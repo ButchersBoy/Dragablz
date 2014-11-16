@@ -426,10 +426,9 @@
                         
                     </Grid>                    
                     <ControlTemplate.Triggers>
-                        <DataTrigger Binding="{Binding Path=(local:TabablzControl.IsItemSelected), RelativeSource={RelativeSource Self}}"                                            
-                                           Value="True">
-                            <Setter Property="Background" Value="Yellow"/>
-                        </DataTrigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource TabItem.Selected.Background}" TargetName="Trapezoid"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>                    
                 </ControlTemplate>
             </Setter.Value>
@@ -547,7 +546,7 @@
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding Path=(local:TabablzControl.IsItemSelected), RelativeSource={RelativeSource TemplatedParent}}" Value="false"/>
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="false"/>
                                 <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Left"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,1,0,1"/>
@@ -555,7 +554,7 @@
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding Path=(local:TabablzControl.IsItemSelected), RelativeSource={RelativeSource TemplatedParent}}" Value="true"/>
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
                                 <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Left"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="Panel.ZIndex" Value="1"/>
@@ -566,7 +565,7 @@
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding Path=(local:TabablzControl.IsItemSelected), RelativeSource={RelativeSource TemplatedParent}}" Value="false"/>
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="false"/>
                                 <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Bottom"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,0,1,1"/>
@@ -574,7 +573,7 @@
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding Path=(local:TabablzControl.IsItemSelected), RelativeSource={RelativeSource TemplatedParent}}" Value="true"/>
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
                                 <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Bottom"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="Panel.ZIndex" Value="1"/>
@@ -585,7 +584,7 @@
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding Path=(local:TabablzControl.IsItemSelected), RelativeSource={RelativeSource TemplatedParent}}" Value="false"/>
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="false"/>
                                 <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Right"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="BorderThickness" TargetName="innerBorder" Value="0,1,1,1"/>
@@ -593,7 +592,7 @@
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding Path=(local:TabablzControl.IsItemSelected), RelativeSource={RelativeSource TemplatedParent}}" Value="true"/>
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
                                 <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Right"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="Panel.ZIndex" Value="1"/>
@@ -604,7 +603,7 @@
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding Path=(local:TabablzControl.IsItemSelected), RelativeSource={RelativeSource TemplatedParent}}" Value="false"/>
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="false"/>
                                 <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top"/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="BorderThickness" TargetName="innerBorder" Value="1,1,1,0"/>
@@ -612,7 +611,7 @@
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding Path=(local:TabablzControl.IsItemSelected), RelativeSource={RelativeSource Self}}"                                            
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"                                            
                                            Value="True"/>
                                 <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top"/>
                             </MultiDataTrigger.Conditions>

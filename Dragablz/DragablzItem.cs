@@ -21,8 +21,7 @@ namespace Dragablz
 
         static DragablzItem()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(DragablzItem), new FrameworkPropertyMetadata(typeof(DragablzItem)));
-            TabItem t;            
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(DragablzItem), new FrameworkPropertyMetadata(typeof(DragablzItem)));            
         }
         
         public static readonly DependencyProperty XProperty = DependencyProperty.Register(
@@ -93,7 +92,16 @@ namespace Dragablz
                 RoutedEvent = YChangedEvent
             };
             instance.RaiseEvent(args);
-        } 
+        }
+
+        public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register(
+            "IsSelected", typeof(bool), typeof(DragablzItem), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault | FrameworkPropertyMetadataOptions.AffectsParentMeasure));
+
+        public bool IsSelected
+        {
+            get { return (bool) GetValue(IsSelectedProperty); }
+            set { SetValue(IsSelectedProperty, value); }
+        }
 
         private static readonly DependencyPropertyKey IsDraggingPropertyKey =
             DependencyProperty.RegisterReadOnly(

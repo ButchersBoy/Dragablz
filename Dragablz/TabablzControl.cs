@@ -48,19 +48,6 @@ namespace Dragablz
             Unloaded += (sender, args) => _loadedInstances.Remove(this);
         }
 
-        private static readonly DependencyProperty IsItemSelectedProperty = DependencyProperty.RegisterAttached(
-            "IsItemSelected", typeof (bool), typeof (TabablzControl), new FrameworkPropertyMetadata(default(bool), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-        
-        internal static void SetIsItemSelected(DependencyObject element, bool value)
-        {
-            element.SetCurrentValue(IsItemSelectedProperty, value);
-        }
-
-        public static bool GetIsItemSelected(DependencyObject element)
-        {
-            return (bool) element.GetValue(IsItemSelectedProperty);
-        }
-
         public static readonly DependencyProperty CustomHeaderItemStyleProperty = DependencyProperty.Register(
             "CustomHeaderItemStyle", typeof (Style), typeof (TabablzControl), new PropertyMetadata(default(Style)));
 
@@ -235,13 +222,13 @@ namespace Dragablz
 
             foreach (var addedItem in notTabItems(e.AddedItems))
             {
-                SetIsItemSelected(addedItem, true);
+                addedItem.IsSelected = true;
                 addedItem.BringIntoView();
             }
 
             foreach (var removedItem in notTabItems(e.RemovedItems))
             {
-                SetIsItemSelected(removedItem, false);
+                removedItem.IsSelected = false;
             }
         }
 
@@ -302,9 +289,9 @@ namespace Dragablz
 
             if (_dragablzItemsControl != null && SelectedItem != null && !(SelectedItem is TabItem))
             {
-                var containerFromItem = _dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(SelectedItem);
+                var containerFromItem = _dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(SelectedItem) as DragablzItem;
                 if (containerFromItem != null)
-                    SetIsItemSelected(_dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(SelectedItem), true);
+                    containerFromItem.IsSelected = true;
             }
         }
 
@@ -321,8 +308,8 @@ namespace Dragablz
                     itemsControlOffset.Y, e.DragStartedEventArgs.HorizontalOffset, e.DragStartedEventArgs.VerticalOffset);
 
                 foreach (var otherItem in _dragablzItemsControl.Containers<DragablzItem>().Except(e.DragablzItem))                
-                    SetIsItemSelected(otherItem, false);                
-                SetIsItemSelected(e.DragablzItem, true);
+                    otherItem.IsSelected = false;                
+                e.DragablzItem.IsSelected = true;
                 var item = _dragablzItemsControl.ItemContainerGenerator.ItemFromContainer(e.DragablzItem);
                 var tabItem = item as TabItem;
                 if (tabItem != null)

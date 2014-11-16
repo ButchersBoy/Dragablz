@@ -16,6 +16,8 @@ namespace Dragablz
         static Trapezoid()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Trapezoid), new FrameworkPropertyMetadata(typeof(Trapezoid)));
+            BackgroundProperty.OverrideMetadata(typeof(Trapezoid), new FrameworkPropertyMetadata(Panel.BackgroundProperty.DefaultMetadata.DefaultValue,
+                        FrameworkPropertyMetadataOptions.AffectsRender));
         }
 
         public static readonly DependencyProperty PenBrushProperty = DependencyProperty.Register(
