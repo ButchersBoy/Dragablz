@@ -1,0 +1,130 @@
+﻿<Window x:Class="DragablzDemo.BasicExampleMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dragablzDemo="clr-namespace:DragablzDemo"
+        Title="Basic Example Defining Tab Content in XAML" Height="350" Width="600"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance dragablzDemo:BasicExampleMainModel, IsDesignTimeCreatable=False}">
+
+
+    <!--
+    
+    <dragablz:TabablzControl Margin="8 8 8 8" ItemsSource="{Binding ViewModels}"
+                                     SelectedItem="{Binding SelectedViewModel}">
+        <TabControl.ContentTemplate>
+            <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
+                <TextBlock Text="{Binding SimpleContent}" />
+            </DataTemplate>
+        </TabControl.ContentTemplate>
+        <dragablz:TabablzControl.CustomHeaderItemTemplate>
+            <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
+                <TextBlock Text="{Binding Name}" />
+            </DataTemplate>
+        </dragablz:TabablzControl.CustomHeaderItemTemplate>
+        <TabControl.ItemTemplate>
+            <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
+                <TextBlock Text="{Binding SimpleContent}" />
+            </DataTemplate>
+        </TabControl.ItemTemplate>
+    </dragablz:TabablzControl>
+
+    -->
+    
+    <dragablz:TabablzControl Style="{StaticResource BasicExamplesTabStyle}">
+        <dragablz:TabablzControl.InterTabController>
+            <dragablz:InterTabController InterTabClient="{Binding BasicInterTabClient}" />
+        </dragablz:TabablzControl.InterTabController>        
+        <TabItem Header="Basic Examples" IsSelected="True">
+            <Grid Margin="8 8 8 8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0">Content Defined in XAML, organised horizontally</TextBlock>
+                <dragablz:DragablzItemsControl Grid.Column="0" Grid.Row="1" BorderThickness="1" BorderBrush="DarkBlue"
+                                               PositionMonitor="{Binding BasicColourMonitor}">
+                    <dragablz:DragablzItemsControl.ItemsOrganiser>
+                        <dragablz:HorizontalOrganiser />
+                    </dragablz:DragablzItemsControl.ItemsOrganiser>
+                    <TextBlock>Red</TextBlock>
+                    <TextBlock>Green</TextBlock>
+                    <TextBlock>Blue</TextBlock>
+                </dragablz:DragablzItemsControl>
+                <TextBlock Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" 
+                           Text="{Binding BasicColourMonitorText, StringFormat='Your view model can monitor coordinates. Latest coords={0}'}" />
+
+                <TextBlock Grid.Row="0" Grid.Column="1" Margin="2 0">Content Bound From View Model, organised vertically</TextBlock>
+                <dragablz:DragablzItemsControl Grid.Column="1" Grid.Row="1" ItemsSource="{Binding People}" BorderThickness="1" 
+                                               BorderBrush="DarkBlue"
+                                               ItemContainerStyle="{StaticResource CustomDragablzItemStyle}"
+                                               Margin="2 0"
+                                               PositionMonitor="{Binding PeopleMonitor}">
+                    <dragablz:DragablzItemsControl.ItemsOrganiser>
+                        <dragablz:VerticalOrganiser />
+                    </dragablz:DragablzItemsControl.ItemsOrganiser>
+                    <dragablz:DragablzItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type dragablzDemo:Person}">
+                            <StackPanel>
+                                <TextBlock Text="{Binding FirstName}" />
+                                <TextBlock Text="{Binding LastName}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </dragablz:DragablzItemsControl.ItemTemplate>
+                </dragablz:DragablzItemsControl>
+                <Button Command="{Binding AddNewPerson}" Grid.Row="2" Grid.Column="1" Margin="2 0">Add New Bound Person</Button>
+                <TextBlock Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" 
+                           Text="{Binding PeopleMonitorText, StringFormat='Your can monitor ordering: {0}'}" />
+            </Grid>            
+        </TabItem>
+        <TabItem Header="Drag me!">
+            <TextBlock Margin="8 8 8 8">You can drag tabs around.</TextBlock>
+        </TabItem>
+        <TabItem Header="Basic bound tabs example">
+            <dragablz:TabablzControl Margin="8 8 8 8" ItemsSource="{Binding ViewModels}"
+                                     SelectedItem="{Binding SelectedViewModel}">
+                <dragablz:TabablzControl.HeaderSuffixContent>
+                    <Button Command="{Binding AddNewViewModel}">+</Button>
+                </dragablz:TabablzControl.HeaderSuffixContent>
+                <TabControl.ContentTemplate>
+                    <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
+                        <TextBlock Text="{Binding SimpleContent}" />
+                    </DataTemplate>
+                </TabControl.ContentTemplate>
+                <dragablz:TabablzControl.CustomHeaderItemTemplate>
+                    <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </dragablz:TabablzControl.CustomHeaderItemTemplate>
+                <TabControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
+                        <TextBlock Text="{Binding SimpleContent}" />
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+            </dragablz:TabablzControl>
+        </TabItem>
+        <TabItem Header="Just an empty tab">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Margin="8 8 8 8">Just an empty tab to illustrate you can drag tabs around.</TextBlock>
+                <dragablz:Trapezoid Grid.Row="1">Trapezium/Trapezoid...pretty useful for tabs</dragablz:Trapezoid>
+            </Grid>
+            
+        </TabItem>
+    </dragablz:TabablzControl>    
+    
+    
+    
+</Window>

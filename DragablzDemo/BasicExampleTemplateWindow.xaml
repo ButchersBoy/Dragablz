@@ -1,0 +1,19 @@
+﻿<Window x:Class="DragablzDemo.BasicExampleTemplateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dragablzDemo="clr-namespace:DragablzDemo"
+        Title="Basic Example Defining Tab Content in XAML" Height="300" Width="300"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance dragablzDemo:BasicExampleTemplateModel, IsDesignTimeCreatable=False}">
+    <dragablz:TabablzControl Margin="8 8 8 8"
+                             x:Name="TabablzControl"
+                             Style="{StaticResource BasicExamplesTabStyle}">
+        <dragablz:TabablzControl.InterTabController>
+            <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" Partition="{Binding Partition}" />
+        </dragablz:TabablzControl.InterTabController>
+        
+    </dragablz:TabablzControl>
+</Window>
