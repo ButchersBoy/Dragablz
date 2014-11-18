@@ -235,7 +235,6 @@
                         <Border x:Name="mainBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,1,1,0" Background="{TemplateBinding Background}" Margin="0 0 0 1">
                             <Border x:Name="innerBorder" BorderBrush="{StaticResource TabItem.Selected.Border}" BorderThickness="1,1,1,0" Background="{StaticResource TabItem.Selected.Background}" Margin="-1" Opacity="0"/>
                         </Border>
-                        <ContentPresenter />
                         <ContentPresenter x:Name="contentPresenter" 
                                           ContentSource="Header" Focusable="False" HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
                     </Grid>
