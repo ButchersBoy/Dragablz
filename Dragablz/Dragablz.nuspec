@@ -15,7 +15,7 @@
     <tags>WPF TabControl Tab Tearable</tags>
   </metadata>
   <files>
-    <file src="..\bin\Release\Dragablz.dll" target="lib\net45" />
-    <file src="..\bin\Release\Dragablz.pdb" target="lib\net45" />
+    <file src="bin\Release\Dragablz.dll" target="lib\net45" />
+    <file src="bin\Release\Dragablz.pdb" target="lib\net45" />
   </files>  
 </package>
