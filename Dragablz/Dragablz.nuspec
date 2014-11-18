@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Dragablz</id>
-    <version>$version$</version>
+    <version>0.0.0.0</version>
     <title>Dragablz - Dragable and tearable tab control for WPF</title>
     <authors>James Willock</authors>
     <owners>James Willock</owners>
@@ -14,4 +14,8 @@
     <copyright>Copyright 2014 James Willock/Mulholland Software Ltd</copyright>
     <tags>WPF TabControl Tab Tearable</tags>
   </metadata>
+  <files>
+    <file src="..\bin\Release\Dragablz.dll" target="lib\net45" />
+    <file src="..\bin\Release\Dragablz.pdb" target="lib\net45" />
+  </files>  
 </package>
