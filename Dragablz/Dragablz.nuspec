@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>$id$</id>
-    <version>0.0.0.1</version>
+    <id>Dragablz</id>
+    <version>$version$</version>
     <title>Dragablz - Dragable and tearable tab control for WPF</title>
     <authors>James Willock</authors>
     <owners>James Willock</owners>
