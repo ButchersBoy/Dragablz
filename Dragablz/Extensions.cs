@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Dragablz
@@ -19,6 +20,16 @@ namespace Dragablz
         public static IEnumerable<TObject> Except<TObject>(this IEnumerable<TObject> first, params TObject[] second)
         {
             return first.Except((IEnumerable<TObject>)second);
+        }
+
+        public static IEnumerable<object> LogicalTreeDepthFirstTraversal(this DependencyObject node)
+        {
+            if (node == null) yield break;
+            yield return node;
+
+            foreach (var child in LogicalTreeHelper.GetChildren(node).OfType<DependencyObject>()
+                .SelectMany(depObj => depObj.LogicalTreeDepthFirstTraversal()))            
+                yield return child;
         }
 
     }

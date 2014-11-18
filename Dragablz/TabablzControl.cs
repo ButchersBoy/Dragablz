@@ -445,7 +445,7 @@ namespace Dragablz
             if (breachOrientation.HasValue)
             {
                 var newTabHost = InterTabController.InterTabClient.GetNewHost(InterTabController.InterTabClient,
-                    InterTabController.Partition);
+                    InterTabController.Partition, this);
                 if (newTabHost == null || newTabHost.TabablzControl == null || newTabHost.Window == null)
                     throw new ApplicationException("New tab host was not correctly provided");
 

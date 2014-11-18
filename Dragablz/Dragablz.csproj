@@ -75,6 +75,7 @@
     <Compile Include="NewTabHost.cs" />
     <Compile Include="OrderChangedEventArgs.cs" />
     <Compile Include="PositionMonitor.cs" />
+    <Compile Include="DefaultInterTabClient.cs" />
     <Compile Include="Referenceless\AnonymousDisposable.cs" />
     <Compile Include="Referenceless\DefaultDisposable.cs" />
     <Compile Include="Referenceless\Disposable.cs" />

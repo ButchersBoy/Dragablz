@@ -35,7 +35,7 @@
     
     <dragablz:TabablzControl Style="{StaticResource BasicExamplesTabStyle}">
         <dragablz:TabablzControl.InterTabController>
-            <dragablz:InterTabController InterTabClient="{Binding BasicInterTabClient}" />
+            <dragablz:InterTabController  />
         </dragablz:TabablzControl.InterTabController>        
         <TabItem Header="Basic Examples" IsSelected="True">
             <Grid Margin="8 8 8 8">
@@ -50,7 +50,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.Column="0">Content Defined in XAML, organised horizontally</TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="0">Content Defined in XAML, organised horizontally</TextBlock>                
                 <dragablz:DragablzItemsControl Grid.Column="0" Grid.Row="1" BorderThickness="1" BorderBrush="DarkBlue"
                                                PositionMonitor="{Binding BasicColourMonitor}">
                     <dragablz:DragablzItemsControl.ItemsOrganiser>
@@ -83,13 +83,13 @@
                 </dragablz:DragablzItemsControl>
                 <Button Command="{Binding AddNewPerson}" Grid.Row="2" Grid.Column="1" Margin="2 0">Add New Bound Person</Button>
                 <TextBlock Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" 
-                           Text="{Binding PeopleMonitorText, StringFormat='Your can monitor ordering: {0}'}" />
+                           Text="{Binding PeopleMonitorText, StringFormat='Your can monitor ordering: {0}'}" />                
             </Grid>            
         </TabItem>
         <TabItem Header="Drag me!">
             <TextBlock Margin="8 8 8 8">You can drag tabs around.</TextBlock>
         </TabItem>
-        <TabItem Header="Basic bound tabs example">
+        <TabItem Header="Basic bound tabs example">            
             <dragablz:TabablzControl Margin="8 8 8 8" ItemsSource="{Binding ViewModels}"
                                      SelectedItem="{Binding SelectedViewModel}">
                 <dragablz:TabablzControl.HeaderSuffixContent>
@@ -110,7 +110,7 @@
                         <TextBlock Text="{Binding SimpleContent}" />
                     </DataTemplate>
                 </TabControl.ItemTemplate>
-            </dragablz:TabablzControl>
+            </dragablz:TabablzControl>            
         </TabItem>
         <TabItem Header="Just an empty tab">
             <Grid>

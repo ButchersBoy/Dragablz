@@ -37,11 +37,13 @@ namespace DragablzDemo
             app.Resources.Add(SystemParameters.ClientAreaAnimationKey, null);
             app.Resources.Add(SystemParameters.MinimizeAnimationKey, null);
             app.Resources.Add(SystemParameters.UIEffectsKey, null);
-            
+                        
             new BoundExampleWindow()
             {
                 DataContext = boundExampleModel
             }.Show();
+
+            new QuickStartWindow().Show();
 
             app.Run();
         }

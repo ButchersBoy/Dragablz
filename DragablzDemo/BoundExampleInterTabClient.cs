@@ -5,7 +5,7 @@ namespace DragablzDemo
 {
     public class BoundExampleInterTabClient : IInterTabClient
     {
-        public INewTabHost GetNewHost(IInterTabClient interTabClient, object partition)
+        public INewTabHost GetNewHost(IInterTabClient interTabClient, object partition, TabablzControl source)
         {
             var view = new BoundExampleWindow();
             var model = new BoundExampleModel();
