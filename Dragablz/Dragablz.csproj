@@ -53,7 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\EqualityToVisibilityConverter.cs" />
-    <Compile Include="Dockablz\BranchItem.cs" />
+    <Compile Include="DefaultInterLayoutClient.cs" />
+    <Compile Include="Dockablz\Branch.cs" />
+    <Compile Include="Dockablz\DropZone.cs" />
+    <Compile Include="Dockablz\DropZoneLocation.cs" />
     <Compile Include="Dockablz\Layout.cs" />
     <Compile Include="Core\FuncComparer.cs" />
     <Compile Include="Core\MultiComparer.cs" />
@@ -64,6 +67,7 @@
     <Compile Include="DragablzItem.cs" />
     <Compile Include="HorizontalOrganiser.cs" />
     <Compile Include="HorizontalPositionMonitor.cs" />
+    <Compile Include="IInterLayoutClient.cs" />
     <Compile Include="IInterTabClient.cs" />
     <Compile Include="IItemsOrganiser.cs" />
     <Compile Include="Core\Extensions.cs" />

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Dragablz.Core;
 using Dragablz.Referenceless;
 
@@ -31,7 +33,7 @@ namespace Dragablz.Dockablz
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Layout), new FrameworkPropertyMetadata(typeof(Layout)));
 
             EventManager.RegisterClassHandler(typeof(DragablzItem), DragablzItem.DragStarted, new DragablzDragStartedEventHandler(ItemDragStarted));
-            EventManager.RegisterClassHandler(typeof (DragablzItem), DragablzItem.PreviewDragDelta, new DragablzDragDeltaEventHandler(ItemDragDelta), true);
+            EventManager.RegisterClassHandler(typeof (DragablzItem), DragablzItem.PreviewDragDelta, new DragablzDragDeltaEventHandler(PreviewItemDragDelta), true);            
             EventManager.RegisterClassHandler(typeof(DragablzItem), DragablzItem.DragCompleted, new DragablzDragCompletedEventHandler(ItemDragCompleted));
         }
 
@@ -52,6 +54,26 @@ namespace Dragablz.Dockablz
         {
             get { return (object) GetValue(PartitionProperty); }
             set { SetValue(PartitionProperty, value); }
+        }
+
+        public static readonly DependencyProperty InterLayoutClientProperty = DependencyProperty.Register(
+            "InterLayoutClient", typeof (IInterLayoutClient), typeof (Layout), new PropertyMetadata(new DefaultInterLayoutClient()));
+
+        public IInterLayoutClient InterLayoutClient
+        {
+            get { return (IInterLayoutClient) GetValue(InterLayoutClientProperty); }
+            set { SetValue(InterLayoutClientProperty, value); }
+        }
+
+        internal static bool IsContainedWithinBranch(DependencyObject dependencyObject)
+        {
+            do 
+            {                
+                dependencyObject = VisualTreeHelper.GetParent(dependencyObject);
+                if (dependencyObject is Branch)
+                    return true;
+            } while (dependencyObject != null);
+            return false;
         }
 
         private static readonly DependencyPropertyKey IsParticipatingInDragPropertyKey =
@@ -123,22 +145,80 @@ namespace Dragablz.Dockablz
             }
         }
 
-        private void Branch(DropZoneLocation location, DragablzItem sourceItem)
+        private void Branch(DropZoneLocation location, DragablzItem sourceDragablzItem)
         {
-            var sourceOfDragItemsControl = ItemsControl.ItemsControlFromItemContainer(sourceItem) as DragablzItemsControl;
-            if (sourceOfDragItemsControl != null)
-            {
-                var sourceTabControl = TabablzControl.GetOwnerOfHeaderItems(sourceOfDragItemsControl);
-                if (sourceTabControl != null)
-                    sourceTabControl.RemoveItem(sourceItem);
-            }
+            if (InterLayoutClient == null)
+                throw new InvalidOperationException("InterLayoutClient is not set.");
 
-            var branchItem = new BranchItem
+            var sourceOfDragItemsControl = ItemsControl.ItemsControlFromItemContainer(sourceDragablzItem) as DragablzItemsControl;
+            if (sourceOfDragItemsControl == null) throw new ApplicationException("Unable to determin source items control.");
+            
+            var sourceTabControl = TabablzControl.GetOwnerOfHeaderItems(sourceOfDragItemsControl);
+            if (sourceTabControl == null) throw new ApplicationException("Unable to determin source tab control.");
+            
+            var sourceItem = sourceOfDragItemsControl.ItemContainerGenerator.ItemFromContainer(sourceDragablzItem);
+            sourceTabControl.RemoveItem(sourceDragablzItem);
+
+            var newTabHost = InterLayoutClient.GetNewHost(Partition, sourceTabControl);
+            if (newTabHost == null) throw new ApplicationException("InterLayoutClient did not provide a new tab host.");
+
+            newTabHost.TabablzControl.AddToSource(sourceItem);
+
+            var branchItem = new Branch
             {
-                FirstItem = Content,
-                SecondItem = sourceItem
+                FirstItem = (location == DropZoneLocation.Right || location == DropZoneLocation.Bottom) ? Content : newTabHost.Container,
+                SecondItem = !(location == DropZoneLocation.Right || location == DropZoneLocation.Bottom) ? Content : newTabHost.Container,
+                Orientation = (location == DropZoneLocation.Right || location == DropZoneLocation.Left) ? Orientation.Horizontal : Orientation.Vertical
             };
             SetCurrentValue(ContentProperty, branchItem);            
+        }
+
+        internal static void ConsolidateBranch(DependencyObject redundantNode)
+        {
+            bool isSecondLineageWhenOwnerIsBranch;
+            var ownerBranch = FindLayoutOrBranchOwner(redundantNode, out isSecondLineageWhenOwnerIsBranch) as Branch;
+            if (ownerBranch == null) return;
+
+            var survivingItem = isSecondLineageWhenOwnerIsBranch ? ownerBranch.FirstItem : ownerBranch.SecondItem;
+
+            var grandParent = FindLayoutOrBranchOwner(ownerBranch, out isSecondLineageWhenOwnerIsBranch);
+            if (grandParent == null) throw new ApplicationException("Unexpected structure, grandparent Layout or Branch not found");
+
+            var layout = grandParent as Layout;
+            if (layout != null)
+            {
+                layout.Content = survivingItem;
+                return;
+            }
+
+            var branch = (Branch) grandParent;
+            if (isSecondLineageWhenOwnerIsBranch)
+                branch.SecondItem = survivingItem;
+            else
+                branch.FirstItem = survivingItem;
+        }
+
+        private static object FindLayoutOrBranchOwner(DependencyObject node, out bool isSecondLineageWhenOwnerIsBranch)
+        {
+            isSecondLineageWhenOwnerIsBranch = false;
+            
+            var ancestoryStack = new Stack<DependencyObject>();
+            do
+            {
+                ancestoryStack.Push(node);
+                node = VisualTreeHelper.GetParent(node);
+                if (node is Layout) 
+                    return node;
+                
+                var branch = node as Branch;
+                if (branch == null) continue;
+
+                isSecondLineageWhenOwnerIsBranch = ancestoryStack.Contains(branch.SecondContentPresenter);
+                return branch;
+
+            } while (node != null);            
+
+            return null;
         }
 
         private static void ItemDragCompleted(object sender, DragablzDragCompletedEventArgs e)
@@ -149,57 +229,19 @@ namespace Dragablz.Dockablz
             if (_currentlyOfferedDropZone != null)
             {                
                 _currentlyOfferedDropZone.Item1.Branch(_currentlyOfferedDropZone.Item2.Location, e.DragablzItem);
+                _currentlyOfferedDropZone = null;
             }
         }
 
-        private static void ItemDragDelta(object sender, DragablzDragDeltaEventArgs e)
-        {         
+        private static void PreviewItemDragDelta(object sender, DragablzDragDeltaEventArgs e)
+        {
+            if (e.Cancel) return;
+
             foreach (var layout in LoadedLayouts.Where(l => l.IsParticipatingInDrag))
             {                
                 var cursorPos = Native.GetCursorPos();
                 layout.MonitorDropZones(cursorPos);
             }         
-        }
-    }
-
-    public enum DropZoneLocation
-    {        
-        Top,
-        Right,
-        Bottom,
-        Left,     
-        Central
-    }
-
-    public class DropZone : Control
-    {
-        static DropZone()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(DropZone), new FrameworkPropertyMetadata(typeof(DropZone)));            
-        }
-
-        public static readonly DependencyProperty LocationProperty = DependencyProperty.Register(
-            "Location", typeof (DropZoneLocation), typeof (DropZone), new PropertyMetadata(default(DropZoneLocation)));
-
-        public DropZoneLocation Location
-        {
-            get { return (DropZoneLocation) GetValue(LocationProperty); }
-            set { SetValue(LocationProperty, value); }
-        }
-
-        private static readonly DependencyPropertyKey IsOfferedPropertyKey =
-            DependencyProperty.RegisterReadOnly(
-                "IsOffered", typeof (bool), typeof (DropZone),
-                new PropertyMetadata(default(bool)));
-
-        public static readonly DependencyProperty IsOfferedProperty =
-            IsOfferedPropertyKey.DependencyProperty;
-
-        public bool IsOffered
-        {
-            get { return (bool) GetValue(IsOfferedProperty); }
-            internal set { SetValue(IsOfferedPropertyKey, value); }
-        }
-
+        }        
     }
 }

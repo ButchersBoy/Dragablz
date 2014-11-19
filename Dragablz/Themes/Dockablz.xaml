@@ -115,10 +115,10 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type dockablz:BranchItem}">
+    <Style TargetType="{x:Type dockablz:Branch}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type dockablz:BranchItem}">
+                <ControlTemplate TargetType="{x:Type dockablz:Branch}">
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
@@ -129,10 +129,10 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="1.00001*" />
                             </Grid.ColumnDefinitions>
-                            <ContentPresenter Content="{TemplateBinding FirstItem}" />
+                            <ContentPresenter x:Name="PART_FirstContentPresenter" Content="{TemplateBinding FirstItem}" />
                             <GridSplitter Grid.Column="1" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" 
                                           Width="5"/>
-                            <ContentPresenter Grid.Column="2" Content="{TemplateBinding SecondItem}" />
+                            <ContentPresenter x:Name="PART_SecondContentPresenter" Grid.Column="2" Content="{TemplateBinding SecondItem}" />
                         </Grid>
                     </Border>
                 </ControlTemplate>
@@ -142,7 +142,7 @@
             <Trigger Property="Orientation" Value="Vertical">
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type dockablz:BranchItem}">
+                        <ControlTemplate TargetType="{x:Type dockablz:Branch}">
                             <Border Background="{TemplateBinding Background}"
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}">
@@ -153,9 +153,9 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="1.00001*" />
                                     </Grid.RowDefinitions>
-                                    <ContentPresenter Content="{TemplateBinding FirstItem}" />
+                                    <ContentPresenter x:Name="PART_FirstContentPresenter" Content="{TemplateBinding FirstItem}" />
                                     <GridSplitter Grid.Row="1" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext" Height="5" HorizontalAlignment="Stretch" />
-                                    <ContentPresenter Grid.Row="2" Content="{TemplateBinding SecondItem}" />
+                                    <ContentPresenter x:Name="PART_SecondContentPresenter" Grid.Row="2" Content="{TemplateBinding SecondItem}" />
                                 </Grid>
                             </Border>
                         </ControlTemplate>

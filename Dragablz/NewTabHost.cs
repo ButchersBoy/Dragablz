@@ -3,23 +3,23 @@ using System.Windows;
 
 namespace Dragablz
 {
-    public class NewTabHost : INewTabHost
+    public class NewTabHost<TElement> : INewTabHost<TElement> where TElement : UIElement
     {
-        private readonly Window _window;
+        private readonly TElement _container;
         private readonly TabablzControl _tabablzControl;
 
-        public NewTabHost(Window window, TabablzControl tabablzControl)
+        public NewTabHost(TElement container, TabablzControl tabablzControl)
         {
-            if (window == null) throw new ArgumentNullException("window");
+            if (container == null) throw new ArgumentNullException("container");
             if (tabablzControl == null) throw new ArgumentNullException("tabablzControl");
 
-            _window = window;
+            _container = container;
             _tabablzControl = tabablzControl;
         }
 
-        public Window Window
+        public TElement Container
         {
-            get { return _window; }
+            get { return _container; }
         }
 
         public TabablzControl TabablzControl

@@ -5,12 +5,12 @@ namespace DragablzDemo
 {
     public class BoundExampleInterTabClient : IInterTabClient
     {
-        public INewTabHost GetNewHost(IInterTabClient interTabClient, object partition, TabablzControl source)
+        public INewTabHost<Window> GetNewHost(IInterTabClient interTabClient, object partition, TabablzControl source)
         {
             var view = new BoundExampleWindow();
             var model = new BoundExampleModel();
             view.DataContext = model;
-            return new NewTabHost(view, view.TabablzControl);
+            return new NewTabHost<Window>(view, view.TabablzControl);
         }
 
         public TabEmptiedResponse TabEmptiedHandler(TabablzControl tabControl, Window window)

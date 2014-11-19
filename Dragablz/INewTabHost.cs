@@ -2,9 +2,9 @@
 
 namespace Dragablz
 {
-    public interface INewTabHost
+    public interface INewTabHost<TElement> where TElement : UIElement
     {
-        Window Window { get; }
+        TElement Container { get; }
         TabablzControl TabablzControl { get; }
     }
 }
