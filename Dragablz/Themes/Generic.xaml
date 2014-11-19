@@ -1,9 +1,14 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:Dragablz">
+    xmlns:local="clr-namespace:Dragablz"
+    xmlns:dockablz="clr-namespace:Dragablz.Dockablz"
+    xmlns:converters="clr-namespace:Dragablz.Converters">
 
-
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Dockablz.xaml" />
+    </ResourceDictionary.MergedDictionaries>       
+    
     <Style TargetType="{x:Type local:DragablzItemsControl}">
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Top" />
@@ -757,5 +762,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>    
+ 
 </ResourceDictionary> 

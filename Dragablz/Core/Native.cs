@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace Dragablz
+namespace Dragablz.Core
 {
     internal static class Native
     {

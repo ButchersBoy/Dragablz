@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Dragablz
+namespace Dragablz.Core
 {
     internal class TabHeaderDragStartInformation
     {

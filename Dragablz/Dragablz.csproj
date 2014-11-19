@@ -52,9 +52,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FuncComparer.cs" />
-    <Compile Include="MultiComparer.cs" />
-    <Compile Include="CollectionTeaser.cs" />
+    <Compile Include="Converters\EqualityToVisibilityConverter.cs" />
+    <Compile Include="Dockablz\BranchItem.cs" />
+    <Compile Include="Dockablz\Layout.cs" />
+    <Compile Include="Core\FuncComparer.cs" />
+    <Compile Include="Core\MultiComparer.cs" />
+    <Compile Include="Core\CollectionTeaser.cs" />
     <Compile Include="DragablzDragCompletedEventArgs.cs" />
     <Compile Include="DragablzDragDeltaEventArgs.cs" />
     <Compile Include="DragablzDragStartedEventArgs.cs" />
@@ -63,15 +66,15 @@
     <Compile Include="HorizontalPositionMonitor.cs" />
     <Compile Include="IInterTabClient.cs" />
     <Compile Include="IItemsOrganiser.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="Core\Extensions.cs" />
     <Compile Include="IManualInterTabClient.cs" />
     <Compile Include="INewTabHost.cs" />
     <Compile Include="InterTabController.cs" />
-    <Compile Include="InterTabTransfer.cs" />
+    <Compile Include="Core\InterTabTransfer.cs" />
     <Compile Include="LinearOrganiser.cs" />
     <Compile Include="LinearPositionMonitor.cs" />
     <Compile Include="LocationChangedEventArgs.cs" />
-    <Compile Include="Native.cs" />
+    <Compile Include="Core\Native.cs" />
     <Compile Include="NewTabHost.cs" />
     <Compile Include="OrderChangedEventArgs.cs" />
     <Compile Include="PositionMonitor.cs" />
@@ -84,10 +87,14 @@
     <Compile Include="TabablzHeaderSizeConverter.cs" />
     <Compile Include="TabablzItemStyleSelector.cs" />
     <Compile Include="TabEmptiedResponse.cs" />
-    <Compile Include="TabHeaderDragStartInformation.cs" />
+    <Compile Include="Core\TabHeaderDragStartInformation.cs" />
     <Compile Include="Trapezoid.cs" />
     <Compile Include="VerticalOrganiser.cs" />
     <Compile Include="VerticalPositionMonitor.cs" />
+    <Page Include="Themes\Dockablz.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -118,9 +125,7 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dockablz\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

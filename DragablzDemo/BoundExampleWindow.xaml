@@ -6,24 +6,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:dragablzDemo="clr-namespace:DragablzDemo"
         mc:Ignorable="d"
-        Title="Simple form of bound tabs" Height="300" Width="300"        
+        Title="Simple form of bound tabs" Height="300" Width="500"        
         d:DataContext="{d:DesignInstance dragablzDemo:BoundExampleModel, IsDesignTimeCreatable=False}">
-
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Generic.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <PopupAnimation x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">None</PopupAnimation>    
+            </ResourceDictionary.MergedDictionaries>            
         </ResourceDictionary>        
     </Window.Resources>
-
+        
     <dragablz:TabablzControl x:Name="TabablzControl"
-                             Style="{StaticResource BasicExamplesTabStyle}"
-                             ItemsSource="{Binding Items}"
-                             CustomHeaderItemStyle="{StaticResource TrapezoidDragableTabItemStyle}"
-                             >
+                                Style="{StaticResource BasicExamplesTabStyle}"
+                                ItemsSource="{Binding Items}"
+                                CustomHeaderItemStyle="{StaticResource TrapezoidDragableTabItemStyle}"
+                                >
         <dragablz:TabablzControl.InterTabController>
             <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" Partition="{Binding TabPartition}" />
         </dragablz:TabablzControl.InterTabController>
@@ -37,5 +35,5 @@
                 <TextBlock Text="{Binding SimpleContent}" />
             </DataTemplate>
         </TabControl.ContentTemplate>
-    </dragablz:TabablzControl>
+    </dragablz:TabablzControl>    
 </Window>
