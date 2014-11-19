@@ -1,21 +1,24 @@
 ﻿<controls:MetroWindow x:Class="DragablzModernUIDemo.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
-        Title="Dragablz and MahApps" Height="350" Width="525">
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+                      WindowTransitionsEnabled="False"
+                      Title="Dragablz and MahApps"                       
+                      
+                      Height="350" Width="525">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+            <Style TargetType="TabItem" BasedOn="{StaticResource MinimalTabItemStyle}" />
+        </ResourceDictionary>        
     </Window.Resources>
     <dragablz:TabablzControl BorderThickness="0">
         <dragablz:TabablzControl.DefaultHeaderItemStyle>
-            <Style TargetType="{x:Type dragablz:DragablzItem}">
-                <Setter Property="Foreground" Value="{DynamicResource BlackBrush}"/>
-                <Setter Property="Background" Value="{DynamicResource AccentColorBrush2}"/>
+            <Style TargetType="{x:Type dragablz:DragablzItem}">                
+                <Setter Property="Background" Value="{DynamicResource AccentColorBrush4}"/>
                 <Setter Property="Margin" Value="0"/>
                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 <Setter Property="VerticalContentAlignment" Value="Stretch"/>
@@ -23,8 +26,8 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type dragablz:DragablzItem}">
                             <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
-                                <dragablz:Trapezoid x:Name="Trapezoid" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,1,1,0" Background="{TemplateBinding Background}" Margin="0 0 0 1">
-                                    <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                <dragablz:Trapezoid x:Name="Trapezoid" PenThickness="0" Background="{TemplateBinding Background}">
+                                    <ContentPresenter Content="{Binding Header}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
                                           x:Name="contentPresenter"                                          
                                           IsHitTestVisible="False"/>
                                 </dragablz:Trapezoid>
@@ -35,11 +38,11 @@
                             </Grid>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource AccentColorBrush}" />                                    
+                                    <Setter Property="Background" Value="{DynamicResource AccentColorBrush3}" />                                    
                                 </Trigger>
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource WhiteBrush}" />
-                                    <Setter Property="Foreground" Value="{DynamicResource BlackBrush}" />
+                                    <Setter Property="Background" Value="{DynamicResource AccentColorBrush2}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
