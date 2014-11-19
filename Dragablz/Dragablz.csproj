@@ -83,6 +83,7 @@
     <Compile Include="Referenceless\DefaultDisposable.cs" />
     <Compile Include="Referenceless\Disposable.cs" />
     <Compile Include="Referenceless\ICancelable.cs" />
+    <Compile Include="Referenceless\SerialDisposable.cs" />
     <Compile Include="TabablzControl.cs" />
     <Compile Include="TabablzHeaderSizeConverter.cs" />
     <Compile Include="TabablzItemStyleSelector.cs" />

@@ -256,14 +256,6 @@ namespace Dragablz
                 Dispatcher.BeginInvoke(new Action(() => thumb.RaiseEvent(new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice,
                     0,
                     MouseButton.Left) {RoutedEvent = MouseLeftButtonDownEvent})));
-
-                /*
-                Console.WriteLine("MungeCapture X =" + X);                
-                thumb.RaiseEvent(new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice,
-                    0,
-                    MouseButton.Left) {RoutedEvent = MouseLeftButtonDownEvent});                
-                Console.WriteLine("MungeCapture X.1 =" + X);
-                 */
             }
             _seizeDragWithTemplate = false;
 
@@ -290,6 +282,8 @@ namespace Dragablz
 
         internal Point MouseAtDragStart { get; set; }
 
+        internal object PartitionAtDragStart { get; set; }
+
         private void ThumbOnDragCompleted(object sender, DragCompletedEventArgs dragCompletedEventArgs)
         {
             MouseAtDragStart = new Point();
@@ -315,8 +309,6 @@ namespace Dragablz
         
         private void ThumbOnDragStarted(object sender, DragStartedEventArgs dragStartedEventArgs)
         {
-            Console.WriteLine("ThumbOnDragStarted {0},{1}", dragStartedEventArgs.HorizontalOffset, dragStartedEventArgs.VerticalOffset);
-
             MouseAtDragStart = Mouse.GetPosition(this);
             OnDragStarted(new DragablzDragStartedEventArgs(DragStarted, this, dragStartedEventArgs));            
         }

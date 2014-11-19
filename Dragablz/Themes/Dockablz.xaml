@@ -3,19 +3,21 @@
                     xmlns:dockablz="clr-namespace:Dragablz.Dockablz"
                     xmlns:converters="clr-namespace:Dragablz.Converters">
 
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <converters:EqualityToVisibilityConverter x:Key="EqualityToVisibilityConverter" />
     
     <Style TargetType="dockablz:DropZone">
+        <Setter Property="Opacity" Value=".25" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="dockablz:DropZone">
                     <Grid>
-                        <Path Fill="{TemplateBinding Foreground}" Opacity=".5"
+                        <Path Fill="{TemplateBinding Foreground}" 
                               Visibility="{TemplateBinding Location, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static dockablz:DropZoneLocation.Top}}"
                               >
                             <Path.Data>
                                 <PathGeometry>
-                                    <PathFigure x:Name="PathFigure" StartPoint="120, 0">
+                                    <PathFigure x:Name="PathFigure" StartPoint="160, 0">
                                         <ArcSegment SweepDirection="Clockwise"
                                                     Size="60,60"
                                                     Point="0, 0"                                                
@@ -24,12 +26,12 @@
                                 </PathGeometry>
                             </Path.Data>
                         </Path>
-                        <Path Fill="{TemplateBinding Foreground}" Opacity=".5"
+                        <Path Fill="{TemplateBinding Foreground}" 
                               Visibility="{TemplateBinding Location, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static dockablz:DropZoneLocation.Right}}"
                               >
                             <Path.Data>
                                 <PathGeometry>
-                                    <PathFigure StartPoint="60, 120">
+                                    <PathFigure StartPoint="60, 160">
                                         <ArcSegment SweepDirection="Clockwise"
                                                     Size="60,60"
                                                     Point="60, 0"                                                
@@ -38,7 +40,7 @@
                                 </PathGeometry>
                             </Path.Data>
                         </Path>
-                        <Path Fill="{TemplateBinding Foreground}" Opacity=".5"
+                        <Path Fill="{TemplateBinding Foreground}" 
                               Visibility="{TemplateBinding Location, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static dockablz:DropZoneLocation.Bottom}}"
                               >
                             <Path.Data>
@@ -46,13 +48,13 @@
                                     <PathFigure StartPoint="0, 60">
                                         <ArcSegment SweepDirection="Clockwise"
                                                     Size="60,60"
-                                                    Point="120, 60"                                                
+                                                    Point="160, 60"                                                
                                                     />
                                     </PathFigure>
                                 </PathGeometry>
                             </Path.Data>
                         </Path>
-                        <Path Fill="{TemplateBinding Foreground}" Opacity=".5"
+                        <Path Fill="{TemplateBinding Foreground}" 
                               Visibility="{TemplateBinding Location, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static dockablz:DropZoneLocation.Left}}"
                               >
                             <Path.Data>
@@ -60,7 +62,7 @@
                                     <PathFigure StartPoint="0, 0">
                                         <ArcSegment SweepDirection="Clockwise"
                                                     Size="60,60"
-                                                    Point="0, 120"                                                
+                                                    Point="0, 160"                                                
                                                     />
                                     </PathFigure>
                                 </PathGeometry>
@@ -70,6 +72,11 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsOffered" Value="True">
+                <Setter Property="Opacity" Value="0.5" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="dockablz:Layout">
@@ -81,17 +88,25 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" />
-                            <dockablz:DropZone VerticalAlignment="Top" HorizontalAlignment="Center"
+                            <dockablz:DropZone x:Name="PART_TopDropZone" 
+                                               VerticalAlignment="Top" HorizontalAlignment="Center"                                               
                                                Location="Top"                                               
+                                               Visibility="{TemplateBinding IsParticipatingInDrag, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                />
-                            <dockablz:DropZone VerticalAlignment="Center" HorizontalAlignment="Right"
+                            <dockablz:DropZone x:Name="PART_RightDropZone" 
+                                               VerticalAlignment="Center" HorizontalAlignment="Right"
                                                Location="Right"                                               
+                                               Visibility="{TemplateBinding IsParticipatingInDrag, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                />
-                            <dockablz:DropZone VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                            <dockablz:DropZone x:Name="PART_BottomDropZone" 
+                                               VerticalAlignment="Bottom" HorizontalAlignment="Center"
                                                Location="Bottom"                                               
+                                               Visibility="{TemplateBinding IsParticipatingInDrag, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                />
-                            <dockablz:DropZone VerticalAlignment="Center" HorizontalAlignment="Left"
+                            <dockablz:DropZone x:Name="PART_LeftDropZone" 
+                                               VerticalAlignment="Center" HorizontalAlignment="Left"
                                                Location="Left"                                               
+                                               Visibility="{TemplateBinding IsParticipatingInDrag, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                />
                         </Grid>
                     </Border>
