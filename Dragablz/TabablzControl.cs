@@ -580,8 +580,8 @@ namespace Dragablz
         /// <summary>
         /// generate a ContentPresenter for the selected item
         /// </summary>
-        private void UpdateSelectedItem()
-        {
+        private void UpdateSelectedItem()        
+        {            
             if (_itemsHolder == null)
             {
                 return;

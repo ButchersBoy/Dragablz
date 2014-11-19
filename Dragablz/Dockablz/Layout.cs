@@ -163,6 +163,7 @@ namespace Dragablz.Dockablz
             if (newTabHost == null) throw new ApplicationException("InterLayoutClient did not provide a new tab host.");
 
             newTabHost.TabablzControl.AddToSource(sourceItem);
+            newTabHost.TabablzControl.SelectedItem = sourceItem;
 
             var branchItem = new Branch
             {
