@@ -19,6 +19,10 @@ namespace Dragablz
         private bool _seizeDragWithTemplate;
         private Action<DragablzItem> _dragSeizedContinuation;
 
+        public DragablzItem()
+        {
+        }
+
         static DragablzItem()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DragablzItem), new FrameworkPropertyMetadata(typeof(DragablzItem)));            

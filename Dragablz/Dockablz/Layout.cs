@@ -110,7 +110,7 @@ namespace Dragablz.Dockablz
             if (draggingWindow == null) return;            
 
             foreach (var loadedLayout in LoadedLayouts.Where(l =>
-                l.Partition == e.DragablzItem.PartitionAtDragStart &&
+                Equals(l.Partition, e.DragablzItem.PartitionAtDragStart) &&
                 !Equals(Window.GetWindow(l), draggingWindow)))
 
             {                

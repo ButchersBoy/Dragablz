@@ -526,8 +526,9 @@ namespace Dragablz
             SelectedItem = interTabTransfer.Item;            
             _dragablzItemsControl.InstigateDrag(interTabTransfer.Item, newContainer =>
             {
+                newContainer.PartitionAtDragStart = interTabTransfer.OriginatorContainer.PartitionAtDragStart;
                 if (interTabTransfer.TransferReason == InterTabTransferReason.Breach)
-                {
+                {                    
                     if (interTabTransfer.BreachOrientation == Orientation.Horizontal)
                         newContainer.Y = interTabTransfer.OriginatorContainer.Y;
                     else
