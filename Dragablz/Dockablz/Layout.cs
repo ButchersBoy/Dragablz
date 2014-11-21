@@ -264,11 +264,10 @@ namespace Dragablz.Dockablz
             foreach (var loadedLayout in LoadedLayouts)
                 loadedLayout.IsParticipatingInDrag = false;
 
-            if (_currentlyOfferedDropZone != null)
-            {                
-                _currentlyOfferedDropZone.Item1.Branch(_currentlyOfferedDropZone.Item2.Location, e.DragablzItem);
-                _currentlyOfferedDropZone = null;
-            }
+            if (_currentlyOfferedDropZone == null || e.DragablzItem.IsDropTargetFound) return;
+
+            _currentlyOfferedDropZone.Item1.Branch(_currentlyOfferedDropZone.Item2.Location, e.DragablzItem);
+            _currentlyOfferedDropZone = null;
         }
 
         private static void PreviewItemDragDelta(object sender, DragablzDragDeltaEventArgs e)

@@ -307,6 +307,8 @@ namespace Dragablz
             //the thumb may steal the user selection, so we will try and apply it manually
             if (_dragablzItemsControl == null) return;
 
+            e.DragablzItem.IsDropTargetFound = false;
+
             var sourceOfDragItemsControl = ItemsControlFromItemContainer(e.DragablzItem) as DragablzItemsControl;
             if (sourceOfDragItemsControl != null && Equals(sourceOfDragItemsControl, _dragablzItemsControl))
             {               
@@ -397,6 +399,7 @@ namespace Dragablz
 
             if (target != null)
             {
+                e.DragablzItem.IsDropTargetFound = true;
                 var item = RemoveItem(e.DragablzItem);
 
                 var interTabTransfer = new InterTabTransfer(item, e.DragablzItem, Mouse.GetPosition(e.DragablzItem));
@@ -500,6 +503,7 @@ namespace Dragablz
                 }
 
                 newTabHost.TabablzControl.ReceiveDrag(interTabTransfer);
+                interTabTransfer.OriginatorContainer.IsDropTargetFound = true;
                 e.Cancel = true;                
             }
         }

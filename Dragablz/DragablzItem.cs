@@ -288,6 +288,8 @@ namespace Dragablz
 
         internal string PartitionAtDragStart { get; set; }
 
+        internal bool IsDropTargetFound { get; set; }
+
         private void ThumbOnDragCompleted(object sender, DragCompletedEventArgs dragCompletedEventArgs)
         {
             MouseAtDragStart = new Point();
