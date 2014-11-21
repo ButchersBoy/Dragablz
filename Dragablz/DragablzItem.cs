@@ -286,7 +286,7 @@ namespace Dragablz
 
         internal Point MouseAtDragStart { get; set; }
 
-        internal object PartitionAtDragStart { get; set; }
+        internal string PartitionAtDragStart { get; set; }
 
         private void ThumbOnDragCompleted(object sender, DragCompletedEventArgs dragCompletedEventArgs)
         {

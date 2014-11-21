@@ -18,14 +18,14 @@
         </ResourceDictionary>               
     </Window.Resources>
 
-    <dockablz:Layout Partition="{Binding TabPartition}" x:Name="Layout">
+    <dockablz:Layout Partition="2AE89D18-F236-4D20-9605-6C03319038E6" x:Name="Layout">
         <dockablz:Layout.BranchTemplate>
             <DataTemplate>
                 <dragablz:TabablzControl Style="{StaticResource BasicExamplesTabStyle}"
                                          ItemsSource="{Binding Items}"
                                          CustomHeaderItemStyle="{StaticResource TrapezoidDragableTabItemStyle}">
                     <dragablz:TabablzControl.InterTabController>
-                        <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" Partition="{Binding TabPartition}" />
+                        <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" Partition="2AE89D18-F236-4D20-9605-6C03319038E6" />
                     </dragablz:TabablzControl.InterTabController>
                     <dragablz:TabablzControl.CustomHeaderItemTemplate>
                         <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
@@ -45,7 +45,7 @@
                                  ItemsSource="{Binding Items}"
                                  CustomHeaderItemStyle="{StaticResource TrapezoidDragableTabItemStyle}">
             <dragablz:TabablzControl.InterTabController>
-                <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" Partition="{Binding TabPartition}" />
+                <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" Partition="2AE89D18-F236-4D20-9605-6C03319038E6" />
             </dragablz:TabablzControl.InterTabController>
             <dragablz:TabablzControl.CustomHeaderItemTemplate>
                 <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">

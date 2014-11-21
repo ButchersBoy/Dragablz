@@ -522,11 +522,12 @@ namespace Dragablz
             }
 
             AddToSource(interTabTransfer.Item);
-
-            SelectedItem = interTabTransfer.Item;            
+            SelectedItem = interTabTransfer.Item;
+            
             _dragablzItemsControl.InstigateDrag(interTabTransfer.Item, newContainer =>
             {
                 newContainer.PartitionAtDragStart = interTabTransfer.OriginatorContainer.PartitionAtDragStart;
+                
                 if (interTabTransfer.TransferReason == InterTabTransferReason.Breach)
                 {                    
                     if (interTabTransfer.BreachOrientation == Orientation.Horizontal)
@@ -559,7 +560,7 @@ namespace Dragablz
                 else
                     Items.Add(item);
             }            
-        }
+        }        
 
         private void RemoveFromSource(object item)
         {

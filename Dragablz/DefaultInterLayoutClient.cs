@@ -19,9 +19,12 @@ namespace Dragablz
 
             Clone(source, tabablzControl);
 
-            var newInterTabController = new InterTabController();
+            var newInterTabController = new InterTabController
+            {
+                Partition = source.InterTabController.Partition
+            };
             Clone(source.InterTabController, newInterTabController);
-            tabablzControl.SetCurrentValue(TabablzControl.InterTabControllerProperty, newInterTabController);
+            tabablzControl.SetCurrentValue(TabablzControl.InterTabControllerProperty, newInterTabController);            
 
             return new NewTabHost<UIElement>(tabablzControl, tabablzControl);
         }
@@ -35,7 +38,7 @@ namespace Dragablz
                     localValueEnumerator.Current.Value is FrameworkElement) continue;
                 
                 if (!(localValueEnumerator.Current.Value is BindingExpressionBase))
-                    to.SetCurrentValue(localValueEnumerator.Current.Property, localValueEnumerator.Current.Value);
+                    to.SetCurrentValue(localValueEnumerator.Current.Property, localValueEnumerator.Current.Value);                
             }            
         }
     }

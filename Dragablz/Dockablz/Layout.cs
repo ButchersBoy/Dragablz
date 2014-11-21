@@ -44,18 +44,11 @@ namespace Dragablz.Dockablz
             Unloaded += (sender, args) => LoadedLayouts.Remove(this);
         }
 
-        public static readonly DependencyProperty PartitionProperty = DependencyProperty.Register(
-            "Partition", typeof (object), typeof (Layout), new PropertyMetadata(default(object)));
-
         /// <summary>
         /// Use in conjuction with the <see cref="InterTabController.Partition"/> on a <see cref="TabablzControl"/>
         /// to isolate drag and drop spaces/control instances.
         /// </summary>
-        public object Partition
-        {
-            get { return (object) GetValue(PartitionProperty); }
-            set { SetValue(PartitionProperty, value); }
-        }
+        public string Partition { get; set; }
 
         public static readonly DependencyProperty InterLayoutClientProperty = DependencyProperty.Register(
             "InterLayoutClient", typeof (IInterLayoutClient), typeof (Layout), new PropertyMetadata(new DefaultInterLayoutClient()));
@@ -120,7 +113,7 @@ namespace Dragablz.Dockablz
             if (draggingWindow == null) return;            
 
             foreach (var loadedLayout in LoadedLayouts.Where(l =>
-                Equals(l.Partition, e.DragablzItem.PartitionAtDragStart) &&
+                l.Partition == e.DragablzItem.PartitionAtDragStart &&
                 !Equals(Window.GetWindow(l), draggingWindow)))
 
             {                
@@ -189,15 +182,18 @@ namespace Dragablz.Dockablz
                 newContent = new ContentControl
                 {
                     Content = new object(),
-                    ContentTemplate = BranchTemplate
+                    ContentTemplate = BranchTemplate,                  
                 };
                 ((ContentControl) newContent).Dispatcher.BeginInvoke(new Action(() =>
                 {
                     //TODO might need to improve this a bit, make it a bit more declarative for complex trees
-                    var newTabControl = ((ContentControl)newContent).VisualTreeDepthFirstTraversal().OfType<TabablzControl>().FirstOrDefault();
-
+                    var newTabControl = ((ContentControl)newContent).VisualTreeDepthFirstTraversal().OfType<TabablzControl>().FirstOrDefault();                    
                     if (newTabControl != null)
-                        newTabControl.AddToSource(sourceItem);                        
+                    {
+                        newTabControl.DataContext = sourceTabControl.DataContext;
+                        newTabControl.AddToSource(sourceItem);
+                        newTabControl.SelectedItem = sourceItem;
+                    }
                 }), DispatcherPriority.Loaded);                
             }
             
