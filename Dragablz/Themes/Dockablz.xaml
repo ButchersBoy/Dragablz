@@ -6,11 +6,11 @@
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <converters:EqualityToVisibilityConverter x:Key="EqualityToVisibilityConverter" />
     
-    <Style TargetType="dockablz:DropZone">
+    <Style TargetType="{x:Type dockablz:DropZone}">
         <Setter Property="Opacity" Value=".25" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="dockablz:DropZone">
+                <ControlTemplate TargetType="{x:Type dockablz:DropZone}">
                     <Grid>
                         <Path Fill="{TemplateBinding Foreground}" 
                               Visibility="{TemplateBinding Location, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static dockablz:DropZoneLocation.Top}}"

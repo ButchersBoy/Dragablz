@@ -2,14 +2,14 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{63F4A11F-3B6A-43D3-B5A2-B9B9C74D6023}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{7B11011C-7FD7-4AB0-A1AD-04E940B026DE}</ProjectGuid>
+    <OutputType>library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DragablzDemo</RootNamespace>
-    <AssemblyName>DragablzDemo</AssemblyName>
+    <RootNamespace>Dragablz</RootNamespace>
+    <AssemblyName>Dragablz</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -17,29 +17,24 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>..\bin\Debug_net45\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET45</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\Release_net45\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>DragablzDemo.Boot</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -57,54 +52,61 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Compile Include="Converters\EqualityToVisibilityConverter.cs" />
+    <Compile Include="DefaultInterLayoutClient.cs" />
+    <Compile Include="Dockablz\Branch.cs" />
+    <Compile Include="Dockablz\DropZone.cs" />
+    <Compile Include="Dockablz\DropZoneLocation.cs" />
+    <Compile Include="Dockablz\Layout.cs" />
+    <Compile Include="Core\FuncComparer.cs" />
+    <Compile Include="Core\MultiComparer.cs" />
+    <Compile Include="Core\CollectionTeaser.cs" />
+    <Compile Include="DragablzDragCompletedEventArgs.cs" />
+    <Compile Include="DragablzDragDeltaEventArgs.cs" />
+    <Compile Include="DragablzDragStartedEventArgs.cs" />
+    <Compile Include="DragablzItem.cs" />
+    <Compile Include="HorizontalOrganiser.cs" />
+    <Compile Include="HorizontalPositionMonitor.cs" />
+    <Compile Include="IInterLayoutClient.cs" />
+    <Compile Include="IInterTabClient.cs" />
+    <Compile Include="IItemsOrganiser.cs" />
+    <Compile Include="Core\Extensions.cs" />
+    <Compile Include="IManualInterTabClient.cs" />
+    <Compile Include="INewTabHost.cs" />
+    <Compile Include="InterTabController.cs" />
+    <Compile Include="Core\InterTabTransfer.cs" />
+    <Compile Include="LinearOrganiser.cs" />
+    <Compile Include="LinearPositionMonitor.cs" />
+    <Compile Include="LocationChangedEventArgs.cs" />
+    <Compile Include="Core\Native.cs" />
+    <Compile Include="NewTabHost.cs" />
+    <Compile Include="OrderChangedEventArgs.cs" />
+    <Compile Include="PositionMonitor.cs" />
+    <Compile Include="DefaultInterTabClient.cs" />
+    <Compile Include="Referenceless\AnonymousDisposable.cs" />
+    <Compile Include="Referenceless\DefaultDisposable.cs" />
+    <Compile Include="Referenceless\Disposable.cs" />
+    <Compile Include="Referenceless\ICancelable.cs" />
+    <Compile Include="Referenceless\SerialDisposable.cs" />
+    <Compile Include="TabablzControl.cs" />
+    <Compile Include="TabablzHeaderSizeConverter.cs" />
+    <Compile Include="TabablzItemStyleSelector.cs" />
+    <Compile Include="TabEmptiedResponse.cs" />
+    <Compile Include="Core\TabHeaderDragStartInformation.cs" />
+    <Compile Include="Trapezoid.cs" />
+    <Compile Include="VerticalOrganiser.cs" />
+    <Compile Include="VerticalPositionMonitor.cs" />
+    <Page Include="Themes\Dockablz.xaml">
       <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="BoundExampleInterTabClient.cs" />
-    <Compile Include="QuickStartWindow.xaml.cs">
-      <DependentUpon>QuickStartWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SimpleViewModel.cs" />
-    <Page Include="BasicExampleMainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
-    <Compile Include="AnotherCommandImplementation.cs" />
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BasicExampleMainWindow.xaml.cs">
-      <DependentUpon>BasicExampleMainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="BasicExampleTemplateWindow.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BoundExampleWindow.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="QuickStartWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicExampleMainModel.cs" />
-    <Compile Include="BasicExampleTemplateWindow.xaml.cs">
-      <DependentUpon>BasicExampleTemplateWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BasicExampleTemplateModel.cs" />
-    <Compile Include="Boot.cs" />
-    <Compile Include="BoundExampleModel.cs" />
-    <Compile Include="BoundExampleWindow.xaml.cs">
-      <DependentUpon>BoundExampleWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BasicExampleInterTabClient.cs" />
-    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="DragablzItemsControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -122,19 +124,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Dragablz\Dragablz.csproj">
-      <Project>{7B11011C-7FD7-4AB0-A1AD-04E940B026DE}</Project>
-      <Name>Dragablz</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

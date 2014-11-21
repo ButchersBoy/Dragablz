@@ -1,14 +1,11 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Dragablz.Core;
-using Dragablz.Referenceless;
 
 namespace Dragablz.Dockablz
 {
