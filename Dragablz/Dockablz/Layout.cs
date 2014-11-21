@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Dragablz.Core;
 using Dragablz.Referenceless;
 
@@ -90,6 +91,15 @@ namespace Dragablz.Dockablz
             private set { SetValue(IsParticipatingInDragPropertyKey, value); }
         }
 
+        public static readonly DependencyProperty BranchTemplateProperty = DependencyProperty.Register(
+            "BranchTemplate", typeof (DataTemplate), typeof (Layout), new PropertyMetadata(default(DataTemplate)));
+
+        public DataTemplate BranchTemplate
+        {
+            get { return (DataTemplate) GetValue(BranchTemplateProperty); }
+            set { SetValue(BranchTemplateProperty, value); }
+        }
+
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -159,18 +169,49 @@ namespace Dragablz.Dockablz
             var sourceItem = sourceOfDragItemsControl.ItemContainerGenerator.ItemFromContainer(sourceDragablzItem);
             sourceTabControl.RemoveItem(sourceDragablzItem);
 
-            var newTabHost = InterLayoutClient.GetNewHost(Partition, sourceTabControl);
-            if (newTabHost == null) throw new ApplicationException("InterLayoutClient did not provide a new tab host.");
-
-            newTabHost.TabablzControl.AddToSource(sourceItem);
-            newTabHost.TabablzControl.SelectedItem = sourceItem;
-
             var branchItem = new Branch
             {
-                FirstItem = (location == DropZoneLocation.Right || location == DropZoneLocation.Bottom) ? Content : newTabHost.Container,
-                SecondItem = !(location == DropZoneLocation.Right || location == DropZoneLocation.Bottom) ? Content : newTabHost.Container,
                 Orientation = (location == DropZoneLocation.Right || location == DropZoneLocation.Left) ? Orientation.Horizontal : Orientation.Vertical
             };
+
+            object newContent;
+            if (BranchTemplate == null)
+            {
+                var newTabHost = InterLayoutClient.GetNewHost(Partition, sourceTabControl);
+                if (newTabHost == null)
+                    throw new ApplicationException("InterLayoutClient did not provide a new tab host.");
+                newTabHost.TabablzControl.AddToSource(sourceItem);
+                newTabHost.TabablzControl.SelectedItem = sourceItem;
+                newContent = newTabHost.Container;
+            }
+            else
+            {
+                newContent = new ContentControl
+                {
+                    Content = new object(),
+                    ContentTemplate = BranchTemplate
+                };
+                ((ContentControl) newContent).Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    //TODO might need to improve this a bit, make it a bit more declarative for complex trees
+                    var newTabControl = ((ContentControl)newContent).VisualTreeDepthFirstTraversal().OfType<TabablzControl>().FirstOrDefault();
+
+                    if (newTabControl != null)
+                        newTabControl.AddToSource(sourceItem);                        
+                }), DispatcherPriority.Loaded);                
+            }
+            
+            if (location == DropZoneLocation.Right || location == DropZoneLocation.Bottom)
+            {
+                branchItem.FirstItem = Content;
+                branchItem.SecondItem = newContent;
+            }
+            else
+            {
+                branchItem.FirstItem = newContent;
+                branchItem.SecondItem = Content;
+            }
+
             SetCurrentValue(ContentProperty, branchItem);            
         }
 

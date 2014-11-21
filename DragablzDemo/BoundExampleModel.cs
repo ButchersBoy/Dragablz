@@ -11,7 +11,7 @@ namespace DragablzDemo
 {
     public class BoundExampleModel
     {
-        private readonly IInterTabClient _interTabClient = new BoundExampleInterTabClient();
+        private readonly IInterTabClient _interTabClient = new BoundExampleInterTabClient();        
         private readonly ObservableCollection<SimpleViewModel> _items;
 
         public BoundExampleModel()

@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using Dragablz;
 
 namespace DragablzDemo
@@ -10,7 +12,7 @@ namespace DragablzDemo
             var view = new BoundExampleWindow();
             var model = new BoundExampleModel();
             view.DataContext = model;
-            return new NewTabHost<Window>(view, view.TabablzControl);
+            return new NewTabHost<Window>(view, view.InitialTabablzControl);            
         }
 
         public TabEmptiedResponse TabEmptiedHandler(TabablzControl tabControl, Window window)

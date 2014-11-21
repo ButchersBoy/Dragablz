@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:dragablzDemo="clr-namespace:DragablzDemo"
+        xmlns:dockablz="clr-namespace:Dragablz.Dockablz;assembly=Dragablz"
         mc:Ignorable="d"
         Title="Simple form of bound tabs" Height="300" Width="500"        
         d:DataContext="{d:DesignInstance dragablzDemo:BoundExampleModel, IsDesignTimeCreatable=False}">
@@ -14,26 +15,48 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>            
-        </ResourceDictionary>        
+        </ResourceDictionary>               
     </Window.Resources>
-        
-    <dragablz:TabablzControl x:Name="TabablzControl"
-                                Style="{StaticResource BasicExamplesTabStyle}"
-                                ItemsSource="{Binding Items}"
-                                CustomHeaderItemStyle="{StaticResource TrapezoidDragableTabItemStyle}"
-                                >
-        <dragablz:TabablzControl.InterTabController>
-            <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" Partition="{Binding TabPartition}" />
-        </dragablz:TabablzControl.InterTabController>
-        <dragablz:TabablzControl.CustomHeaderItemTemplate>
-            <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
-                <TextBlock Text="{Binding Name}" />
+
+    <dockablz:Layout Partition="{Binding TabPartition}" x:Name="Layout">
+        <dockablz:Layout.BranchTemplate>
+            <DataTemplate>
+                <dragablz:TabablzControl Style="{StaticResource BasicExamplesTabStyle}"
+                                         ItemsSource="{Binding Items}"
+                                         CustomHeaderItemStyle="{StaticResource TrapezoidDragableTabItemStyle}">
+                    <dragablz:TabablzControl.InterTabController>
+                        <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" Partition="{Binding TabPartition}" />
+                    </dragablz:TabablzControl.InterTabController>
+                    <dragablz:TabablzControl.CustomHeaderItemTemplate>
+                        <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </dragablz:TabablzControl.CustomHeaderItemTemplate>
+                    <TabControl.ContentTemplate>
+                        <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
+                            <TextBlock Text="{Binding SimpleContent}" />
+                        </DataTemplate>
+                    </TabControl.ContentTemplate>
+                </dragablz:TabablzControl>
             </DataTemplate>
-        </dragablz:TabablzControl.CustomHeaderItemTemplate>
-        <TabControl.ContentTemplate>
-            <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
-                <TextBlock Text="{Binding SimpleContent}" />
-            </DataTemplate>
-        </TabControl.ContentTemplate>
-    </dragablz:TabablzControl>    
+        </dockablz:Layout.BranchTemplate>    
+        <dragablz:TabablzControl Style="{StaticResource BasicExamplesTabStyle}"
+                                 x:Name="InitialTabablzControl"
+                                 ItemsSource="{Binding Items}"
+                                 CustomHeaderItemStyle="{StaticResource TrapezoidDragableTabItemStyle}">
+            <dragablz:TabablzControl.InterTabController>
+                <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" Partition="{Binding TabPartition}" />
+            </dragablz:TabablzControl.InterTabController>
+            <dragablz:TabablzControl.CustomHeaderItemTemplate>
+                <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </dragablz:TabablzControl.CustomHeaderItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
+                    <TextBlock Text="{Binding SimpleContent}" />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </dragablz:TabablzControl>
+    </dockablz:Layout>
 </Window>

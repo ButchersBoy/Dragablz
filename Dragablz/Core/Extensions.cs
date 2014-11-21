@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Dragablz.Core
 {
@@ -32,5 +33,19 @@ namespace Dragablz.Core
                 yield return child;
         }
 
+        public static IEnumerable<object> VisualTreeDepthFirstTraversal(this DependencyObject node)
+        {
+            if (node == null) yield break;
+            yield return node;
+
+            for (var i = 0; i < VisualTreeHelper.GetChildrenCount(node); i++)
+            {
+                var child = VisualTreeHelper.GetChild(node, i);
+                foreach (var d in child.VisualTreeDepthFirstTraversal())
+                {
+                    yield return d;
+                }
+            }
+        }
     }
 }
