@@ -9,6 +9,13 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance dragablzDemo:BasicExampleMainModel, IsDesignTimeCreatable=False}">
 
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>            
+        </ResourceDictionary>
+    </Window.Resources>
 
     <!--
     
@@ -112,16 +119,17 @@
                 </TabControl.ItemTemplate>
             </dragablz:TabablzControl>            
         </TabItem>
-        <TabItem Header="Just an empty tab">
+        <TabItem Header="Cool features">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <TextBlock Margin="8 8 8 8">Just an empty tab to illustrate you can drag tabs around.</TextBlock>
-                <dragablz:Trapezoid Grid.Row="1">Trapezium/Trapezoid...pretty useful for tabs</dragablz:Trapezoid>
-            </Grid>
-            
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>                
+                <dragablz:Trapezoid Grid.Row="0" Margin="8 8 8 8">Trapezium/Trapezoid...pretty useful for tabs</dragablz:Trapezoid>
+                <dragablz:DragablzItem Grid.Row="1" BorderBrush="Black" BorderThickness="4" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource SizableFromBottomRightDragablzItemStyle}">
+                    <TextBlock TextWrapping="Wrap" Margin="2 2 2 2">This is a dragablz item, which can be resized...pretty cool to let text arrange.  Try dragging the bottom right of the border. A simple example style is used, but you can also create your own grips in content using DragablzItem.SizeGrip. </TextBlock>
+                </dragablz:DragablzItem>
+            </Grid>            
         </TabItem>
     </dragablz:TabablzControl>    
     

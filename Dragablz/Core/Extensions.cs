@@ -1,6 +1,7 @@
 #if NET40
 using System.Collections;
 #endif
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -18,8 +19,8 @@ namespace Dragablz.Core
             for (var i = 0; i < itemsControl.ItemContainerGenerator.Items.Count; i++)
 #endif
 #if NET40
-            var propertyInfo = typeof (ItemContainerGenerator).GetProperty("Items", BindingFlags.NonPublic);
-            var list = (IList) propertyInfo.GetValue(itemsControl, new object[0]);
+            var fieldInfo = typeof(ItemContainerGenerator).GetField("_items", BindingFlags.NonPublic | BindingFlags.Instance);
+            var list = (IList)fieldInfo.GetValue(itemsControl.ItemContainerGenerator);            
             for (var i = 0; i < list.Count; i++)
 #endif
             {
@@ -57,6 +58,22 @@ namespace Dragablz.Core
                     yield return d;
                 }
             }
+        }
+
+        /// <summary>
+        /// Yields the visual ancestory (including the starting point).
+        /// </summary>
+        /// <param name="dependencyObject"></param>
+        /// <returns></returns>
+        public static IEnumerable<DependencyObject> VisualTreeAncestory(this DependencyObject dependencyObject)
+        {
+            if (dependencyObject == null) throw new ArgumentNullException("dependencyObject");
+
+            while (dependencyObject != null)
+            {
+                yield return dependencyObject;
+                dependencyObject = VisualTreeHelper.GetParent(dependencyObject);
+            }            
         }
     }
 }

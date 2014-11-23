@@ -1,14 +1,29 @@
 ﻿using System;
 using System.Dynamic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Dragablz.Core;
 using Dragablz.Referenceless;
 
 namespace Dragablz
-{        
+{
+    public enum SizeGrip
+    {
+        NotApplicable,
+        Left,
+        TopLeft,
+        Top,
+        TopRight,
+        Right,
+        BottomRight,
+        Bottom,
+        BottomLeft
+    }
+
     [TemplatePart(Name = ThumbPartName, Type = typeof(Thumb))]
     public class DragablzItem : ContentControl
     {
@@ -18,10 +33,6 @@ namespace Dragablz
 
         private bool _seizeDragWithTemplate;
         private Action<DragablzItem> _dragSeizedContinuation;
-
-        public DragablzItem()
-        {
-        }
 
         static DragablzItem()
         {
@@ -96,6 +107,36 @@ namespace Dragablz
                 RoutedEvent = YChangedEvent
             };
             instance.RaiseEvent(args);
+        }
+
+        public static readonly DependencyProperty SizeGripProperty = DependencyProperty.RegisterAttached(
+            "SizeGrip", typeof (SizeGrip), typeof (DragablzItem), new PropertyMetadata(default(SizeGrip), SizeGripPropertyChangedCallback));
+
+        private static void SizeGripPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            var thumb = (dependencyObject as Thumb);
+            if (thumb == null) return;
+            thumb.DragDelta += SizeThumbOnDragDelta;
+        }
+
+        private static void SizeThumbOnDragDelta(object sender, DragDeltaEventArgs dragDeltaEventArgs)
+        {
+            var thumb = ((Thumb) sender);
+            var dragablzItem = thumb.VisualTreeAncestory().OfType<DragablzItem>().FirstOrDefault();
+            if (dragablzItem == null) return;
+
+            dragablzItem.SetCurrentValue(WidthProperty, Math.Max(dragablzItem.ActualWidth + dragDeltaEventArgs.HorizontalChange, thumb.DesiredSize.Width));
+            dragablzItem.SetCurrentValue(HeightProperty, Math.Max(dragablzItem.ActualHeight + dragDeltaEventArgs.VerticalChange, thumb.DesiredSize.Height));
+        }
+
+        public static void SetSizeGrip(DependencyObject element, SizeGrip value)
+        {
+            element.SetValue(SizeGripProperty, value);
+        }
+
+        public static SizeGrip GetSizeGrip(DependencyObject element)
+        {
+            return (SizeGrip) element.GetValue(SizeGripProperty);
         }
 
         public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register(
