@@ -96,6 +96,7 @@
     <Compile Include="Trapezoid.cs" />
     <Compile Include="VerticalOrganiser.cs" />
     <Compile Include="VerticalPositionMonitor.cs" />
+    <Compile Include="TwoDimensionalOrgansier.cs" />
     <Page Include="Themes\Dockablz.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

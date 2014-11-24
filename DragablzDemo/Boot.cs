@@ -44,7 +44,7 @@ namespace DragablzDemo
             }.Show();
 
             new QuickStartWindow().Show();
-
+            
             app.Run();
         }
     }

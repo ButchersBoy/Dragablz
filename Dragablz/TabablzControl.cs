@@ -304,6 +304,8 @@ namespace Dragablz
 
         private void ItemDragStarted(object sender, DragablzDragStartedEventArgs e)
         {
+            if (!IsMyItem(e.DragablzItem)) return;
+
             //the thumb may steal the user selection, so we will try and apply it manually
             if (_dragablzItemsControl == null) return;
 
@@ -429,12 +431,16 @@ namespace Dragablz
 
         private void ItemDragCompleted(object sender, DragablzDragCompletedEventArgs e)
         {
+            if (!IsMyItem(e.DragablzItem)) return;
+
             _interTabTransfer = null;
             _dragablzItemsControl.LockedMeasure = null;            
         }
 
         private void ItemDragDelta(object sender, DragablzDragDeltaEventArgs e)
         {
+            if (!IsMyItem(e.DragablzItem)) return;
+
             if (_tabHeaderDragStartInformation != null &&
                 Equals(_tabHeaderDragStartInformation.DragItem, e.DragablzItem) && 
                 InterTabController != null)
@@ -444,6 +450,11 @@ namespace Dragablz
                 
                 MonitorBreach(e);
             }
+        }
+
+        private bool IsMyItem(DragablzItem item)
+        {
+            return _dragablzItemsControl.DragablzItems().Contains(item);
         }
 
         private void MonitorBreach(DragablzDragDeltaEventArgs e)

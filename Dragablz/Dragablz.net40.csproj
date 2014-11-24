@@ -88,6 +88,7 @@
     <Compile Include="TabablzItemStyleSelector.cs" />
     <Compile Include="TabEmptiedResponse.cs" />
     <Compile Include="Trapezoid.cs" />
+    <Compile Include="TwoDimensionalOrgansier.cs" />
     <Compile Include="VerticalOrganiser.cs" />
     <Compile Include="VerticalPositionMonitor.cs" />
   </ItemGroup>

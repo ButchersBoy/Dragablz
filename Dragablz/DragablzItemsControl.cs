@@ -116,7 +116,7 @@ namespace Dragablz
 
             _itemsPendingInitialArrangement.Add(dragablzItem);
 
-            return false;
+            return true;
         }
 
         protected override DependencyObject GetContainerForItemOverride()
@@ -162,7 +162,7 @@ namespace Dragablz
 
         internal IEnumerable<DragablzItem> DragablzItems()
         {
-            return this.Containers<DragablzItem>();            
+            return this.Containers<DragablzItem>().ToList();            
         }
 
         internal Size? LockedMeasure { get; set; }

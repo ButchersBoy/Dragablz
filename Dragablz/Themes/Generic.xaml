@@ -154,7 +154,95 @@
             </Setter>
         </Style.Setters>
     </Style>
-    
+
+    <Style TargetType="{x:Type local:DragablzItem}" x:Key="FullySizableDragablzItemStyle">
+        <Style.Setters>
+            <Setter Property="Canvas.Left" Value="{Binding X, RelativeSource={RelativeSource Self}}" />
+            <Setter Property="Canvas.Top" Value="{Binding Y, RelativeSource={RelativeSource Self}}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type local:DragablzItem}">
+                        <Grid Margin="{TemplateBinding Margin}">                            
+                            <Border BorderThickness="{TemplateBinding Border.BorderThickness}" Padding="{TemplateBinding Control.Padding}" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}" SnapsToDevicePixels="True">
+                                <Grid>                                    
+                                    <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                                      Margin="{TemplateBinding Control.Padding }"/>
+                                    <Thumb HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" x:Name="PART_Thumb"
+                                           Style="{StaticResource InvisibleThumbStyle}"
+                                           />
+                                </Grid>                                
+                            </Border>
+                            <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                   Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
+                                   Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   local:DragablzItem.SizeGrip="Left"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Stretch"
+                                   Cursor="SizeWE"
+                                   />
+                            <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                   Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
+                                   Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   local:DragablzItem.SizeGrip="Top"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Top"
+                                   Cursor="SizeNS"
+                                   />
+                            <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                   Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
+                                   Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   local:DragablzItem.SizeGrip="Left"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Stretch"
+                                   Cursor="SizeWE"
+                                   />
+                            <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                   Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
+                                   Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   local:DragablzItem.SizeGrip="Right"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Top"
+                                   Cursor="SizeNS"
+                                   />
+                            <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                   Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
+                                   Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   local:DragablzItem.SizeGrip="TopLeft"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
+                                   Cursor="SizeNWSE"
+                                   />
+                            <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                   Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
+                                   Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   local:DragablzItem.SizeGrip="TopRight"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Top"
+                                   Cursor="SizeNESW"
+                                   />
+                            <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                   Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
+                                   Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   local:DragablzItem.SizeGrip="BottomRight"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Bottom"
+                                   Cursor="SizeNWSE"
+                                   />
+                            <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                   Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
+                                   Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   local:DragablzItem.SizeGrip="BottomLeft"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Bottom"
+                                   Cursor="SizeNESW"
+                                   />                            
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style.Setters>
+    </Style>
+
     <Style TargetType="{x:Type local:DragablzItem}" x:Key="ToolWindowDragablzItem">
         <Style.Setters>
             <Setter Property="Canvas.Left" Value="{Binding X, RelativeSource={RelativeSource Self}}" />
