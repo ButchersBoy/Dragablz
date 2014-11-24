@@ -43,12 +43,17 @@ namespace Dragablz
         protected override void ClearContainerForItemOverride(DependencyObject element, object item)
         {
             base.ClearContainerForItemOverride(element, item);
-    
-            var dragablzItems = DragablzItems().ToList();
-            ItemsOrganiser.Organise(new Size(ItemsPresenterWidth, ItemsPresenterHeight), dragablzItems);
-            var measure = ItemsOrganiser.Measure(dragablzItems);
-            ItemsPresenterWidth = measure.Width;
-            ItemsPresenterHeight = measure.Height;
+
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                var dragablzItems = DragablzItems().ToList();
+                ItemsOrganiser.Organise(new Size(ItemsPresenterWidth, ItemsPresenterHeight), dragablzItems);
+                var measure = ItemsOrganiser.Measure(dragablzItems);
+                ItemsPresenterWidth = measure.Width;
+                ItemsPresenterHeight = measure.Height;
+            }), DispatcherPriority.Input);
+
+            
         }        
 
         public static readonly DependencyProperty ItemsOrganiserProperty = DependencyProperty.Register(

@@ -35,7 +35,7 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0">Content Defined in XAML, organised horizontally</TextBlock>                
-                <!--
+                
                 <dragablz:DragablzItemsControl Grid.Column="0" Grid.Row="1" BorderThickness="1" BorderBrush="DarkBlue"
                                                PositionMonitor="{Binding BasicColourMonitor}">
                     <dragablz:DragablzItemsControl.ItemsOrganiser>
@@ -45,7 +45,7 @@
                     <TextBlock>Green</TextBlock>
                     <TextBlock>Blue</TextBlock>
                 </dragablz:DragablzItemsControl>
-                -->
+                
                 <TextBlock Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" 
                            Text="{Binding BasicColourMonitorText, StringFormat='Your view model can monitor coordinates. Latest coords={0}'}" />
 
