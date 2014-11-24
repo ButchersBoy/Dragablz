@@ -44,10 +44,14 @@ namespace Dragablz
         {
             base.ClearContainerForItemOverride(element, item);
 
-            ItemsOrganiser.Organise(new Size(ItemsPresenterWidth, ItemsPresenterHeight), DragablzItems());
-            var measure = ItemsOrganiser.Measure(DragablzItems());
-            ItemsPresenterWidth = measure.Width;
-            ItemsPresenterHeight = measure.Height;            
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                var dragablzItems = DragablzItems().ToList();
+                ItemsOrganiser.Organise(new Size(ItemsPresenterWidth, ItemsPresenterHeight), dragablzItems);
+                var measure = ItemsOrganiser.Measure(dragablzItems);
+                ItemsPresenterWidth = measure.Width;
+                ItemsPresenterHeight = measure.Height;
+            }), DispatcherPriority.Input);            
         }        
 
         public static readonly DependencyProperty ItemsOrganiserProperty = DependencyProperty.Register(
