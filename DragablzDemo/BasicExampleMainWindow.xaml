@@ -16,29 +16,6 @@
             </ResourceDictionary.MergedDictionaries>            
         </ResourceDictionary>
     </Window.Resources>
-
-    <!--
-    
-    <dragablz:TabablzControl Margin="8 8 8 8" ItemsSource="{Binding ViewModels}"
-                                     SelectedItem="{Binding SelectedViewModel}">
-        <TabControl.ContentTemplate>
-            <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
-                <TextBlock Text="{Binding SimpleContent}" />
-            </DataTemplate>
-        </TabControl.ContentTemplate>
-        <dragablz:TabablzControl.CustomHeaderItemTemplate>
-            <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
-                <TextBlock Text="{Binding Name}" />
-            </DataTemplate>
-        </dragablz:TabablzControl.CustomHeaderItemTemplate>
-        <TabControl.ItemTemplate>
-            <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
-                <TextBlock Text="{Binding SimpleContent}" />
-            </DataTemplate>
-        </TabControl.ItemTemplate>
-    </dragablz:TabablzControl>
-
-    -->
     
     <dragablz:TabablzControl Style="{StaticResource BasicExamplesTabStyle}">
         <dragablz:TabablzControl.InterTabController>
@@ -58,6 +35,7 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0">Content Defined in XAML, organised horizontally</TextBlock>                
+                <!--
                 <dragablz:DragablzItemsControl Grid.Column="0" Grid.Row="1" BorderThickness="1" BorderBrush="DarkBlue"
                                                PositionMonitor="{Binding BasicColourMonitor}">
                     <dragablz:DragablzItemsControl.ItemsOrganiser>
@@ -67,10 +45,12 @@
                     <TextBlock>Green</TextBlock>
                     <TextBlock>Blue</TextBlock>
                 </dragablz:DragablzItemsControl>
+                -->
                 <TextBlock Grid.Row="2" Grid.Column="0" TextWrapping="Wrap" 
                            Text="{Binding BasicColourMonitorText, StringFormat='Your view model can monitor coordinates. Latest coords={0}'}" />
 
                 <TextBlock Grid.Row="0" Grid.Column="1" Margin="2 0">Content Bound From View Model, organised vertically</TextBlock>
+                
                 <dragablz:DragablzItemsControl Grid.Column="1" Grid.Row="1" ItemsSource="{Binding People}" BorderThickness="1" 
                                                BorderBrush="DarkBlue"
                                                ItemContainerStyle="{StaticResource CustomDragablzItemStyle}"
@@ -90,7 +70,7 @@
                 </dragablz:DragablzItemsControl>
                 <Button Command="{Binding AddNewPerson}" Grid.Row="2" Grid.Column="1" Margin="2 0">Add New Bound Person</Button>
                 <TextBlock Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" 
-                           Text="{Binding PeopleMonitorText, StringFormat='Your can monitor ordering: {0}'}" />                
+                           Text="{Binding PeopleMonitorText, StringFormat='Your can monitor ordering: {0}'}" />                                
             </Grid>            
         </TabItem>
         <TabItem Header="Drag me!">
@@ -123,16 +103,25 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>                
-                <dragablz:Trapezoid Grid.Row="0" Margin="8 8 8 8">Trapezium/Trapezoid...pretty useful for tabs</dragablz:Trapezoid>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <dragablz:Trapezoid Grid.Row="0" Margin="8 8 8 8">Trapezium/Trapezoid...pretty useful for tabs</dragablz:Trapezoid>        
                 <dragablz:DragablzItem Grid.Row="1" BorderBrush="Black" BorderThickness="4" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource SizableFromBottomRightDragablzItemStyle}">
-                    <TextBlock TextWrapping="Wrap" Margin="2 2 2 2">This is a dragablz item, which can be resized...pretty cool to let text arrange.  Try dragging the bottom right of the border. A simple example style is used, but you can also create your own grips in content using DragablzItem.SizeGrip. </TextBlock>
-                </dragablz:DragablzItem>
+                    <TextBlock TextWrapping="Wrap" Margin="2 2 2 2">This is a dragablz item, which can be resized...pretty cool to let text arrange.  Try dragging the bottom right of the border. A simple example style is used, but you can also create your own grips in content using DragablzItem.SizeGrip.</TextBlock>
+                </dragablz:DragablzItem>        
+                <dragablz:DragablzItemsControl Grid.RowSpan="2" Grid.Row="0" VerticalAlignment="Stretch" >            
+                    <dragablz:DragablzItemsControl.ItemsOrganiser>
+                        <dragablz:TwoDimensionalOrgansier />
+                    </dragablz:DragablzItemsControl.ItemsOrganiser>            
+                    <dragablz:DragablzItem BorderBrush="Black" BorderThickness="4" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource FullySizableDragablzItemStyle}"
+                                                   Background="White"
+                                                   X="100" Y="200"
+                                                   Width="150" Height="100">
+                        <TextBlock TextWrapping="Wrap" Margin="2 2 2 2">This is a dragablz item, is floating aroung happily, you can size it on any part of the border, and drag it anywhere.</TextBlock>
+                    </dragablz:DragablzItem>
+                </dragablz:DragablzItemsControl>
             </Grid>            
         </TabItem>
-    </dragablz:TabablzControl>    
-    
-    
+    </dragablz:TabablzControl>       
     
 </Window>

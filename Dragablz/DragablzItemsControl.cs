@@ -43,11 +43,12 @@ namespace Dragablz
         protected override void ClearContainerForItemOverride(DependencyObject element, object item)
         {
             base.ClearContainerForItemOverride(element, item);
-
-            ItemsOrganiser.Organise(new Size(ItemsPresenterWidth, ItemsPresenterHeight), DragablzItems());
-            var measure = ItemsOrganiser.Measure(DragablzItems());
+    
+            var dragablzItems = DragablzItems().ToList();
+            ItemsOrganiser.Organise(new Size(ItemsPresenterWidth, ItemsPresenterHeight), dragablzItems);
+            var measure = ItemsOrganiser.Measure(dragablzItems);
             ItemsPresenterWidth = measure.Width;
-            ItemsPresenterHeight = measure.Height;            
+            ItemsPresenterHeight = measure.Height;
         }        
 
         public static readonly DependencyProperty ItemsOrganiserProperty = DependencyProperty.Register(
@@ -112,7 +113,7 @@ namespace Dragablz
 
             _itemsPendingInitialArrangement.Add(dragablzItem);
 
-            return false;
+            return true;
         }
 
         protected override DependencyObject GetContainerForItemOverride()
@@ -158,7 +159,7 @@ namespace Dragablz
 
         internal IEnumerable<DragablzItem> DragablzItems()
         {
-            return this.Containers<DragablzItem>();            
+            return this.Containers<DragablzItem>().ToList();            
         }
 
         internal Size? LockedMeasure { get; set; }
