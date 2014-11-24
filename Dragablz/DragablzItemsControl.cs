@@ -51,9 +51,7 @@ namespace Dragablz
                 var measure = ItemsOrganiser.Measure(dragablzItems);
                 ItemsPresenterWidth = measure.Width;
                 ItemsPresenterHeight = measure.Height;
-            }), DispatcherPriority.Input);
-
-            
+            }), DispatcherPriority.Input);            
         }        
 
         public static readonly DependencyProperty ItemsOrganiserProperty = DependencyProperty.Register(
