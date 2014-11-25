@@ -71,7 +71,7 @@ namespace Dragablz
             {
                 RoutedEvent = XChangedEvent
             };
-            instance.RaiseEvent(args);
+            instance.RaiseEvent(args);            
         } 
 
         public static readonly DependencyProperty YProperty = DependencyProperty.Register(
@@ -125,8 +125,56 @@ namespace Dragablz
             var dragablzItem = thumb.VisualTreeAncestory().OfType<DragablzItem>().FirstOrDefault();
             if (dragablzItem == null) return;
 
-            dragablzItem.SetCurrentValue(WidthProperty, Math.Max(dragablzItem.ActualWidth + dragDeltaEventArgs.HorizontalChange, thumb.DesiredSize.Width));
-            dragablzItem.SetCurrentValue(HeightProperty, Math.Max(dragablzItem.ActualHeight + dragDeltaEventArgs.VerticalChange, thumb.DesiredSize.Height));
+            var sizeGrip = (SizeGrip) thumb.GetValue(SizeGripProperty);
+            var width = dragablzItem.ActualWidth;
+            var height = dragablzItem.ActualHeight;
+            var x = dragablzItem.X;
+            var y = dragablzItem.Y;
+            switch (sizeGrip)
+            {                                   
+                case SizeGrip.NotApplicable:
+                    break;
+                case SizeGrip.Left:
+                    width += -dragDeltaEventArgs.HorizontalChange;
+                    x += dragDeltaEventArgs.HorizontalChange;
+                    break;
+                case SizeGrip.TopLeft:
+                    width += -dragDeltaEventArgs.HorizontalChange;
+                    height += -dragDeltaEventArgs.VerticalChange;
+                    x += dragDeltaEventArgs.HorizontalChange;
+                    y += dragDeltaEventArgs.VerticalChange;
+                    break;
+                case SizeGrip.Top:
+                    height += -dragDeltaEventArgs.VerticalChange;                    
+                    y += dragDeltaEventArgs.VerticalChange;
+                    break;
+                case SizeGrip.TopRight:
+                    height += -dragDeltaEventArgs.VerticalChange;
+                    width += dragDeltaEventArgs.HorizontalChange;
+                    y += dragDeltaEventArgs.VerticalChange;
+                    break;
+                case SizeGrip.Right:
+                    width += dragDeltaEventArgs.HorizontalChange;
+                    break;
+                case SizeGrip.BottomRight:
+                    width += dragDeltaEventArgs.HorizontalChange;
+                    height += dragDeltaEventArgs.VerticalChange;
+                    break;
+                case SizeGrip.Bottom:
+                    height += dragDeltaEventArgs.VerticalChange;
+                    break;
+                case SizeGrip.BottomLeft:
+                    height += dragDeltaEventArgs.VerticalChange;
+                    width += -dragDeltaEventArgs.HorizontalChange;
+                    x += dragDeltaEventArgs.HorizontalChange;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            dragablzItem.SetCurrentValue(XProperty, x);
+            dragablzItem.SetCurrentValue(YProperty, y);
+            dragablzItem.SetCurrentValue(WidthProperty, Math.Max(width, thumb.DesiredSize.Width));
+            dragablzItem.SetCurrentValue(HeightProperty, Math.Max(height, thumb.DesiredSize.Height));
         }
 
         public static void SetSizeGrip(DependencyObject element, SizeGrip value)
