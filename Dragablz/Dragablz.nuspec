@@ -7,7 +7,7 @@
     <authors>James Willock</authors>
     <owners>James Willock</owners>
     <licenseUrl>http://opensource.org/licenses/MS-PL</licenseUrl>
-    <projectUrl>https://dragablz.wordpress.com/</projectUrl>    
+    <projectUrl>http://dragablz.net</projectUrl>    
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Dragable and tearable tab control for WPF</description>
     <releaseNotes>We are in alpha right now!.</releaseNotes>
