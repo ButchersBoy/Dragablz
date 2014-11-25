@@ -407,5 +407,5 @@ namespace Dragablz
             MouseAtDragStart = Mouse.GetPosition(this);
             OnDragStarted(new DragablzDragStartedEventArgs(DragStarted, this, dragStartedEventArgs));            
         }
-    }    
+    }
 }

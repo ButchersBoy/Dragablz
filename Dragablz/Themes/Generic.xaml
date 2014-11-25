@@ -9,6 +9,24 @@
         <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Dockablz.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <!-- these tab styles are as close as possible to the default .net styles, so the tab will fit straight in to an unstyled app -->
+    <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#ACACAC"/>
+
+    <LinearGradientBrush x:Key="TabItem.Static.Background" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#F0F0F0" Offset="0.0"/>
+        <GradientStop Color="#E5E5E5" Offset="1.0"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="TabItem.Static.Border" Color="#ACACAC"/>
+    <LinearGradientBrush x:Key="TabItem.MouseOver.Background" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#ECF4FC" Offset="0.0"/>
+        <GradientStop Color="#DCECFC" Offset="1.0"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="TabItem.MouseOver.Border" Color="#7EB4EA"/>
+    <SolidColorBrush x:Key="TabItem.Disabled.Background" Color="#F0F0F0"/>
+    <SolidColorBrush x:Key="TabItem.Disabled.Border" Color="#D9D9D9"/>
+
+
     <Style TargetType="{x:Type Thumb}" x:Key="InvisibleThumbStyle">
         <Setter Property="Template">
             <Setter.Value>
@@ -153,9 +171,154 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
+    <Style TargetType="{x:Type local:HeaderedDragablzItem}">
+        <Style.Setters>
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TabItem.Static.Border}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Canvas.Left" Value="{Binding X, RelativeSource={RelativeSource Self}}" />
+            <Setter Property="Canvas.Top" Value="{Binding Y, RelativeSource={RelativeSource Self}}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type local:HeaderedDragablzItem}">
+                        <Grid Margin="{TemplateBinding Margin}">
+                            <Border Background="White">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="10" ShadowDepth="5" Direction="315" Color="Black" Opacity=".5" />
+                                </Border.Effect>
+                            </Border>
+                            <Border BorderThickness="{TemplateBinding Border.BorderThickness}" Padding="{TemplateBinding Control.Padding}" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}" SnapsToDevicePixels="True">
+                                <DockPanel>
+                                    <Grid DockPanel.Dock="Top" Background="{StaticResource TabItem.Static.Background}">
+                                        <ContentPresenter Content="{TemplateBinding HeaderContent}" 
+                                                          ContentTemplate="{TemplateBinding HeaderContentTemplate}" 
+                                                          ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" 
+                                                          ContentTemplateSelector="{TemplateBinding HeaderContentTemplateSelector}"
+                                                          VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" 
+                                                          SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                                          Margin="{TemplateBinding Control.Padding }"
+                                                          />
+                                        <Thumb HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" x:Name="PART_Thumb"
+                                               Style="{StaticResource InvisibleThumbStyle}"
+                                               />                                        
+                                    </Grid>
+                                    <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                                      Margin="{TemplateBinding Control.Padding }"/>
+                                </DockPanel>
+                            </Border>                            
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style.Setters>
+    </Style>
+
+    <Style TargetType="{x:Type local:HeaderedDragablzItem}" x:Key="ToolDragablzItemStyle">
+        <Style.Setters>
+            <Setter Property="BorderBrush" Value="{StaticResource TabItem.Static.Border}" />
+            <Setter Property="BorderThickness" Value="4" />            
+            <Setter Property="Canvas.Left" Value="{Binding X, RelativeSource={RelativeSource Self}}" />
+            <Setter Property="Canvas.Top" Value="{Binding Y, RelativeSource={RelativeSource Self}}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type local:HeaderedDragablzItem}">
+                        <Grid Margin="{TemplateBinding Margin}">
+                            <Border Background="White">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="10" ShadowDepth="5" Direction="315" Color="Black" Opacity=".5" />
+                                </Border.Effect>
+                            </Border>
+                            <Border BorderThickness="{TemplateBinding Border.BorderThickness}" Padding="{TemplateBinding Control.Padding}" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}" SnapsToDevicePixels="True">
+                                <DockPanel>
+                                    <Grid DockPanel.Dock="Top" Background="{StaticResource TabItem.Static.Background}">
+                                        <ContentPresenter Content="{TemplateBinding HeaderContent}" 
+                                                          ContentTemplate="{TemplateBinding HeaderContentTemplate}" 
+                                                          ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" 
+                                                          ContentTemplateSelector="{TemplateBinding HeaderContentTemplateSelector}"
+                                                          VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" 
+                                                          SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                                          Margin="{TemplateBinding Control.Padding }"
+                                                          />
+                                        <Thumb HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" x:Name="PART_Thumb"
+                                               Style="{StaticResource InvisibleThumbStyle}"
+                                               />
+                                    </Grid>
+                                    <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                                      Margin="{TemplateBinding Control.Padding }"/>
+                                </DockPanel>                                
+                            </Border>
+                            <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                   Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Left}"
+                                   local:DragablzItem.SizeGrip="Left"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Stretch"
+                                   Cursor="SizeWE"
+                                   />
+                            <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                   Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Top}"
+                                   local:DragablzItem.SizeGrip="Top"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Top"
+                                   Cursor="SizeNS"
+                                   />
+                            <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                   Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
+                                   local:DragablzItem.SizeGrip="Right"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Stretch"
+                                   Cursor="SizeWE"
+                                   />
+                            <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                   Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   local:DragablzItem.SizeGrip="Bottom"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Bottom"
+                                   Cursor="SizeNS"
+                                   />
+                            <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                   Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
+                                   Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   local:DragablzItem.SizeGrip="TopLeft"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
+                                   Cursor="SizeNWSE"
+                                   />
+                            <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                   Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
+                                   Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   local:DragablzItem.SizeGrip="TopRight"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Top"
+                                   Cursor="SizeNESW"
+                                   />
+                            <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                   Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
+                                   Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   local:DragablzItem.SizeGrip="BottomRight"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Bottom"
+                                   Cursor="SizeNWSE"
+                                   />
+                            <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                   Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
+                                   Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   local:DragablzItem.SizeGrip="BottomLeft"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Bottom"
+                                   Cursor="SizeNESW"
+                                   />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style.Setters>
+    </Style>
+
     <Style TargetType="{x:Type local:DragablzItem}" x:Key="SizableFromBottomRightDragablzItemStyle">
         <Style.Setters>
+            <Setter Property="BorderBrush" Value="{StaticResource TabItem.Static.Border}" />
+            <Setter Property="BorderThickness" Value="4" />
             <Setter Property="Canvas.Left" Value="{Binding X, RelativeSource={RelativeSource Self}}" />
             <Setter Property="Canvas.Top" Value="{Binding Y, RelativeSource={RelativeSource Self}}" />
             <Setter Property="Template">
@@ -183,6 +346,8 @@
 
     <Style TargetType="{x:Type local:DragablzItem}" x:Key="FullySizableDragablzItemStyle">
         <Style.Setters>
+            <Setter Property="BorderBrush" Value="{StaticResource TabItem.Static.Border}" />
+            <Setter Property="BorderThickness" Value="4" />
             <Setter Property="Canvas.Left" Value="{Binding X, RelativeSource={RelativeSource Self}}" />
             <Setter Property="Canvas.Top" Value="{Binding Y, RelativeSource={RelativeSource Self}}" />
             <Setter Property="Template">
@@ -268,14 +433,7 @@
                 </Setter.Value>
             </Setter>
         </Style.Setters>
-    </Style>
-
-    <Style TargetType="{x:Type local:DragablzItem}" x:Key="ToolWindowDragablzItem">
-        <Style.Setters>
-            <Setter Property="Canvas.Left" Value="{Binding X, RelativeSource={RelativeSource Self}}" />
-            <Setter Property="Canvas.Top" Value="{Binding Y, RelativeSource={RelativeSource Self}}" />
-        </Style.Setters>
-    </Style>
+    </Style>       
 
     <Style TargetType="{x:Type local:DragablzItem}" x:Key="FullyDragablzItemStyle">
         <Setter Property="Template">
@@ -294,27 +452,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
-
-    <!-- these tab styles are as close as possible to the default .net styles, so the tab will fit straight in to an unstyled app -->
-
-    <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#FFFFFF"/>
-    <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#ACACAC"/>
-
-    <LinearGradientBrush x:Key="TabItem.Static.Background" EndPoint="0,1" StartPoint="0,0">
-        <GradientStop Color="#F0F0F0" Offset="0.0"/>
-        <GradientStop Color="#E5E5E5" Offset="1.0"/>
-    </LinearGradientBrush>
-    <SolidColorBrush x:Key="TabItem.Static.Border" Color="#ACACAC"/>
-    <LinearGradientBrush x:Key="TabItem.MouseOver.Background" EndPoint="0,1" StartPoint="0,0">
-        <GradientStop Color="#ECF4FC" Offset="0.0"/>
-        <GradientStop Color="#DCECFC" Offset="1.0"/>
-    </LinearGradientBrush>
-    <SolidColorBrush x:Key="TabItem.MouseOver.Border" Color="#7EB4EA"/>
-    <SolidColorBrush x:Key="TabItem.Disabled.Background" Color="#F0F0F0"/>
-    <SolidColorBrush x:Key="TabItem.Disabled.Border" Color="#D9D9D9"/>
-
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>

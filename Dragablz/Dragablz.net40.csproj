@@ -63,6 +63,7 @@
     <Compile Include="DragablzDragStartedEventArgs.cs" />
     <Compile Include="DragablzItem.cs" />
     <Compile Include="DragablzItemsControl.cs" />
+    <Compile Include="HeaderedDragablzItem.cs" />
     <Compile Include="HorizontalOrganiser.cs" />
     <Compile Include="HorizontalPositionMonitor.cs" />
     <Compile Include="IInterLayoutClient.cs" />
