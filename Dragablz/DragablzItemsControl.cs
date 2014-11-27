@@ -47,6 +47,7 @@ namespace Dragablz
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 var dragablzItems = DragablzItems().ToList();
+                if (ItemsOrganiser == null) return;
                 ItemsOrganiser.Organise(new Size(ItemsPresenterWidth, ItemsPresenterHeight), dragablzItems);
                 var measure = ItemsOrganiser.Measure(dragablzItems);
                 ItemsPresenterWidth = measure.Width;

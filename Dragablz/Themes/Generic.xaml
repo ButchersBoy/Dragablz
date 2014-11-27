@@ -69,8 +69,13 @@
 
     <Style TargetType="{x:Type local:DragablzItemsControl}" x:Key="AdornerDragablzItemsControlStyle">
         <Setter Property="Background" Value="{x:Null}" />
-        <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="ItemsOrganiser">
+            <Setter.Value>
+                <local:TwoDimensionalOrgansier />    
+            </Setter.Value>            
+        </Setter>
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
