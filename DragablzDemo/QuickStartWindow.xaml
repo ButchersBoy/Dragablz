@@ -7,7 +7,7 @@
         Title="Quick Start Window" Height="300" Width="300">
     <Window.Resources>
         <system:String x:Key="Partition">QuickStart</system:String>
-    </Window.Resources>
+    </Window.Resources>    
     <dockablz:Layout Partition="{StaticResource Partition}">
         <dragablz:TabablzControl Margin="8">
             <dragablz:TabablzControl.InterTabController>

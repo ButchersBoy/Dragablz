@@ -145,6 +145,17 @@ namespace Dragablz.Dockablz
             }
         }
 
+        private static TabablzControl AssertGetSourceTabControl(DragablzItem dragablzItem)
+        {
+            var sourceOfDragItemsControl = ItemsControl.ItemsControlFromItemContainer(dragablzItem) as DragablzItemsControl;
+            if (sourceOfDragItemsControl == null) throw new ApplicationException("Unable to determin source items control.");
+
+            var sourceTabControl = TabablzControl.GetOwnerOfHeaderItems(sourceOfDragItemsControl);
+            if (sourceTabControl == null) throw new ApplicationException("Unable to determin source tab control.");
+
+            return sourceTabControl;
+        }
+
         private void Branch(DropZoneLocation location, DragablzItem sourceDragablzItem)
         {
             if (InterLayoutClient == null)
@@ -262,6 +273,9 @@ namespace Dragablz.Dockablz
                 loadedLayout.IsParticipatingInDrag = false;
 
             if (_currentlyOfferedDropZone == null || e.DragablzItem.IsDropTargetFound) return;
+
+            var assertGetSourceTabControl = AssertGetSourceTabControl(e.DragablzItem);
+            if (assertGetSourceTabControl.Items.Count > 1) return;
 
             _currentlyOfferedDropZone.Item1.Branch(_currentlyOfferedDropZone.Item2.Location, e.DragablzItem);
             _currentlyOfferedDropZone = null;
