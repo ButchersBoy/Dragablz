@@ -10,7 +10,7 @@ Dragable and tearable tab control for WPF.
 
 Features:
 
-- Tearable tabs
+- Drag and tear tabs
 - User firendly docking
 - Floating tool windows
 - Supports MVVM
