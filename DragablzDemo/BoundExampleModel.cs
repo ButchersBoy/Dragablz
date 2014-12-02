@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using Dragablz;
@@ -38,5 +39,16 @@ namespace DragablzDemo
         {
             get { return _interTabClient; }
         }
+
+        public IEnumerable<HeaderAndContentModel> ToolItems
+        {
+            get
+            {
+                yield return new HeaderAndContentModel { Header = "January", Content = "Welcome to the January tool/float item."};
+                yield return new HeaderAndContentModel { Header = "July", Content = "Welcome to the July tool/float item." };
+            }
+        }
+
+        
     }
 }

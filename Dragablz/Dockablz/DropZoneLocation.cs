@@ -6,6 +6,6 @@ namespace Dragablz.Dockablz
         Right,
         Bottom,
         Left,     
-        Central
+        Floating
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Dragablz.Core;
@@ -13,7 +15,8 @@ namespace Dragablz.Dockablz
     [TemplatePart(Name = RightDropZonePartName, Type = typeof(DropZone))]
     [TemplatePart(Name = BottomDropZonePartName, Type = typeof(DropZone))]
     [TemplatePart(Name = LeftDropZonePartName, Type = typeof(DropZone))]
-    [TemplatePart(Name = CentralDropZonePartName, Type = typeof(DropZone))]
+    [TemplatePart(Name = FloatingDropZonePartName, Type = typeof(DropZone))]
+    [TemplatePart(Name = FloatingContentPresenterPartName, Type = typeof(ContentPresenter))]
     public class Layout : ContentControl
     {
         private static readonly HashSet<Layout> LoadedLayouts = new HashSet<Layout>();
@@ -21,10 +24,13 @@ namespace Dragablz.Dockablz
         private const string RightDropZonePartName = "PART_RightDropZone";
         private const string BottomDropZonePartName = "PART_BottomDropZone";
         private const string LeftDropZonePartName = "PART_LeftDropZone";
-        private const string CentralDropZonePartName = "PART_CentralDropZone";
-
+        private const string FloatingDropZonePartName = "PART_FloatDropZone";
+        private const string FloatingContentPresenterPartName = "PART_FloatContentPresenter";
+    
         private readonly IDictionary<DropZoneLocation, DropZone> _dropZones = new Dictionary<DropZoneLocation, DropZone>();
         private static Tuple<Layout, DropZone> _currentlyOfferedDropZone;
+        
+        private readonly DragablzItemsControl _floatingItems = new DragablzItemsControl();        
 
         static Layout()
         {
@@ -32,13 +38,24 @@ namespace Dragablz.Dockablz
 
             EventManager.RegisterClassHandler(typeof(DragablzItem), DragablzItem.DragStarted, new DragablzDragStartedEventHandler(ItemDragStarted));
             EventManager.RegisterClassHandler(typeof (DragablzItem), DragablzItem.PreviewDragDelta, new DragablzDragDeltaEventHandler(PreviewItemDragDelta), true);            
-            EventManager.RegisterClassHandler(typeof(DragablzItem), DragablzItem.DragCompleted, new DragablzDragCompletedEventHandler(ItemDragCompleted));
+            EventManager.RegisterClassHandler(typeof(DragablzItem), DragablzItem.DragCompleted, new DragablzDragCompletedEventHandler(ItemDragCompleted));            
         }
 
         public Layout()
         {
             Loaded += (sender, args) => LoadedLayouts.Add(this);
             Unloaded += (sender, args) => LoadedLayouts.Remove(this);
+            
+            var floatingItemsSourceBinding = new Binding("FloatingItemsSource") { Source = this };
+            _floatingItems.SetBinding(ItemsControl.ItemsSourceProperty, floatingItemsSourceBinding);
+            var floatingItemsControlStyleBinding = new Binding("FloatingItemsControlStyle") { Source = this };
+            _floatingItems.SetBinding(StyleProperty, floatingItemsControlStyleBinding);
+            var floatingItemTemplateBinding = new Binding("FloatingItemTemplate") { Source = this };
+            _floatingItems.SetBinding(ItemsControl.ItemTemplateProperty, floatingItemTemplateBinding);
+            var floatingItemTemplateSelectorBinding = new Binding("FloatingItemTemplateSelector") { Source = this };
+            _floatingItems.SetBinding(ItemsControl.ItemTemplateSelectorProperty, floatingItemTemplateSelectorBinding);
+            var floatingItemContainerStyeBinding = new Binding("FloatingItemContainerStyle") { Source = this };
+            _floatingItems.SetBinding(ItemsControl.ItemContainerStyleProperty, floatingItemContainerStyeBinding);            
         }
 
         /// <summary>
@@ -90,16 +107,97 @@ namespace Dragablz.Dockablz
             set { SetValue(BranchTemplateProperty, value); }
         }
 
-        public override void OnApplyTemplate()
+        public static readonly DependencyProperty IsFloatDropZoneEnabledProperty = DependencyProperty.Register(
+            "IsFloatDropZoneEnabled", typeof (bool), typeof (Layout), new PropertyMetadata(default(bool)));
+
+        public bool IsFloatDropZoneEnabled
         {
+            get { return (bool) GetValue(IsFloatDropZoneEnabledProperty); }
+            set { SetValue(IsFloatDropZoneEnabledProperty, value); }
+        }
+
+        public ItemCollection FloatingItems
+        {
+            get { return _floatingItems.Items; }
+        }
+
+        public static readonly DependencyProperty FloatingItemsSourceProperty = DependencyProperty.Register(
+            "FloatingItemsSource", typeof (IEnumerable), typeof (Layout), new PropertyMetadata(default(IEnumerable)));
+
+        public IEnumerable FloatingItemsSource
+        {
+            get { return (IEnumerable) GetValue(FloatingItemsSourceProperty); }
+            set { SetValue(FloatingItemsSourceProperty, value); }
+        }
+
+        public static readonly DependencyProperty FloatingItemsControlStyleProperty = DependencyProperty.Register(
+            "FloatingItemsControlStyle", typeof (Style), typeof (Layout), new PropertyMetadata((Style)null));
+
+        /// <summary>
+        /// The style to be applied to the <see cref="DragablzItemsControl"/> which is used to display floating items.
+        /// In most scenarios it should be OK to leave this to that applied by the default style.
+        /// </summary>
+        public Style FloatingItemsControlStyle
+        {
+            get { return (Style) GetValue(FloatingItemsControlStyleProperty); }
+            set { SetValue(FloatingItemsControlStyleProperty, value); }
+        }
+
+        public static readonly DependencyProperty FloatingItemContainerStyleProperty = DependencyProperty.Register(
+            "FloatingItemContainerStyle", typeof (Style), typeof (Layout), new PropertyMetadata(default(Style)));
+
+        public Style FloatingItemContainerStyle
+        {
+            get { return (Style) GetValue(FloatingItemContainerStyleProperty); }
+            set { SetValue(FloatingItemContainerStyleProperty, value); }
+        }
+
+        public static readonly DependencyProperty FloatingItemTemplateProperty = DependencyProperty.Register(
+            "FloatingItemTemplate", typeof (DataTemplate), typeof (Layout), new PropertyMetadata(default(DataTemplate)));
+
+        public DataTemplate FloatingItemTemplate
+        {
+            get { return (DataTemplate) GetValue(FloatingItemTemplateProperty); }
+            set { SetValue(FloatingItemTemplateProperty, value); }
+        }
+
+        public static readonly DependencyProperty FloatingItemTemplateSelectorProperty = DependencyProperty.Register(
+            "FloatingItemTemplateSelector", typeof (DataTemplateSelector), typeof (Layout), new PropertyMetadata(default(DataTemplateSelector)));
+
+        public DataTemplateSelector FloatingItemTemplateSelector
+        {
+            get { return (DataTemplateSelector) GetValue(FloatingItemTemplateSelectorProperty); }
+            set { SetValue(FloatingItemTemplateSelectorProperty, value); }
+        }
+
+        public override void OnApplyTemplate()
+        {            
             base.OnApplyTemplate();
+
+            var floatingItemsContentPresenter = GetTemplateChild(FloatingContentPresenterPartName) as ContentPresenter;
+            if (floatingItemsContentPresenter != null)
+                floatingItemsContentPresenter.Content = _floatingItems;
 
             _dropZones[DropZoneLocation.Top] = GetTemplateChild(TopDropZonePartName) as DropZone;
             _dropZones[DropZoneLocation.Right] = GetTemplateChild(RightDropZonePartName) as DropZone;
             _dropZones[DropZoneLocation.Bottom] = GetTemplateChild(BottomDropZonePartName) as DropZone;
             _dropZones[DropZoneLocation.Left] = GetTemplateChild(LeftDropZonePartName) as DropZone;
-            _dropZones[DropZoneLocation.Central] = GetTemplateChild(CentralDropZonePartName) as DropZone;
-        }
+            _dropZones[DropZoneLocation.Floating] = GetTemplateChild(FloatingDropZonePartName) as DropZone;
+        }        
+
+        public static readonly RoutedEvent FloatRequestedEvent =
+            EventManager.RegisterRoutedEvent(
+                "FloatRequested",
+                RoutingStrategy.Bubble,
+                typeof(FloatRequestedEventHandler),
+                typeof (Layout));        
+
+        private static void OnFloatRequested(DependencyObject d, DragablzItem i)
+        {
+            var instance = (Layout) d;
+            var args = new FloatRequestedEventArgs(FloatRequestedEvent, i);                
+            instance.RaiseEvent(args);            
+        } 
 
         private static void ItemDragStarted(object sender, DragablzDragStartedEventArgs e)
         {               
@@ -277,7 +375,11 @@ namespace Dragablz.Dockablz
             var assertGetSourceTabControl = AssertGetSourceTabControl(e.DragablzItem);
             if (assertGetSourceTabControl.Items.Count > 1) return;
 
-            _currentlyOfferedDropZone.Item1.Branch(_currentlyOfferedDropZone.Item2.Location, e.DragablzItem);
+            if (_currentlyOfferedDropZone.Item2.Location == DropZoneLocation.Floating)
+                OnFloatRequested(_currentlyOfferedDropZone.Item1, e.DragablzItem);
+            else
+                _currentlyOfferedDropZone.Item1.Branch(_currentlyOfferedDropZone.Item2.Location, e.DragablzItem);
+
             _currentlyOfferedDropZone = null;
         }
 

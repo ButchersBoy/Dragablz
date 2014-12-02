@@ -5,9 +5,9 @@
     xmlns:dockablz="clr-namespace:Dragablz.Dockablz"
     xmlns:converters="clr-namespace:Dragablz.Converters">
 
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Dockablz.xaml" />
-    </ResourceDictionary.MergedDictionaries>
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <converters:EqualityToVisibilityConverter x:Key="EqualityToVisibilityConverter" />
+    <converters:BooleanAndToVisibilityConverter x:Key="BooleanAndToVisibilityConverter" />
 
     <!-- these tab styles are as close as possible to the default .net styles, so the tab will fit straight in to an unstyled app -->
     <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#FFFFFF"/>
@@ -35,6 +35,79 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type dockablz:DropZone}">
+        <Setter Property="Opacity" Value=".25" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type dockablz:DropZone}">
+                    <Grid>
+                        <Path Fill="{TemplateBinding Foreground}" 
+                              Visibility="{TemplateBinding Location, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static dockablz:DropZoneLocation.Top}}"
+                              >
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure x:Name="PathFigure" StartPoint="160, 0">
+                                        <ArcSegment SweepDirection="Clockwise"
+                                                    Size="60,60"
+                                                    Point="0, 0"                                                
+                                                />
+                                    </PathFigure>
+                                </PathGeometry>
+                            </Path.Data>
+                        </Path>
+                        <Path Fill="{TemplateBinding Foreground}" 
+                              Visibility="{TemplateBinding Location, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static dockablz:DropZoneLocation.Right}}"
+                              >
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="60, 160">
+                                        <ArcSegment SweepDirection="Clockwise"
+                                                    Size="60,60"
+                                                    Point="60, 0"                                                
+                                                    />
+                                    </PathFigure>
+                                </PathGeometry>
+                            </Path.Data>
+                        </Path>
+                        <Path Fill="{TemplateBinding Foreground}" 
+                              Visibility="{TemplateBinding Location, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static dockablz:DropZoneLocation.Bottom}}"
+                              >
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="0, 60">
+                                        <ArcSegment SweepDirection="Clockwise"
+                                                    Size="60,60"
+                                                    Point="160, 60"                                                
+                                                    />
+                                    </PathFigure>
+                                </PathGeometry>
+                            </Path.Data>
+                        </Path>
+                        <Path Fill="{TemplateBinding Foreground}" 
+                              Visibility="{TemplateBinding Location, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static dockablz:DropZoneLocation.Left}}"
+                              >
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="0, 0">
+                                        <ArcSegment SweepDirection="Clockwise"
+                                                    Size="60,60"
+                                                    Point="0, 160"                                                
+                                                    />
+                                    </PathFigure>
+                                </PathGeometry>
+                            </Path.Data>
+                        </Path>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsOffered" Value="True">
+                <Setter Property="Opacity" Value="0.5" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="{x:Type local:DragablzItemsControl}">
@@ -65,38 +138,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
-
-    <Style TargetType="{x:Type local:DragablzItemsControl}" x:Key="AdornerDragablzItemsControlStyle">
-        <Setter Property="Background" Value="{x:Null}" />
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Setter Property="ItemsOrganiser">
-            <Setter.Value>
-                <local:TwoDimensionalOrgansier />    
-            </Setter.Value>            
-        </Setter>
-        <Setter Property="ItemsPanel">
-            <Setter.Value>
-                <ItemsPanelTemplate>
-                    <Canvas IsItemsHost="True" />
-                </ItemsPanelTemplate>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:DragablzItemsControl}">
-                    <Border BorderThickness="{TemplateBinding Border.BorderThickness}" Padding="{TemplateBinding Control.Padding}" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}" SnapsToDevicePixels="True">
-                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Top"
-                                        Width="{TemplateBinding ItemsPresenterWidth}"
-                                        Height="{TemplateBinding ItemsPresenterHeight}"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+    </Style>   
 
     <ControlTemplate x:Key="TabablzScrollViewerControlTemplate" TargetType="{x:Type ScrollViewer}">
         <Grid x:Name="Grid" Background="{TemplateBinding Background}">
@@ -176,7 +218,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-
+    
     <Style TargetType="{x:Type local:HeaderedDragablzItem}">
         <Style.Setters>
             <Setter Property="Padding" Value="2"/>
@@ -217,7 +259,7 @@
                 </Setter.Value>
             </Setter>
         </Style.Setters>
-    </Style>
+    </Style>    
 
     <Style TargetType="{x:Type local:HeaderedDragablzItem}" x:Key="ToolDragablzItemStyle">
         <Style.Setters>
@@ -349,7 +391,7 @@
         </Style.Setters>
     </Style>
 
-    <Style TargetType="{x:Type local:DragablzItem}" x:Key="FullySizableDragablzItemStyle">
+    <Style TargetType="{x:Type local:DragablzItem}" x:Key="FloatingDragablzItemStyle">
         <Style.Setters>
             <Setter Property="BorderBrush" Value="{StaticResource TabItem.Static.Border}" />
             <Setter Property="BorderThickness" Value="4" />
@@ -1053,6 +1095,136 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:DragablzItemsControl}" x:Key="FloatingDragablzItemsControlStyle">
+        <Setter Property="Background" Value="{x:Null}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />        
+        <Setter Property="ItemsOrganiser">
+            <Setter.Value>
+                <local:TwoDimensionalOrgansier />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <Canvas IsItemsHost="True" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:DragablzItemsControl}">
+                    <Border BorderThickness="{TemplateBinding Border.BorderThickness}" Padding="{TemplateBinding Control.Padding}" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}" SnapsToDevicePixels="True">
+                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        Width="{TemplateBinding ItemsPresenterWidth}"
+                                        Height="{TemplateBinding ItemsPresenterHeight}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="dockablz:Layout">
+        <Setter Property="FloatingItemsControlStyle" Value="{StaticResource FloatingDragablzItemsControlStyle}" />
+        <Setter Property="FloatingItemContainerStyle" Value="{StaticResource FloatingDragablzItemStyle}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="dockablz:Layout">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" />
+                            <ContentPresenter x:Name="PART_FloatContentPresenter" />
+                            <dockablz:DropZone x:Name="PART_TopDropZone" 
+                                               VerticalAlignment="Top" HorizontalAlignment="Center"                                               
+                                               Location="Top"                                               
+                                               Visibility="{TemplateBinding IsParticipatingInDrag, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                               />
+                            <dockablz:DropZone x:Name="PART_RightDropZone" 
+                                               VerticalAlignment="Center" HorizontalAlignment="Right"
+                                               Location="Right"                                               
+                                               Visibility="{TemplateBinding IsParticipatingInDrag, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                               />
+                            <dockablz:DropZone x:Name="PART_BottomDropZone" 
+                                               VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                                               Location="Bottom"                                               
+                                               Visibility="{TemplateBinding IsParticipatingInDrag, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                               />
+                            <dockablz:DropZone x:Name="PART_LeftDropZone" 
+                                               VerticalAlignment="Center" HorizontalAlignment="Left"
+                                               Location="Left"                                               
+                                               Visibility="{TemplateBinding IsParticipatingInDrag, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                               />
+                            <dockablz:DropZone x:Name="PART_FloatDropZone" 
+                                               VerticalAlignment="Center" HorizontalAlignment="Center"
+                                               Location="Floating">
+                                <dockablz:DropZone.Visibility>
+                                    <MultiBinding Converter="{StaticResource BooleanAndToVisibilityConverter}">
+                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="IsParticipatingInDrag" />
+                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="IsFloatDropZoneEnabled" />
+                                    </MultiBinding>
+                                </dockablz:DropZone.Visibility>
+                            </dockablz:DropZone>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type dockablz:Branch}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type dockablz:Branch}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <!-- had a problem in past using 1 where the splitter would cease working -->
+                                <ColumnDefinition Width="0.99999*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="1.00001*" />
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter x:Name="PART_FirstContentPresenter" Content="{TemplateBinding FirstItem}" />
+                            <GridSplitter Grid.Column="1" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" 
+                                          Width="5"/>
+                            <ContentPresenter x:Name="PART_SecondContentPresenter" Grid.Column="2" Content="{TemplateBinding SecondItem}" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Vertical">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type dockablz:Branch}">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <!-- had a problem in past using 1 where the splitter would cease working -->
+                                        <RowDefinition Height="0.99999*" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="1.00001*" />
+                                    </Grid.RowDefinitions>
+                                    <ContentPresenter x:Name="PART_FirstContentPresenter" Content="{TemplateBinding FirstItem}" />
+                                    <GridSplitter Grid.Row="1" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext" Height="5" HorizontalAlignment="Stretch" />
+                                    <ContentPresenter x:Name="PART_SecondContentPresenter" Grid.Row="2" Content="{TemplateBinding SecondItem}" />
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
     </Style>    
- 
+
 </ResourceDictionary> 

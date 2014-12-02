@@ -111,7 +111,7 @@ namespace Dragablz
         }
 
         protected override bool IsItemItsOwnContainerOverride(object item)
-        {
+        {            
             var dragablzItem = item as DragablzItem;
             if (dragablzItem == null) return false;
 
@@ -127,7 +127,12 @@ namespace Dragablz
             _itemsPendingInitialArrangement.Add(result);
 
             return result;
-        }        
+        }
+
+        protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
+        {
+            base.PrepareContainerForItemOverride(element, item);
+        }
 
         protected override Size MeasureOverride(Size constraint)        
         {

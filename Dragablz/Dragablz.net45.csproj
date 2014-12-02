@@ -52,11 +52,13 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\BooleanAndToVisibilityConverter.cs" />
     <Compile Include="Converters\EqualityToVisibilityConverter.cs" />
     <Compile Include="DefaultInterLayoutClient.cs" />
     <Compile Include="Dockablz\Branch.cs" />
     <Compile Include="Dockablz\DropZone.cs" />
     <Compile Include="Dockablz\DropZoneLocation.cs" />
+    <Compile Include="Dockablz\FloatRequestedEvent.cs" />
     <Compile Include="Dockablz\Layout.cs" />
     <Compile Include="Core\FuncComparer.cs" />
     <Compile Include="Core\MultiComparer.cs" />

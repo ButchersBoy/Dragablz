@@ -18,7 +18,7 @@ namespace DragablzDemo
         {            
             var app = new App {ShutdownMode = ShutdownMode.OnLastWindowClose};
             app.InitializeComponent();
-                              
+                                          
             new BasicExampleMainWindow
             {
                 DataContext = new BasicExampleMainModel()
@@ -32,12 +32,8 @@ namespace DragablzDemo
                 new SimpleViewModel { Name = "Fri", SimpleContent = "Friday" },
                 new SimpleViewModel { Name = "Sat", SimpleContent = "Sunday" },
                 new SimpleViewModel { Name = "Sun", SimpleContent = "Sunday" }                 
-                );
-
-            app.Resources.Add(SystemParameters.ClientAreaAnimationKey, null);
-            app.Resources.Add(SystemParameters.MinimizeAnimationKey, null);
-            app.Resources.Add(SystemParameters.UIEffectsKey, null);
-                        
+                );            
+                       
             new BoundExampleWindow()
             {
                 DataContext = boundExampleModel
