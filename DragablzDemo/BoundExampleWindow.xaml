@@ -38,11 +38,11 @@
         <dockablz:Layout.BranchTemplate>
             <DataTemplate>
                 <dragablz:TabablzControl Style="{StaticResource BasicExamplesTabStyle}"
-                                        ItemsSource="{Binding Items}"
-                                        CustomHeaderItemStyle="{StaticResource TrapezoidDragableTabItemStyle}"
-                                        CustomHeaderItemTemplate="{StaticResource HeaderTemplate}"
-                                        ContentTemplate="{StaticResource ContentTemplate}"
-                                        InterTabController="{StaticResource InterTabController}">
+                                         ItemsSource="{Binding Items}"
+                                         CustomHeaderItemStyle="{StaticResource TrapezoidDragableTabItemStyle}"
+                                         CustomHeaderItemTemplate="{StaticResource HeaderTemplate}"
+                                         ContentTemplate="{StaticResource ContentTemplate}"
+                                         InterTabController="{StaticResource InterTabController}">
                 </dragablz:TabablzControl>
             </DataTemplate>
         </dockablz:Layout.BranchTemplate>

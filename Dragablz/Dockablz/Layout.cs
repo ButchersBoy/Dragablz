@@ -1,10 +1,12 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Dragablz.Core;
@@ -31,7 +33,7 @@ namespace Dragablz.Dockablz
         private static Tuple<Layout, DropZone> _currentlyOfferedDropZone;
         
         private readonly DragablzItemsControl _floatingItems;
-
+        private static bool _isDragOpWireUpPending;
         private FloatTransfer _floatTransfer;
 
         static Layout()
@@ -39,14 +41,18 @@ namespace Dragablz.Dockablz
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Layout), new FrameworkPropertyMetadata(typeof(Layout)));
 
             EventManager.RegisterClassHandler(typeof(DragablzItem), DragablzItem.DragStarted, new DragablzDragStartedEventHandler(ItemDragStarted));
-            EventManager.RegisterClassHandler(typeof (DragablzItem), DragablzItem.PreviewDragDelta, new DragablzDragDeltaEventHandler(PreviewItemDragDelta), true);            
+            EventManager.RegisterClassHandler(typeof(DragablzItem), DragablzItem.PreviewDragDelta, new DragablzDragDeltaEventHandler(PreviewItemDragDelta), true);            
             EventManager.RegisterClassHandler(typeof(DragablzItem), DragablzItem.DragCompleted, new DragablzDragCompletedEventHandler(ItemDragCompleted));            
         }
+
+        public static RoutedCommand UnfloatCommand = new RoutedCommand();
 
         public Layout()
         {
             Loaded += (sender, args) => LoadedLayouts.Add(this);
             Unloaded += (sender, args) => LoadedLayouts.Remove(this);
+
+            CommandBindings.Add(new CommandBinding(UnfloatCommand, UnfloatExecuted));
 
             _floatingItems = new DragablzItemsControl(
                 GetFloatingContainerForItemOverride, 
@@ -206,6 +212,19 @@ namespace Dragablz.Dockablz
             set { SetValue(FloatingItemDisplayMemberPathProperty, value); }
         }
 
+        public static readonly DependencyPropertyKey KeyIsFloatingInLayoutPropertyKey = DependencyProperty.RegisterAttachedReadOnly(
+            "IsFloatingInLayout", typeof (bool), typeof (Layout), new PropertyMetadata(default(bool)));
+
+        private static void SetIsFloatingInLayout(DependencyObject element, bool value)
+        {
+            element.SetValue(KeyIsFloatingInLayoutPropertyKey, value);
+        }
+
+        public static bool GetIsFloatingInLayout(DependencyObject element)
+        {
+            return (bool)element.GetValue(KeyIsFloatingInLayoutPropertyKey.DependencyProperty);
+        }
+
         public override void OnApplyTemplate()
         {            
             base.OnApplyTemplate();
@@ -222,18 +241,24 @@ namespace Dragablz.Dockablz
         }                 
 
         private static void ItemDragStarted(object sender, DragablzDragStartedEventArgs e)
-        {               
-            var sourceOfDragItemsControl = ItemsControl.ItemsControlFromItemContainer(e.DragablzItem) as DragablzItemsControl;
+        {
+            //we wait until drag is in full flow so we know the partition has been setup by the owning tab control
+            _isDragOpWireUpPending = true;            
+        }
+
+        private static void SetupParticipatingLayouts(DragablzItem dragablzItem)
+        {
+            var sourceOfDragItemsControl = ItemsControl.ItemsControlFromItemContainer(dragablzItem) as DragablzItemsControl;
             if (sourceOfDragItemsControl == null || sourceOfDragItemsControl.Items.Count != 1) return;
 
-            var draggingWindow = Window.GetWindow(e.DragablzItem);
-            if (draggingWindow == null) return;            
+            var draggingWindow = Window.GetWindow(dragablzItem);
+            if (draggingWindow == null) return;
 
             foreach (var loadedLayout in LoadedLayouts.Where(l =>
-                l.Partition == e.DragablzItem.PartitionAtDragStart &&
+                l.Partition == dragablzItem.PartitionAtDragStart &&
                 !Equals(Window.GetWindow(l), draggingWindow)))
 
-            {                
+            {
                 loadedLayout.IsParticipatingInDrag = true;
             }
         }
@@ -389,6 +414,8 @@ namespace Dragablz.Dockablz
 
         private static void ItemDragCompleted(object sender, DragablzDragCompletedEventArgs e)
         {
+            _isDragOpWireUpPending = false;
+
             foreach (var loadedLayout in LoadedLayouts)
                 loadedLayout.IsParticipatingInDrag = false;
 
@@ -430,6 +457,12 @@ namespace Dragablz.Dockablz
         {
             if (e.Cancel) return;
 
+            if (_isDragOpWireUpPending)
+            {
+                SetupParticipatingLayouts(e.DragablzItem);
+                _isDragOpWireUpPending = false;
+            }
+
             foreach (var layout in LoadedLayouts.Where(l => l.IsParticipatingInDrag))
             {                
                 var cursorPos = Native.GetCursorPos();
@@ -441,6 +474,8 @@ namespace Dragablz.Dockablz
         {
             var headeredDragablzItem = dependencyObject as HeaderedDragablzItem;
             if (headeredDragablzItem == null) return;
+
+            SetIsFloatingInLayout(dependencyObject, true);
 
             var headerBinding = new Binding(FloatingItemHeaderMemberPath) {Source = o};
 
@@ -466,9 +501,51 @@ namespace Dragablz.Dockablz
             return new HeaderedDragablzItem();
         }
 
-        private void ClearingFloatingContainerForItemOverride(DependencyObject dependencyObject, object o)
+        private static void ClearingFloatingContainerForItemOverride(DependencyObject dependencyObject, object o)
         {
+            SetIsFloatingInLayout(dependencyObject, false);
         }
 
+        private void UnfloatExecuted(object sender, ExecutedRoutedEventArgs executedRoutedEventArgs)
+        {
+            var dragablzItem = executedRoutedEventArgs.Parameter as DragablzItem;
+            if (dragablzItem == null) return;
+
+            var exemplarTab = this.LogicalTreeDepthFirstTraversal().OfType<TabablzControl>()
+                .FirstOrDefault(t => t.InterTabController != null && t.InterTabController.Partition == Partition);
+
+            if (exemplarTab == null) return;
+
+            //TODO passing the exemplar tab in here isnt ideal, as strictly speaking there isnt one.
+            var newTabHost = exemplarTab.InterTabController.InterTabClient.GetNewHost(exemplarTab.InterTabController.InterTabClient,
+                exemplarTab.InterTabController.Partition, exemplarTab);
+            if (newTabHost == null || newTabHost.TabablzControl == null || newTabHost.Container == null)
+                throw new ApplicationException("New tab host was not correctly provided");
+
+            var content = dragablzItem.Content ?? dragablzItem;
+
+            //remove from source
+            CollectionTeaser collectionTeaser;
+            if (CollectionTeaser.TryCreate(FloatingItemsSource, out collectionTeaser))
+                collectionTeaser.Remove(content);
+            else
+                FloatingItems.Remove(content);
+
+            var myWindow = Window.GetWindow(this);
+            if (myWindow == null) throw new ApplicationException("Unable to find owning window.");
+            newTabHost.Container.Width = myWindow.RestoreBounds.Width;
+            newTabHost.Container.Height = myWindow.RestoreBounds.Height;
+
+            newTabHost.Container.Left = myWindow.Left + 20;
+            newTabHost.Container.Top = myWindow.Top + 20;                     
+
+            Dispatcher.BeginInvoke(new Action(() =>            
+            {
+                newTabHost.TabablzControl.AddToSource(content);
+                newTabHost.TabablzControl.SelectedItem = content;
+                newTabHost.Container.Show();
+                newTabHost.Container.Activate();
+            }), DispatcherPriority.DataBind);            
+        }
     }
 }
