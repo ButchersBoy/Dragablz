@@ -76,11 +76,11 @@ namespace Dragablz.Core
             public POINT minPosition;
             public POINT maxPosition;
             public RECT normalPosition;
-        }
-
-        public const int SC_MOUSEMOVE = 0xf012;
+        }        
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        internal static extern IntPtr SendMessage(IntPtr hWnd, WindowMessage msg, IntPtr wParam, IntPtr lParam); 
+        internal static extern IntPtr SendMessage(IntPtr hWnd, WindowMessage msg, IntPtr wParam, IntPtr lParam);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        internal static extern IntPtr PostMessage(IntPtr hWnd, WindowMessage msg, IntPtr wParam, IntPtr lParam); 
     }
 }

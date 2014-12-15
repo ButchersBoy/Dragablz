@@ -52,6 +52,7 @@
     <Compile Include="Core\InterTabTransfer.cs" />
     <Compile Include="Core\MultiComparer.cs" />
     <Compile Include="Core\Native.cs" />
+    <Compile Include="Core\SystemCommand.cs" />
     <Compile Include="Core\TabHeaderDragStartInformation.cs" />
     <Compile Include="Core\WindowMessage.cs" />
     <Compile Include="DefaultInterLayoutClient.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="TabablzHeaderSizeConverter.cs" />
     <Compile Include="TabablzItemStyleSelector.cs" />
     <Compile Include="TabEmptiedResponse.cs" />
+    <Compile Include="Themes\SystemCommandIcon.cs" />
     <Compile Include="Trapezoid.cs" />
     <Compile Include="TwoDimensionalOrgansier.cs" />
     <Compile Include="VerticalOrganiser.cs" />
@@ -105,6 +107,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\MahApps.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

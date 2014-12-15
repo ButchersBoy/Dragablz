@@ -3,16 +3,36 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:Dragablz"
     xmlns:dockablz="clr-namespace:Dragablz.Dockablz"
-    xmlns:converters="clr-namespace:Dragablz.Converters">
+    xmlns:converters="clr-namespace:Dragablz.Converters"
+    xmlns:themes="clr-namespace:Dragablz.Themes">
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <converters:EqualityToVisibilityConverter x:Key="EqualityToVisibilityConverter" />
     <converters:BooleanAndToVisibilityConverter x:Key="BooleanAndToVisibilityConverter" />
 
+    <Style x:Key="FocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- these tab styles are as close as possible to the default .net styles, so the tab will fit straight in to an unstyled app -->
     <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#ACACAC"/>
-
+    <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+    <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+    <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+    <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+    <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+    <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+    <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+    <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+    
     <LinearGradientBrush x:Key="TabItem.Static.Background" EndPoint="0,1" StartPoint="0,0">
         <GradientStop Color="#F0F0F0" Offset="0.0"/>
         <GradientStop Color="#E5E5E5" Offset="1.0"/>
@@ -32,6 +52,79 @@
             <Setter.Value>
                 <ControlTemplate>
                     <Grid Background="Transparent" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type themes:SystemCommandIcon}">
+        <Setter Property="Width" Value="12" />
+        <Setter Property="Height" Value="12" />        
+        <Setter Property="Margin" Value="4 2 4 2" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type themes:SystemCommandIcon}">
+                    <Path x:Name="Path" 
+                          Data="M0.5,71 L70,0.5 M0.5,1 L70,70.5" 
+                          Stretch="Uniform"
+                          Stroke="{TemplateBinding Foreground}"
+                          StrokeThickness="1"
+                          StrokeStartLineCap="Triangle" 
+                          StrokeEndLineCap="Triangle"
+                          />                    
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="SystemCommandType" Value="MaximizeWindow">
+                            <Setter TargetName="Path" Property="Data" Value="M2.5,2.5 L67.5,2.5 L67.5,68 L2.5,68 z" />
+                        </Trigger>
+                        <Trigger Property="SystemCommandType" Value="MinimzeWindow">
+                            <Setter TargetName="Path" Property="Data" Value="M165,40 L234.5,39.5" />
+                            <Setter TargetName="Path" Property="StrokeStartLineCap" Value="Flat" />
+                            <Setter TargetName="Path" Property="StrokeEndLineCap" Value="Flat" />
+                        </Trigger>
+                        <Trigger Property="SystemCommandType" Value="RestoreWindow">
+                            <Setter TargetName="Path" Property="Data" Value="M2.5,13 L57.576,13 L57.576,69 L2.5,69 z M12.424,2.5 L67.5,2.5 67.5,58.5 57.576,58.5 57.576,13 12.424,13 z" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+
+        </Setter>
+    </Style>
+
+    
+    <Style TargetType="{x:Type Button}" x:Key="MinimalistButtonStyle">
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsDefaulted" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -74,20 +167,46 @@
         <Setter Property="ResizeMode" Value="CanResize" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Window}">
+                <ControlTemplate TargetType="{x:Type local:DragablzWindow}">
                     <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
                         <AdornerDecorator>
                             <Grid>
                                 <Thumb Style="{StaticResource InvisibleThumbStyle}"
                                        IsHitTestVisible="False"
                                        x:Name="PART_WindowRestoreThumb"/>
-                                <ContentPresenter/>
+                                <ContentPresenter Margin="0 2 0 0"/>
+                                <StackPanel x:Name="SystemCommandsPanel" 
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            Orientation="Horizontal">                                    
+                                    <Button Command="{x:Static local:DragablzWindow.MinimizeWindowCommand}"
+                                            Style="{StaticResource MinimalistButtonStyle}">
+                                        <themes:SystemCommandIcon SystemCommandType="MinimzeWindow" />
+                                    </Button>
+                                    <Button Command="{x:Static local:DragablzWindow.RestoreWindowCommand}"
+                                            Visibility="{TemplateBinding WindowState, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static WindowState.Maximized}}"
+                                            Style="{StaticResource MinimalistButtonStyle}">
+                                        <themes:SystemCommandIcon SystemCommandType="RestoreWindow" />
+                                    </Button>                                  
+                                    <Button Command="{x:Static local:DragablzWindow.MaximizeWindowCommand}"
+                                            Visibility="{TemplateBinding WindowState, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static WindowState.Normal}}"
+                                            Style="{StaticResource MinimalistButtonStyle}">
+                                        <themes:SystemCommandIcon SystemCommandType="MaximizeWindow" />
+                                    </Button>
+                                    <Button Command="{x:Static local:DragablzWindow.CloseWindowCommand}"
+                                            Style="{StaticResource MinimalistButtonStyle}">
+                                        <themes:SystemCommandIcon SystemCommandType="CloseWindow" />
+                                    </Button>
+                                </StackPanel>                                
                             </Grid>
                         </AdornerDecorator>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="WindowState" Value="Maximized">
                             <Setter TargetName="PART_WindowRestoreThumb" Property="IsHitTestVisible" Value="True" />
+                        </Trigger>
+                        <Trigger Property="IsBeingDraggedByTab" Value="True">
+                            <Setter TargetName="SystemCommandsPanel" Property="Visibility" Value="Collapsed"></Setter>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -99,7 +218,7 @@
             </Trigger>
             <Trigger Property="IsBeingDraggedByTab" Value="True">
                 <Setter Property="Background" Value="Transparent" />
-                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="Transparent" />                
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -577,27 +696,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
-    
-    <Style x:Key="FocusVisual">
-        <Setter Property="Control.Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
-    <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
-    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
-    <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
-    <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
-    <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
-    <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
-    <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
-    <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+    </Style>   
     
     <Style x:Key="StandardEmbeddedButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -1310,6 +1409,6 @@
                 </Setter>
             </Trigger>
         </Style.Triggers>
-    </Style>    
+    </Style>       
 
 </ResourceDictionary> 

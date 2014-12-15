@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Interop;
 using Dragablz.Core;
 using Dragablz.Dockablz;
 using Dragablz.Referenceless;
@@ -27,6 +28,11 @@ namespace Dragablz
         public const string WindowMoveThumbPartName = "PART_WindowRestoreThumb";
         private readonly SerialDisposable _templateSubscription = new SerialDisposable();
 
+        public static RoutedCommand CloseWindowCommand = new RoutedCommand();
+        public static RoutedCommand RestoreWindowCommand = new RoutedCommand();
+        public static RoutedCommand MaximizeWindowCommand = new RoutedCommand();
+        public static RoutedCommand MinimizeWindowCommand = new RoutedCommand();
+
         static DragablzWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DragablzWindow), new FrameworkPropertyMetadata(typeof(DragablzWindow)));            
@@ -36,7 +42,11 @@ namespace Dragablz
         {
             AddHandler(DragablzItem.DragStarted, new DragablzDragStartedEventHandler(ItemDragStarted), true);
             AddHandler(DragablzItem.DragCompleted, new DragablzDragCompletedEventHandler(ItemDragCompleted), true);
-        }
+            CommandBindings.Add(new CommandBinding(CloseWindowCommand, CloseWindowExecuted));
+            CommandBindings.Add(new CommandBinding(MaximizeWindowCommand, MaximizeWindowExecuted));
+            CommandBindings.Add(new CommandBinding(MinimizeWindowCommand, MinimizeWindowExecuted));
+            CommandBindings.Add(new CommandBinding(RestoreWindowCommand, RestoreWindowExecuted));            
+        }        
 
         private static readonly DependencyPropertyKey IsWindowBeingDraggedByTabPropertyKey =
             DependencyProperty.RegisterReadOnly(
@@ -50,7 +60,7 @@ namespace Dragablz
         {
             get { return (bool) GetValue(IsBeingDraggedByTabProperty); }
             private set { SetValue(IsWindowBeingDraggedByTabPropertyKey, value); }
-        }
+        }        
 
         private void ItemDragCompleted(object sender, DragablzDragCompletedEventArgs e)
         {            
@@ -111,7 +121,27 @@ namespace Dragablz
 
             WindowState = WindowState.Normal;
             Native.SendMessage(CriticalHandle, WindowMessage.WM_LBUTTONUP, IntPtr.Zero, IntPtr.Zero);    
-            Native.SendMessage(CriticalHandle, WindowMessage.WM_SYSCOMMAND, (IntPtr)Native.SC_MOUSEMOVE, IntPtr.Zero);
+            Native.SendMessage(CriticalHandle, WindowMessage.WM_SYSCOMMAND, (IntPtr)SystemCommand.SC_MOUSEMOVE, IntPtr.Zero);
+        }
+
+        private void RestoreWindowExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            Native.PostMessage(new WindowInteropHelper(this).Handle, WindowMessage.WM_SYSCOMMAND, (IntPtr)SystemCommand.SC_RESTORE, IntPtr.Zero);
+        }
+
+        private void MinimizeWindowExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            Native.PostMessage(new WindowInteropHelper(this).Handle, WindowMessage.WM_SYSCOMMAND, (IntPtr)SystemCommand.SC_MINIMIZE, IntPtr.Zero);
+        }
+
+        private void MaximizeWindowExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            Native.PostMessage(new WindowInteropHelper(this).Handle, WindowMessage.WM_SYSCOMMAND, (IntPtr)SystemCommand.SC_MAXIMIZE, IntPtr.Zero);
+        }
+
+        private void CloseWindowExecuted(object sender, ExecutedRoutedEventArgs executedRoutedEventArgs)
+        {
+            Native.PostMessage(new WindowInteropHelper(this).Handle, WindowMessage.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
         }
     }
 }

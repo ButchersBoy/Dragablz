@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Converters\BooleanAndToVisibilityConverter.cs" />
     <Compile Include="Converters\EqualityToVisibilityConverter.cs" />
+    <Compile Include="Core\SystemCommand.cs" />
     <Compile Include="Core\WindowMessage.cs" />
     <Compile Include="DefaultInterLayoutClient.cs" />
     <Compile Include="Dockablz\Branch.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="TabablzItemStyleSelector.cs" />
     <Compile Include="TabEmptiedResponse.cs" />
     <Compile Include="Core\TabHeaderDragStartInformation.cs" />
+    <Compile Include="Themes\SystemCommandIcon.cs" />
     <Compile Include="Trapezoid.cs" />
     <Compile Include="VerticalOrganiser.cs" />
     <Compile Include="VerticalPositionMonitor.cs" />
