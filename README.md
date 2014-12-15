@@ -7,6 +7,7 @@ Dragablz
 - Docs 'n' help 'n' stuff: [dragablz.net](http://dragablz.net/)
 - NuGet details here: http://www.nuget.org/packages/Dragablz/
 - You can criticise the developer here: [@James_Willock](http://twitter.com/James_Willock)
+  - No, seriously, please get involved and give me a ping with any questions/requests.
 
 ## A note on the demo project:
 
