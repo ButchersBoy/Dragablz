@@ -101,7 +101,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dragablz\Dragablz.csproj">
+    <ProjectReference Include="..\Dragablz\Dragablz.net45.csproj">
       <Project>{7b11011c-7fd7-4ab0-a1ad-04e940b026de}</Project>
       <Name>Dragablz</Name>
     </ProjectReference>

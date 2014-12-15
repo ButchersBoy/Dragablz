@@ -37,6 +37,73 @@
         </Setter>
     </Style>
 
+    <ControlTemplate x:Key="WindowTemplateKey" TargetType="{x:Type local:DragablzWindow}">
+        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+            <Grid>
+                <AdornerDecorator>
+                    <Grid>
+                        <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                       x:Name="PART_WindowRestoreThumb"/>
+                        <ContentPresenter/>
+                    </Grid>
+                </AdornerDecorator>
+                <ResizeGrip x:Name="WindowResizeGrip" HorizontalAlignment="Right" IsTabStop="false" Visibility="Collapsed" VerticalAlignment="Bottom"/>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="WindowState" Value="Maximized">
+                <Setter TargetName="PART_WindowRestoreThumb" Property="IsHitTestVisible" Value="True" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="ResizeMode" Value="CanResizeWithGrip"/>
+                    <Condition Property="WindowState" Value="Normal"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Visibility" TargetName="WindowResizeGrip" Value="Visible"/>
+            </MultiTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style TargetType="{x:Type local:DragablzWindow}">
+        <Setter Property="WindowStyle" Value="None" />
+        <Setter Property="AllowsTransparency" Value="True" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+        <Setter Property="BorderBrush" Value="{x:Static SystemColors.ActiveBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="ResizeMode" Value="CanResize" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                        <AdornerDecorator>
+                            <Grid>
+                                <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                       IsHitTestVisible="False"
+                                       x:Name="PART_WindowRestoreThumb"/>
+                                <ContentPresenter/>
+                            </Grid>
+                        </AdornerDecorator>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="WindowState" Value="Maximized">
+                            <Setter TargetName="PART_WindowRestoreThumb" Property="IsHitTestVisible" Value="True" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="ResizeMode" Value="CanResizeWithGrip">
+                <Setter Property="Template" Value="{StaticResource WindowTemplateKey}"/>
+            </Trigger>
+            <Trigger Property="IsBeingDraggedByTab" Value="True">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style TargetType="{x:Type dockablz:DropZone}">
         <Setter Property="Opacity" Value=".25" />
         <Setter Property="Template">

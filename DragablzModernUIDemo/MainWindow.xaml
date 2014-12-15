@@ -1,66 +1,35 @@
-﻿<controls:MetroWindow x:Class="DragablzModernUIDemo.MainWindow"
-                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                      xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                      xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
-                      WindowTransitionsEnabled="False"
-                      Title="Dragablz and MahApps"                       
-                      
-                      Height="350" Width="525">
+﻿<dragablz:DragablzWindow x:Class="DragablzModernUIDemo.MainWindow"
+                         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                         xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"                      
+                         Title="Dragablz and MahApps"                                               
+                         Height="350" Width="525">
+    <Window.Style>
+        <Style TargetType="{x:Type dragablz:DragablzWindow}" BasedOn="{StaticResource {x:Type dragablz:DragablzWindow}}">
+            <Setter Property="Background" Value="{DynamicResource GrayBrush8}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource WindowTitleColorBrush}" />
+        </Style>
+    </Window.Style>
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Generic.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="TabItem" BasedOn="{StaticResource MinimalTabItemStyle}" />
+                <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/MahApps.xaml" />
+            </ResourceDictionary.MergedDictionaries>            
         </ResourceDictionary>        
     </Window.Resources>
-    <dragablz:TabablzControl BorderThickness="0">
-        <dragablz:TabablzControl.DefaultHeaderItemStyle>
-            <Style TargetType="{x:Type dragablz:DragablzItem}">                
-                <Setter Property="Background" Value="{DynamicResource AccentColorBrush4}"/>
-                <Setter Property="Margin" Value="0"/>
-                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type dragablz:DragablzItem}">
-                            <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
-                                <dragablz:Trapezoid x:Name="Trapezoid" PenThickness="0" Background="{TemplateBinding Background}">
-                                    <ContentPresenter Content="{Binding Header}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
-                                          x:Name="contentPresenter"                                          
-                                          IsHitTestVisible="False"/>
-                                </dragablz:Trapezoid>
-                                <Thumb HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" x:Name="PART_Thumb"
-                                       Style="{StaticResource InvisibleThumbStyle}"
-                                       Clip="{Binding ElementName=Trapezoid, Path=Clip, Mode=OneWay}">                                    
-                                </Thumb>
-                            </Grid>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource AccentColorBrush3}" />                                    
-                                </Trigger>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource AccentColorBrush2}" />
-                                    <Setter Property="Foreground" Value="{DynamicResource WhiteBrush}" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </dragablz:TabablzControl.DefaultHeaderItemStyle>
+    <dragablz:TabablzControl Background="{DynamicResource WhiteColorBrush}"
+                             DefaultHeaderItemStyle="{StaticResource MahAppsTabHeaderItemStyle}">
         <dragablz:TabablzControl.InterTabController>
             <dragablz:InterTabController />
         </dragablz:TabablzControl.InterTabController>
-        <TabItem Header="one">
-            <TextBlock>This is the first</TextBlock>
+        <TabItem Header="1 - one">
+            <TextBlock Margin="2">This is the first</TextBlock>
         </TabItem>
-        <TabItem Header="two">
-            <TextBlock>This is the second</TextBlock>
+        <TabItem Header="2 - two">
+            <TextBlock Margin="2">This is the second</TextBlock>
         </TabItem>
-        <TabItem Header="three">
-            <TextBlock>This is the third</TextBlock>
+        <TabItem Header="3 - three">
+            <TextBlock Margin="2">This is the third</TextBlock>
         </TabItem>
-    </dragablz:TabablzControl>
-</controls:MetroWindow>
+    </dragablz:TabablzControl>        
+</dragablz:DragablzWindow>

@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Converters\BooleanAndToVisibilityConverter.cs" />
     <Compile Include="Converters\EqualityToVisibilityConverter.cs" />
+    <Compile Include="Core\WindowMessage.cs" />
     <Compile Include="DefaultInterLayoutClient.cs" />
     <Compile Include="Dockablz\Branch.cs" />
     <Compile Include="Dockablz\CouldBeHeaderedStyleSelector.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="DragablzDragDeltaEventArgs.cs" />
     <Compile Include="DragablzDragStartedEventArgs.cs" />
     <Compile Include="DragablzItem.cs" />
+    <Compile Include="DragablzWindow.cs" />
     <Compile Include="HeaderedDragablzItem.cs" />
     <Compile Include="HorizontalOrganiser.cs" />
     <Compile Include="HorizontalPositionMonitor.cs" />
@@ -109,6 +111,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\MahApps.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using MS.Internal.Interop;
 
 namespace Dragablz.Core
 {
@@ -77,5 +78,10 @@ namespace Dragablz.Core
             public POINT maxPosition;
             public RECT normalPosition;
         }
+
+        public const int SC_MOUSEMOVE = 0xf012;
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        internal static extern IntPtr SendMessage(IntPtr hWnd, WindowMessage msg, IntPtr wParam, IntPtr lParam); 
     }
 }
