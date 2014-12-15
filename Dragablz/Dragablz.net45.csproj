@@ -56,6 +56,7 @@
     <Compile Include="Converters\EqualityToVisibilityConverter.cs" />
     <Compile Include="DefaultInterLayoutClient.cs" />
     <Compile Include="Dockablz\Branch.cs" />
+    <Compile Include="Dockablz\CouldBeHeaderedStyleSelector.cs" />
     <Compile Include="Dockablz\DropZone.cs" />
     <Compile Include="Dockablz\DropZoneLocation.cs" />
     <Compile Include="Dockablz\FloatRequestedEvent.cs" />

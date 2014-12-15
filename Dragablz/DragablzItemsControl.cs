@@ -16,12 +16,23 @@ namespace Dragablz
     /// </summary>
     public class DragablzItemsControl : ItemsControl
     {
+        private readonly Func<DragablzItem> _getContainerForItemOverride;
+        private readonly Action<DependencyObject, object> _prepareContainerForItemOverride;
         private readonly IList<DragablzItem> _itemsPendingInitialArrangement = new List<DragablzItem>();
         private object[] _previousSortQueryResult;
 
         static DragablzItemsControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DragablzItemsControl), new FrameworkPropertyMetadata(typeof(DragablzItemsControl)));            
+        }
+
+        public DragablzItemsControl(
+            Func<DragablzItem> getContainerForItemOverride,
+            Action<DependencyObject, object> prepareContainerForItemOverride)
+            : this()
+        {
+            _getContainerForItemOverride = getContainerForItemOverride;
+            _prepareContainerForItemOverride = prepareContainerForItemOverride;
         }
 
         public DragablzItemsControl()
@@ -122,7 +133,9 @@ namespace Dragablz
 
         protected override DependencyObject GetContainerForItemOverride()
         {
-            var result = new DragablzItem();
+            var result = _getContainerForItemOverride != null
+                ? _getContainerForItemOverride()
+                : new DragablzItem();
 
             _itemsPendingInitialArrangement.Add(result);
 
@@ -131,6 +144,9 @@ namespace Dragablz
 
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
+            if (_prepareContainerForItemOverride != null)
+                _prepareContainerForItemOverride(element, item);
+
             base.PrepareContainerForItemOverride(element, item);
         }
 

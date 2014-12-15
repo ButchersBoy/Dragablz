@@ -30,7 +30,7 @@ namespace Dragablz.Dockablz
         private readonly IDictionary<DropZoneLocation, DropZone> _dropZones = new Dictionary<DropZoneLocation, DropZone>();
         private static Tuple<Layout, DropZone> _currentlyOfferedDropZone;
         
-        private readonly DragablzItemsControl _floatingItems = new DragablzItemsControl();        
+        private readonly DragablzItemsControl _floatingItems;
 
         static Layout()
         {
@@ -45,6 +45,8 @@ namespace Dragablz.Dockablz
         {
             Loaded += (sender, args) => LoadedLayouts.Add(this);
             Unloaded += (sender, args) => LoadedLayouts.Remove(this);
+
+            _floatingItems = new DragablzItemsControl(GetFloatingContainerForItemOverride, PrepareFloatingContainerForItemOverride);
             
             var floatingItemsSourceBinding = new Binding("FloatingItemsSource") { Source = this };
             _floatingItems.SetBinding(ItemsControl.ItemsSourceProperty, floatingItemsSourceBinding);
@@ -53,9 +55,11 @@ namespace Dragablz.Dockablz
             var floatingItemTemplateBinding = new Binding("FloatingItemTemplate") { Source = this };
             _floatingItems.SetBinding(ItemsControl.ItemTemplateProperty, floatingItemTemplateBinding);
             var floatingItemTemplateSelectorBinding = new Binding("FloatingItemTemplateSelector") { Source = this };
-            _floatingItems.SetBinding(ItemsControl.ItemTemplateSelectorProperty, floatingItemTemplateSelectorBinding);
+            _floatingItems.SetBinding(ItemsControl.ItemTemplateSelectorProperty, floatingItemTemplateSelectorBinding);            
             var floatingItemContainerStyeBinding = new Binding("FloatingItemContainerStyle") { Source = this };
-            _floatingItems.SetBinding(ItemsControl.ItemContainerStyleProperty, floatingItemContainerStyeBinding);            
+            _floatingItems.SetBinding(ItemsControl.ItemContainerStyleProperty, floatingItemContainerStyeBinding);
+            var floatingItemContainerStyleSelectorBinding = new Binding("FloatingItemContainerStyleSelector") { Source = this };
+            _floatingItems.SetBinding(ItemsControl.ItemContainerStyleSelectorProperty, floatingItemContainerStyleSelectorBinding);
         }
 
         /// <summary>
@@ -152,6 +156,15 @@ namespace Dragablz.Dockablz
             set { SetValue(FloatingItemContainerStyleProperty, value); }
         }
 
+        public static readonly DependencyProperty FloatingItemContainerStyleSelectorProperty = DependencyProperty.Register(
+            "FloatingItemContainerStyleSelector", typeof (StyleSelector), typeof (Layout), new PropertyMetadata(new CouldBeHeaderedStyleSelector()));
+
+        public StyleSelector FloatingItemContainerStyleSelector
+        {
+            get { return (StyleSelector) GetValue(FloatingItemContainerStyleSelectorProperty); }
+            set { SetValue(FloatingItemContainerStyleSelectorProperty, value); }
+        }
+
         public static readonly DependencyProperty FloatingItemTemplateProperty = DependencyProperty.Register(
             "FloatingItemTemplate", typeof (DataTemplate), typeof (Layout), new PropertyMetadata(default(DataTemplate)));
 
@@ -168,6 +181,24 @@ namespace Dragablz.Dockablz
         {
             get { return (DataTemplateSelector) GetValue(FloatingItemTemplateSelectorProperty); }
             set { SetValue(FloatingItemTemplateSelectorProperty, value); }
+        }
+
+        public static readonly DependencyProperty FloatingItemHeaderMemberPathProperty = DependencyProperty.Register(
+            "FloatingItemHeaderMemberPath", typeof (string), typeof (Layout), new PropertyMetadata(default(string)));
+
+        public string FloatingItemHeaderMemberPath
+        {
+            get { return (string) GetValue(FloatingItemHeaderMemberPathProperty); }
+            set { SetValue(FloatingItemHeaderMemberPathProperty, value); }
+        }
+
+        public static readonly DependencyProperty FloatingItemDisplayMemberPathProperty = DependencyProperty.Register(
+            "FloatingItemDisplayMemberPath", typeof (string), typeof (Layout), new PropertyMetadata(default(string)));
+
+        public string FloatingItemDisplayMemberPath
+        {
+            get { return (string) GetValue(FloatingItemDisplayMemberPathProperty); }
+            set { SetValue(FloatingItemDisplayMemberPathProperty, value); }
         }
 
         public override void OnApplyTemplate()
@@ -392,6 +423,24 @@ namespace Dragablz.Dockablz
                 var cursorPos = Native.GetCursorPos();
                 layout.MonitorDropZones(cursorPos);
             }         
-        }        
+        }
+
+        private void PrepareFloatingContainerForItemOverride(DependencyObject dependencyObject, object o)
+        {
+            var headeredDragablzItem = dependencyObject as HeaderedDragablzItem;
+            if (headeredDragablzItem == null) return;
+
+            var headerBinding = new Binding(FloatingItemHeaderMemberPath) {Source = o};
+
+            headeredDragablzItem.SetBinding(HeaderedDragablzItem.HeaderContentProperty, headerBinding);
+        }
+
+        private DragablzItem GetFloatingContainerForItemOverride()
+        {
+            if (string.IsNullOrWhiteSpace(FloatingItemHeaderMemberPath))
+                return new DragablzItem();
+
+            return new HeaderedDragablzItem();
+        }
     }
 }

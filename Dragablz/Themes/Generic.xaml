@@ -499,6 +499,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -1080,7 +1081,6 @@
         </Setter>
     </Style>
 
-
     <Style TargetType="{x:Type local:Trapezoid}">
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Top" />
@@ -1130,7 +1130,13 @@
     
     <Style TargetType="dockablz:Layout">
         <Setter Property="FloatingItemsControlStyle" Value="{StaticResource FloatingDragablzItemsControlStyle}" />
-        <Setter Property="FloatingItemContainerStyle" Value="{StaticResource FloatingDragablzItemStyle}" />
+        <!--Setter Property="FloatingItemContainerStyle" Value="{StaticResource FloatingDragablzItemStyle}" /-->
+        <Setter Property="FloatingItemContainerStyleSelector">
+            <Setter.Value>
+                <dockablz:CouldBeHeaderedStyleSelector NonHeaderedStyle="{StaticResource FloatingDragablzItemStyle}"
+                                                       HeaderedStyle="{StaticResource ToolDragablzItemStyle}" />
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="dockablz:Layout">

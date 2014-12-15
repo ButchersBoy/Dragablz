@@ -26,7 +26,8 @@
 
     
     <dockablz:Layout Partition="2AE89D18-F236-4D20-9605-6C03319038E6" x:Name="Layout" IsFloatDropZoneEnabled="True"
-                     FloatingItemsSource="{Binding ToolItems}">
+                     FloatingItemsSource="{Binding ToolItems}"
+                     FloatingItemHeaderMemberPath="Header">
         <dockablz:Layout.FloatingItemTemplate>
             <DataTemplate DataType="{x:Type dragablzDemo:HeaderAndContentModel}">
                 <ContentControl Content="{Binding Content}" />
