@@ -63,6 +63,7 @@ namespace Dragablz
             if (sourceOfDragItemsControl == null) return;
 
             var sourceTab = TabablzControl.GetOwnerOfHeaderItems(sourceOfDragItemsControl);
+            if (sourceTab == null) return;
 
             if (sourceOfDragItemsControl.Items.Count != 1
                 || (sourceTab.InterTabController != null && !sourceTab.InterTabController.MoveWindowWithSolitaryTabs)
@@ -97,7 +98,7 @@ namespace Dragablz
             get
             {
                 var value = typeof (Window).GetProperty("CriticalHandle", BindingFlags.NonPublic | BindingFlags.Instance)
-                    .GetValue(this);
+                    .GetValue(this, new object[0]);
                 return (IntPtr) value;
             }
         }

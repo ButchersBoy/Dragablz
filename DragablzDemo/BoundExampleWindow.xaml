@@ -1,4 +1,4 @@
-﻿<Window x:Class="DragablzDemo.BoundExampleWindow"
+﻿<dragablz:DragablzWindow x:Class="DragablzDemo.BoundExampleWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
@@ -57,4 +57,4 @@
         </dragablz:TabablzControl>
     </dockablz:Layout>
     
-</Window>
+</dragablz:DragablzWindow>

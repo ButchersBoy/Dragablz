@@ -53,6 +53,7 @@
     <Compile Include="Core\MultiComparer.cs" />
     <Compile Include="Core\Native.cs" />
     <Compile Include="Core\TabHeaderDragStartInformation.cs" />
+    <Compile Include="Core\WindowMessage.cs" />
     <Compile Include="DefaultInterLayoutClient.cs" />
     <Compile Include="DefaultInterTabClient.cs" />
     <Compile Include="Dockablz\Branch.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="DragablzDragStartedEventArgs.cs" />
     <Compile Include="DragablzItem.cs" />
     <Compile Include="DragablzItemsControl.cs" />
+    <Compile Include="DragablzWindow.cs" />
     <Compile Include="HeaderedDragablzItem.cs" />
     <Compile Include="HorizontalOrganiser.cs" />
     <Compile Include="HorizontalPositionMonitor.cs" />
