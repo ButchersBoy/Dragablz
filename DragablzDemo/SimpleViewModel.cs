@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization.Formatters;
 using DragablzDemo.Annotations;
 
 namespace DragablzDemo
@@ -19,14 +20,24 @@ namespace DragablzDemo
             {
                 if (_isSelected == value) return;
                 _isSelected = value;
+#if NET40
+                OnPropertyChanged("IsSelected");
+#endif
+#if NET45
                 OnPropertyChanged();
+#endif                
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
+#if NET40
+        protected virtual void OnPropertyChanged(string propertyName)
+#endif
+#if NET45
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+#endif
         {
             var handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));

@@ -1,14 +1,29 @@
 ﻿using System;
 using System.Dynamic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Dragablz.Core;
 using Dragablz.Referenceless;
 
 namespace Dragablz
-{        
+{
+    public enum SizeGrip
+    {
+        NotApplicable,
+        Left,
+        TopLeft,
+        Top,
+        TopRight,
+        Right,
+        BottomRight,
+        Bottom,
+        BottomLeft
+    }
+
     [TemplatePart(Name = ThumbPartName, Type = typeof(Thumb))]
     public class DragablzItem : ContentControl
     {
@@ -56,7 +71,7 @@ namespace Dragablz
             {
                 RoutedEvent = XChangedEvent
             };
-            instance.RaiseEvent(args);
+            instance.RaiseEvent(args);            
         } 
 
         public static readonly DependencyProperty YProperty = DependencyProperty.Register(
@@ -92,6 +107,84 @@ namespace Dragablz
                 RoutedEvent = YChangedEvent
             };
             instance.RaiseEvent(args);
+        }
+
+        public static readonly DependencyProperty SizeGripProperty = DependencyProperty.RegisterAttached(
+            "SizeGrip", typeof (SizeGrip), typeof (DragablzItem), new PropertyMetadata(default(SizeGrip), SizeGripPropertyChangedCallback));
+
+        private static void SizeGripPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            var thumb = (dependencyObject as Thumb);
+            if (thumb == null) return;
+            thumb.DragDelta += SizeThumbOnDragDelta;
+        }
+
+        private static void SizeThumbOnDragDelta(object sender, DragDeltaEventArgs dragDeltaEventArgs)
+        {
+            var thumb = ((Thumb) sender);
+            var dragablzItem = thumb.VisualTreeAncestory().OfType<DragablzItem>().FirstOrDefault();
+            if (dragablzItem == null) return;
+
+            var sizeGrip = (SizeGrip) thumb.GetValue(SizeGripProperty);
+            var width = dragablzItem.ActualWidth;
+            var height = dragablzItem.ActualHeight;
+            var x = dragablzItem.X;
+            var y = dragablzItem.Y;
+            switch (sizeGrip)
+            {                                   
+                case SizeGrip.NotApplicable:
+                    break;
+                case SizeGrip.Left:
+                    width += -dragDeltaEventArgs.HorizontalChange;
+                    x += dragDeltaEventArgs.HorizontalChange;
+                    break;
+                case SizeGrip.TopLeft:
+                    width += -dragDeltaEventArgs.HorizontalChange;
+                    height += -dragDeltaEventArgs.VerticalChange;
+                    x += dragDeltaEventArgs.HorizontalChange;
+                    y += dragDeltaEventArgs.VerticalChange;
+                    break;
+                case SizeGrip.Top:
+                    height += -dragDeltaEventArgs.VerticalChange;                    
+                    y += dragDeltaEventArgs.VerticalChange;
+                    break;
+                case SizeGrip.TopRight:
+                    height += -dragDeltaEventArgs.VerticalChange;
+                    width += dragDeltaEventArgs.HorizontalChange;
+                    y += dragDeltaEventArgs.VerticalChange;
+                    break;
+                case SizeGrip.Right:
+                    width += dragDeltaEventArgs.HorizontalChange;
+                    break;
+                case SizeGrip.BottomRight:
+                    width += dragDeltaEventArgs.HorizontalChange;
+                    height += dragDeltaEventArgs.VerticalChange;
+                    break;
+                case SizeGrip.Bottom:
+                    height += dragDeltaEventArgs.VerticalChange;
+                    break;
+                case SizeGrip.BottomLeft:
+                    height += dragDeltaEventArgs.VerticalChange;
+                    width += -dragDeltaEventArgs.HorizontalChange;
+                    x += dragDeltaEventArgs.HorizontalChange;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            dragablzItem.SetCurrentValue(XProperty, x);
+            dragablzItem.SetCurrentValue(YProperty, y);
+            dragablzItem.SetCurrentValue(WidthProperty, Math.Max(width, thumb.DesiredSize.Width));
+            dragablzItem.SetCurrentValue(HeightProperty, Math.Max(height, thumb.DesiredSize.Height));
+        }
+
+        public static void SetSizeGrip(DependencyObject element, SizeGrip value)
+        {
+            element.SetValue(SizeGripProperty, value);
+        }
+
+        public static SizeGrip GetSizeGrip(DependencyObject element)
+        {
+            return (SizeGrip) element.GetValue(SizeGripProperty);
         }
 
         public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register(
@@ -256,14 +349,6 @@ namespace Dragablz
                 Dispatcher.BeginInvoke(new Action(() => thumb.RaiseEvent(new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice,
                     0,
                     MouseButton.Left) {RoutedEvent = MouseLeftButtonDownEvent})));
-
-                /*
-                Console.WriteLine("MungeCapture X =" + X);                
-                thumb.RaiseEvent(new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice,
-                    0,
-                    MouseButton.Left) {RoutedEvent = MouseLeftButtonDownEvent});                
-                Console.WriteLine("MungeCapture X.1 =" + X);
-                 */
             }
             _seizeDragWithTemplate = false;
 
@@ -290,6 +375,10 @@ namespace Dragablz
 
         internal Point MouseAtDragStart { get; set; }
 
+        internal string PartitionAtDragStart { get; set; }
+
+        internal bool IsDropTargetFound { get; set; }
+
         private void ThumbOnDragCompleted(object sender, DragCompletedEventArgs dragCompletedEventArgs)
         {
             MouseAtDragStart = new Point();
@@ -315,10 +404,8 @@ namespace Dragablz
         
         private void ThumbOnDragStarted(object sender, DragStartedEventArgs dragStartedEventArgs)
         {
-            Console.WriteLine("ThumbOnDragStarted {0},{1}", dragStartedEventArgs.HorizontalOffset, dragStartedEventArgs.VerticalOffset);
-
             MouseAtDragStart = Mouse.GetPosition(this);
             OnDragStarted(new DragablzDragStartedEventArgs(DragStarted, this, dragStartedEventArgs));            
         }
-    }    
+    }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Dragablz
+namespace Dragablz.Core
 {
     internal class MultiComparer<TObject> : IComparer<TObject>
     {

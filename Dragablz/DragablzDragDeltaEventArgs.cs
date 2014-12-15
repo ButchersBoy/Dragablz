@@ -42,6 +42,6 @@ namespace Dragablz
             get { return _dragDeltaEventArgs; }
         }
 
-        public bool Cancel { get; set; }
+        public bool Cancel { get; set; }        
     }
 }

@@ -15,7 +15,7 @@ namespace Dragablz
         /// <param name="partition">Provides the partition where the drag operation was initiated.</param>
         /// <param name="source">The source control where a dragging operation was initiated.</param>
         /// <returns></returns>
-        INewTabHost GetNewHost(IInterTabClient interTabClient, object partition, TabablzControl source);
+        INewTabHost<Window> GetNewHost(IInterTabClient interTabClient, object partition, TabablzControl source);
         /// <summary>
         /// Called when a tab has been emptied, and thus typically a window needs closing.
         /// </summary>

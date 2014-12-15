@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Dragablz
+namespace Dragablz.Core
 {
     internal enum InterTabTransferReason
     {

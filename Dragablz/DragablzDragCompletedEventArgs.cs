@@ -9,6 +9,7 @@ namespace Dragablz
     public class DragablzDragCompletedEventArgs : RoutedEventArgs
     {
         private readonly DragablzItem _dragablzItem;
+        private readonly bool _isDropTargetFound;
         private readonly DragCompletedEventArgs _dragCompletedEventArgs;
 
         public DragablzDragCompletedEventArgs(DragablzItem dragablzItem, DragCompletedEventArgs dragCompletedEventArgs)
@@ -26,7 +27,7 @@ namespace Dragablz
             if (dragablzItem == null) throw new ArgumentNullException("dragablzItem");
             if (dragCompletedEventArgs == null) throw new ArgumentNullException("dragCompletedEventArgs");
 
-            _dragablzItem = dragablzItem;
+            _dragablzItem = dragablzItem;            
             _dragCompletedEventArgs = dragCompletedEventArgs;
         }
 
@@ -48,6 +49,6 @@ namespace Dragablz
         public DragCompletedEventArgs DragCompletedEventArgs
         {
             get { return _dragCompletedEventArgs; }
-        }
+        }        
     }
 }

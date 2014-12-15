@@ -49,6 +49,7 @@ namespace Dragablz
             set { SetValue(InterTabClientProperty, value); }
         }
 
+        /*
         public static readonly DependencyProperty PartitionProperty = DependencyProperty.Register(
             "Partition", typeof (object), typeof (InterTabController), new PropertyMetadata(default(object)));
 
@@ -61,5 +62,12 @@ namespace Dragablz
             get { return (object) GetValue(PartitionProperty); }
             set { SetValue(PartitionProperty, value); }
         }
+         */
+
+        /// <summary>
+        /// The partition allows on or more tab environments in a single application.  Only tabs which have a tab controller
+        /// with a common partition will be allowed to have tabs dragged between them.  <c>null</c> is a valid partition (i.e global).
+        /// </summary>
+        public string Partition { get; set; }
     }
 }

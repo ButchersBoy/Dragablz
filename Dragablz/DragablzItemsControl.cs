@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Threading;
+using Dragablz.Core;
 
 namespace Dragablz
 {
@@ -15,12 +16,26 @@ namespace Dragablz
     /// </summary>
     public class DragablzItemsControl : ItemsControl
     {
+        private readonly Func<DragablzItem> _getContainerForItemOverride;
+        private readonly Action<DependencyObject, object> _prepareContainerForItemOverride;
+        private readonly Action<DependencyObject, object> _clearingContainerForItemOverride;
         private readonly IList<DragablzItem> _itemsPendingInitialArrangement = new List<DragablzItem>();
         private object[] _previousSortQueryResult;
 
         static DragablzItemsControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DragablzItemsControl), new FrameworkPropertyMetadata(typeof(DragablzItemsControl)));            
+        }
+
+        public DragablzItemsControl(
+            Func<DragablzItem> getContainerForItemOverride,
+            Action<DependencyObject, object> prepareContainerForItemOverride,
+            Action<DependencyObject, object> clearingContainerForItemOverride)
+            : this()
+        {
+            _getContainerForItemOverride = getContainerForItemOverride;
+            _prepareContainerForItemOverride = prepareContainerForItemOverride;
+            _clearingContainerForItemOverride = clearingContainerForItemOverride;
         }
 
         public DragablzItemsControl()
@@ -41,12 +56,20 @@ namespace Dragablz
 
         protected override void ClearContainerForItemOverride(DependencyObject element, object item)
         {
+            if (_clearingContainerForItemOverride != null)
+                _clearingContainerForItemOverride(element, item);            
+
             base.ClearContainerForItemOverride(element, item);
 
-            ItemsOrganiser.Organise(new Size(ItemsPresenterWidth, ItemsPresenterHeight), DragablzItems());
-            var measure = ItemsOrganiser.Measure(DragablzItems());
-            ItemsPresenterWidth = measure.Width;
-            ItemsPresenterHeight = measure.Height;            
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                var dragablzItems = DragablzItems().ToList();
+                if (ItemsOrganiser == null) return;
+                ItemsOrganiser.Organise(new Size(ItemsPresenterWidth, ItemsPresenterHeight), dragablzItems);
+                var measure = ItemsOrganiser.Measure(dragablzItems);
+                ItemsPresenterWidth = measure.Width;
+                ItemsPresenterHeight = measure.Height;
+            }), DispatcherPriority.Input);            
         }        
 
         public static readonly DependencyProperty ItemsOrganiserProperty = DependencyProperty.Register(
@@ -105,23 +128,33 @@ namespace Dragablz
         }
 
         protected override bool IsItemItsOwnContainerOverride(object item)
-        {
+        {            
             var dragablzItem = item as DragablzItem;
             if (dragablzItem == null) return false;
 
             _itemsPendingInitialArrangement.Add(dragablzItem);
 
-            return false;
+            return true;
         }
 
         protected override DependencyObject GetContainerForItemOverride()
         {
-            var result = new DragablzItem();
+            var result = _getContainerForItemOverride != null
+                ? _getContainerForItemOverride()
+                : new DragablzItem();
 
             _itemsPendingInitialArrangement.Add(result);
 
             return result;
-        }        
+        }
+
+        protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
+        {
+            if (_prepareContainerForItemOverride != null)
+                _prepareContainerForItemOverride(element, item);
+
+            base.PrepareContainerForItemOverride(element, item);
+        }
 
         protected override Size MeasureOverride(Size constraint)        
         {
@@ -157,7 +190,7 @@ namespace Dragablz
 
         internal IEnumerable<DragablzItem> DragablzItems()
         {
-            return this.Containers<DragablzItem>();            
+            return this.Containers<DragablzItem>().ToList();            
         }
 
         internal Size? LockedMeasure { get; set; }

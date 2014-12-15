@@ -1,12 +1,13 @@
 using System;
 using System.Linq;
 using System.Windows;
+using Dragablz.Core;
 
 namespace Dragablz
 {
     public class DefaultInterTabClient : IInterTabClient
     {        
-        public INewTabHost GetNewHost(IInterTabClient interTabClient, object partition, TabablzControl source)
+        public INewTabHost<Window> GetNewHost(IInterTabClient interTabClient, object partition, TabablzControl source)
         {
             if (source == null) throw new ArgumentNullException("source");
             var sourceWindow = Window.GetWindow(source);
@@ -18,7 +19,7 @@ namespace Dragablz
 
             newTabablzControl.Items.Clear();
 
-            return new NewTabHost(newWindow, newTabablzControl);            
+            return new NewTabHost<Window>(newWindow, newTabablzControl);            
         }
 
         public TabEmptiedResponse TabEmptiedHandler(TabablzControl tabControl, Window window)

@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace Dragablz
 {
-    public class LocationChangedEventArgs
+    public class LocationChangedEventArgs : EventArgs
     {
         private readonly object _item;
         private readonly Point _location;

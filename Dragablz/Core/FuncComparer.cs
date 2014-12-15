@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Dragablz
+namespace Dragablz.Core
 {
     internal class FuncComparer<TObject> : IComparer<TObject>
     {

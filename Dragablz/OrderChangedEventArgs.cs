@@ -2,7 +2,7 @@
 
 namespace Dragablz
 {
-    public class OrderChangedEventArgs
+    public class OrderChangedEventArgs : EventArgs
     {
         private readonly object[] _previousOrder;
         private readonly object[] _newOrder;

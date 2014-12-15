@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using Dragablz;
@@ -11,8 +12,9 @@ namespace DragablzDemo
 {
     public class BoundExampleModel
     {
-        private readonly IInterTabClient _interTabClient = new BoundExampleInterTabClient();
+        private readonly IInterTabClient _interTabClient = new BoundExampleInterTabClient();        
         private readonly ObservableCollection<SimpleViewModel> _items;
+        private readonly ObservableCollection<SimpleViewModel> _toolItems = new ObservableCollection<SimpleViewModel>();
 
         public BoundExampleModel()
         {
@@ -38,5 +40,10 @@ namespace DragablzDemo
         {
             get { return _interTabClient; }
         }
+
+        public ObservableCollection<SimpleViewModel> ToolItems
+        {
+            get { return _toolItems; }
+        }        
     }
 }
