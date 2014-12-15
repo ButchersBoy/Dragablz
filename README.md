@@ -26,7 +26,7 @@ Dragablz
 - Layout persistance and restore
 - Extra themes
 
-**If you like it, or where it's going, please *star* it!!!**  A bit of long goes a long way ;)
+**If you like it, or where it's going, please *star* it!!!**  A bit of love goes a long way ;)
 
 
 
