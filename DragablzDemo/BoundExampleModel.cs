@@ -14,6 +14,7 @@ namespace DragablzDemo
     {
         private readonly IInterTabClient _interTabClient = new BoundExampleInterTabClient();        
         private readonly ObservableCollection<SimpleViewModel> _items;
+        private readonly ObservableCollection<SimpleViewModel> _toolItems = new ObservableCollection<SimpleViewModel>();
 
         public BoundExampleModel()
         {
@@ -40,15 +41,9 @@ namespace DragablzDemo
             get { return _interTabClient; }
         }
 
-        public IEnumerable<HeaderAndContentModel> ToolItems
+        public ObservableCollection<SimpleViewModel> ToolItems
         {
-            get
-            {
-                yield return new HeaderAndContentModel { Header = "January", Content = "Welcome to the January tool/float item."};
-                yield return new HeaderAndContentModel { Header = "July", Content = "Welcome to the July tool/float item." };
-            }
-        }
-
-        
+            get { return _toolItems; }
+        }        
     }
 }

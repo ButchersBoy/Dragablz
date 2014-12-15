@@ -60,6 +60,7 @@
     <Compile Include="Dockablz\DropZone.cs" />
     <Compile Include="Dockablz\DropZoneLocation.cs" />
     <Compile Include="Dockablz\FloatRequestedEvent.cs" />
+    <Compile Include="Dockablz\FloatTransfer.cs" />
     <Compile Include="Dockablz\Layout.cs" />
     <Compile Include="DragablzDragCompletedEventArgs.cs" />
     <Compile Include="DragablzDragDeltaEventArgs.cs" />

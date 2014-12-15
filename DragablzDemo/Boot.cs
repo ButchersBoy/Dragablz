@@ -32,7 +32,11 @@ namespace DragablzDemo
                 new SimpleViewModel { Name = "Fri", SimpleContent = "Friday" },
                 new SimpleViewModel { Name = "Sat", SimpleContent = "Sunday" },
                 new SimpleViewModel { Name = "Sun", SimpleContent = "Sunday" }                 
-                );            
+                );
+            boundExampleModel.ToolItems.Add(
+                new SimpleViewModel { Name = "January", SimpleContent = "Welcome to the January tool/float item." });
+            boundExampleModel.ToolItems.Add(
+                new SimpleViewModel { Name = "July", SimpleContent = "Welcome to the July tool/float item." });
                        
             new BoundExampleWindow()
             {

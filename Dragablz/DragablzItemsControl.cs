@@ -18,6 +18,7 @@ namespace Dragablz
     {
         private readonly Func<DragablzItem> _getContainerForItemOverride;
         private readonly Action<DependencyObject, object> _prepareContainerForItemOverride;
+        private readonly Action<DependencyObject, object> _clearingContainerForItemOverride;
         private readonly IList<DragablzItem> _itemsPendingInitialArrangement = new List<DragablzItem>();
         private object[] _previousSortQueryResult;
 
@@ -28,11 +29,13 @@ namespace Dragablz
 
         public DragablzItemsControl(
             Func<DragablzItem> getContainerForItemOverride,
-            Action<DependencyObject, object> prepareContainerForItemOverride)
+            Action<DependencyObject, object> prepareContainerForItemOverride,
+            Action<DependencyObject, object> clearingContainerForItemOverride)
             : this()
         {
             _getContainerForItemOverride = getContainerForItemOverride;
             _prepareContainerForItemOverride = prepareContainerForItemOverride;
+            _clearingContainerForItemOverride = clearingContainerForItemOverride;
         }
 
         public DragablzItemsControl()
@@ -53,6 +56,9 @@ namespace Dragablz
 
         protected override void ClearContainerForItemOverride(DependencyObject element, object item)
         {
+            if (_clearingContainerForItemOverride != null)
+                _clearingContainerForItemOverride(element, item);            
+
             base.ClearContainerForItemOverride(element, item);
 
             Dispatcher.BeginInvoke(new Action(() =>

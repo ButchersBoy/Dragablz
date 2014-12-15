@@ -25,12 +25,13 @@
     </Window.Resources>
 
     
-    <dockablz:Layout Partition="2AE89D18-F236-4D20-9605-6C03319038E6" x:Name="Layout" IsFloatDropZoneEnabled="True"
+    <dockablz:Layout Partition="2AE89D18-F236-4D20-9605-6C03319038E6" x:Name="Layout"
                      FloatingItemsSource="{Binding ToolItems}"
-                     FloatingItemHeaderMemberPath="Header">
+                     FloatingItemHeaderMemberPath="Name"
+                     IsFloatDropZoneEnabled="True">
         <dockablz:Layout.FloatingItemTemplate>
-            <DataTemplate DataType="{x:Type dragablzDemo:HeaderAndContentModel}">
-                <ContentControl Content="{Binding Content}" />
+            <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
+                <ContentControl Content="{Binding SimpleContent}" />
             </DataTemplate>
         </dockablz:Layout.FloatingItemTemplate>
         <!-- branch template lets dragablz create a new tab control after a window is split via docking -->

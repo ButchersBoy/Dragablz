@@ -4,15 +4,15 @@
         xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
         xmlns:dockablz="clr-namespace:Dragablz.Dockablz;assembly=Dragablz"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
-        Title="Quick Start Window" Height="300" Width="300">
+        Title="Quick Start Window" Height="341" Width="617">
     <Window.Resources>
         <system:String x:Key="Partition">QuickStart</system:String>
-    </Window.Resources>    
+    </Window.Resources>
     <dockablz:Layout Partition="{StaticResource Partition}">
         <dragablz:TabablzControl Margin="8">
             <dragablz:TabablzControl.InterTabController>
                 <dragablz:InterTabController Partition="{StaticResource Partition}" />
-            </dragablz:TabablzControl.InterTabController>    
+            </dragablz:TabablzControl.InterTabController>
             <TabItem Header="Tab No. 1" IsSelected="True">
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Hello World</TextBlock>
             </TabItem>

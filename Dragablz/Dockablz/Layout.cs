@@ -32,6 +32,8 @@ namespace Dragablz.Dockablz
         
         private readonly DragablzItemsControl _floatingItems;
 
+        private FloatTransfer _floatTransfer;
+
         static Layout()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Layout), new FrameworkPropertyMetadata(typeof(Layout)));
@@ -46,7 +48,10 @@ namespace Dragablz.Dockablz
             Loaded += (sender, args) => LoadedLayouts.Add(this);
             Unloaded += (sender, args) => LoadedLayouts.Remove(this);
 
-            _floatingItems = new DragablzItemsControl(GetFloatingContainerForItemOverride, PrepareFloatingContainerForItemOverride);
+            _floatingItems = new DragablzItemsControl(
+                GetFloatingContainerForItemOverride, 
+                PrepareFloatingContainerForItemOverride,
+                ClearingFloatingContainerForItemOverride);
             
             var floatingItemsSourceBinding = new Binding("FloatingItemsSource") { Source = this };
             _floatingItems.SetBinding(ItemsControl.ItemsSourceProperty, floatingItemsSourceBinding);
@@ -214,21 +219,7 @@ namespace Dragablz.Dockablz
             _dropZones[DropZoneLocation.Bottom] = GetTemplateChild(BottomDropZonePartName) as DropZone;
             _dropZones[DropZoneLocation.Left] = GetTemplateChild(LeftDropZonePartName) as DropZone;
             _dropZones[DropZoneLocation.Floating] = GetTemplateChild(FloatingDropZonePartName) as DropZone;
-        }        
-
-        public static readonly RoutedEvent FloatRequestedEvent =
-            EventManager.RegisterRoutedEvent(
-                "FloatRequested",
-                RoutingStrategy.Bubble,
-                typeof(FloatRequestedEventHandler),
-                typeof (Layout));        
-
-        private static void OnFloatRequested(DependencyObject d, DragablzItem i)
-        {
-            var instance = (Layout) d;
-            var args = new FloatRequestedEventArgs(FloatRequestedEvent, i);                
-            instance.RaiseEvent(args);            
-        } 
+        }                 
 
         private static void ItemDragStarted(object sender, DragablzDragStartedEventArgs e)
         {               
@@ -404,14 +395,35 @@ namespace Dragablz.Dockablz
             if (_currentlyOfferedDropZone == null || e.DragablzItem.IsDropTargetFound) return;
 
             var assertGetSourceTabControl = AssertGetSourceTabControl(e.DragablzItem);
-            if (assertGetSourceTabControl.Items.Count > 1) return;
+            if (assertGetSourceTabControl.Items.Count > 1) return;            
 
             if (_currentlyOfferedDropZone.Item2.Location == DropZoneLocation.Floating)
-                OnFloatRequested(_currentlyOfferedDropZone.Item1, e.DragablzItem);
+                Float(_currentlyOfferedDropZone.Item1, e.DragablzItem);
             else
                 _currentlyOfferedDropZone.Item1.Branch(_currentlyOfferedDropZone.Item2.Location, e.DragablzItem);
 
             _currentlyOfferedDropZone = null;
+        }
+
+        private static void Float(Layout layout, DragablzItem dragablzItem)
+        {
+            //TODO we need eq of IManualInterTabClient here, so consumer can control this op'.
+
+            layout._floatTransfer = FloatTransfer.TakeSnapshot(dragablzItem);
+
+            //remove from source
+            var sourceOfDragItemsControl = ItemsControl.ItemsControlFromItemContainer(dragablzItem) as DragablzItemsControl;
+            if (sourceOfDragItemsControl == null) throw new ApplicationException("Unable to determin source items control.");            
+            var sourceTabControl = TabablzControl.GetOwnerOfHeaderItems(sourceOfDragItemsControl);
+            if (sourceTabControl == null) throw new ApplicationException("Unable to determin source tab control.");            
+            sourceTabControl.RemoveItem(dragablzItem);
+            
+            //add to float layer            
+            CollectionTeaser collectionTeaser;
+            if (CollectionTeaser.TryCreate(layout.FloatingItemsSource, out collectionTeaser))
+                collectionTeaser.Add(layout._floatTransfer.Content);
+            else
+                layout.FloatingItems.Add(layout._floatTransfer.Content);
         }
 
         private static void PreviewItemDragDelta(object sender, DragablzDragDeltaEventArgs e)
@@ -433,6 +445,17 @@ namespace Dragablz.Dockablz
             var headerBinding = new Binding(FloatingItemHeaderMemberPath) {Source = o};
 
             headeredDragablzItem.SetBinding(HeaderedDragablzItem.HeaderContentProperty, headerBinding);
+
+            if (_floatTransfer != null && (o == _floatTransfer.Content || dependencyObject == _floatTransfer.Content))
+            {
+                //TODO might be nice to allow user a bit of control over sizing
+
+                var dragablzItem = (DragablzItem) dependencyObject;
+                dragablzItem.SetCurrentValue(DragablzItem.XProperty, _floatingItems.ActualWidth / 2 - _floatTransfer.Width / 2);
+                dragablzItem.SetCurrentValue(DragablzItem.YProperty, _floatingItems.ActualHeight / 2 - _floatTransfer.Height / 2);
+
+                _floatTransfer = null;
+            }
         }
 
         private DragablzItem GetFloatingContainerForItemOverride()
@@ -442,5 +465,10 @@ namespace Dragablz.Dockablz
 
             return new HeaderedDragablzItem();
         }
+
+        private void ClearingFloatingContainerForItemOverride(DependencyObject dependencyObject, object o)
+        {
+        }
+
     }
 }

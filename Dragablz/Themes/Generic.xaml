@@ -99,6 +99,10 @@
                                 </PathGeometry>
                             </Path.Data>
                         </Path>
+                        <Ellipse Fill="{TemplateBinding Foreground}"
+                                 Visibility="{TemplateBinding Location, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static dockablz:DropZoneLocation.Floating}}"
+                                 Width="120" Height="120"
+                                 />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
