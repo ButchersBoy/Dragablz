@@ -56,7 +56,13 @@ namespace Dragablz
             CommandBindings.Add(new CommandBinding(CloseWindowCommand, CloseWindowExecuted));
             CommandBindings.Add(new CommandBinding(MaximizeWindowCommand, MaximizeWindowExecuted));
             CommandBindings.Add(new CommandBinding(MinimizeWindowCommand, MinimizeWindowExecuted));
-            CommandBindings.Add(new CommandBinding(RestoreWindowCommand, RestoreWindowExecuted));            
+            CommandBindings.Add(new CommandBinding(RestoreWindowCommand, RestoreWindowExecuted));
+            
+            this.StateChanged += (sender, args) =>
+            {
+                Console.WriteLine("RESTOREBOUNDS: " + RestoreBounds.Left + ", " + RestoreBounds.Top + ", " + WindowState);
+
+            };
         }        
 
         private static readonly DependencyPropertyKey IsWindowBeingDraggedByTabPropertyKey =
@@ -126,7 +132,7 @@ namespace Dragablz
             }
             
             MouseLeftButtonDown += (s, e) => DragMove();
-        }
+        }        
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
@@ -280,6 +286,9 @@ namespace Dragablz
                 (!(Math.Abs(dragDeltaEventArgs.HorizontalChange) > 2) &&
                  !(Math.Abs(dragDeltaEventArgs.VerticalChange) > 2))) return;
 
+            var cursorPos = Native.GetCursorPos();
+            Top = 2;
+            Left = Math.Max(cursorPos.X - RestoreBounds.Width /2, 0);
             WindowState = WindowState.Normal;
             Native.SendMessage(CriticalHandle, WindowMessage.WM_LBUTTONUP, IntPtr.Zero, IntPtr.Zero);    
             Native.SendMessage(CriticalHandle, WindowMessage.WM_SYSCOMMAND, (IntPtr)SystemCommand.SC_MOUSEMOVE, IntPtr.Zero);
