@@ -48,10 +48,11 @@
 
 
     <Style TargetType="{x:Type Thumb}" x:Key="InvisibleThumbStyle">
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Grid Background="Transparent" />
+                    <Grid Background="{TemplateBinding Background}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -90,7 +91,6 @@
 
         </Setter>
     </Style>
-
     
     <Style TargetType="{x:Type Button}" x:Key="MinimalistButtonStyle">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -168,39 +168,44 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:DragablzWindow}">
-                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
-                        <AdornerDecorator>
-                            <Grid>
-                                <Thumb Style="{StaticResource InvisibleThumbStyle}"
-                                       IsHitTestVisible="False"
-                                       x:Name="PART_WindowRestoreThumb"/>
-                                <ContentPresenter Margin="0 2 0 0"/>
-                                <StackPanel x:Name="SystemCommandsPanel" 
-                                            HorizontalAlignment="Right"
-                                            VerticalAlignment="Top"
-                                            Orientation="Horizontal">                                    
-                                    <Button Command="{x:Static local:DragablzWindow.MinimizeWindowCommand}"
-                                            Style="{StaticResource MinimalistButtonStyle}">
-                                        <themes:SystemCommandIcon SystemCommandType="MinimzeWindow" />
-                                    </Button>
-                                    <Button Command="{x:Static local:DragablzWindow.RestoreWindowCommand}"
-                                            Visibility="{TemplateBinding WindowState, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static WindowState.Maximized}}"
-                                            Style="{StaticResource MinimalistButtonStyle}">
-                                        <themes:SystemCommandIcon SystemCommandType="RestoreWindow" />
-                                    </Button>                                  
-                                    <Button Command="{x:Static local:DragablzWindow.MaximizeWindowCommand}"
-                                            Visibility="{TemplateBinding WindowState, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static WindowState.Normal}}"
-                                            Style="{StaticResource MinimalistButtonStyle}">
-                                        <themes:SystemCommandIcon SystemCommandType="MaximizeWindow" />
-                                    </Button>
-                                    <Button Command="{x:Static local:DragablzWindow.CloseWindowCommand}"
-                                            Style="{StaticResource MinimalistButtonStyle}">
-                                        <themes:SystemCommandIcon SystemCommandType="CloseWindow" />
-                                    </Button>
-                                </StackPanel>                                
-                            </Grid>
-                        </AdornerDecorator>
-                    </Border>
+                    <Grid>
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                            <AdornerDecorator>
+                                <Grid>
+                                    <Thumb Style="{StaticResource InvisibleThumbStyle}"
+                                           IsHitTestVisible="False"
+                                           x:Name="PART_WindowRestoreThumb"/>                                    
+                                    <ContentPresenter Margin="4"/>
+                                    <StackPanel x:Name="SystemCommandsPanel" 
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Top"
+                                                Orientation="Horizontal">                                    
+                                        <Button Command="{x:Static local:DragablzWindow.MinimizeWindowCommand}"
+                                                Style="{StaticResource MinimalistButtonStyle}">
+                                            <themes:SystemCommandIcon SystemCommandType="MinimzeWindow" />
+                                        </Button>
+                                        <Button Command="{x:Static local:DragablzWindow.RestoreWindowCommand}"
+                                                Visibility="{TemplateBinding WindowState, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static WindowState.Maximized}}"
+                                                Style="{StaticResource MinimalistButtonStyle}">
+                                            <themes:SystemCommandIcon SystemCommandType="RestoreWindow" />
+                                        </Button>                                  
+                                        <Button Command="{x:Static local:DragablzWindow.MaximizeWindowCommand}"
+                                                Visibility="{TemplateBinding WindowState, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static WindowState.Normal}}"
+                                                Style="{StaticResource MinimalistButtonStyle}">
+                                            <themes:SystemCommandIcon SystemCommandType="MaximizeWindow" />
+                                        </Button>
+                                        <Button Command="{x:Static local:DragablzWindow.CloseWindowCommand}"
+                                                Style="{StaticResource MinimalistButtonStyle}">
+                                            <themes:SystemCommandIcon SystemCommandType="CloseWindow" />
+                                        </Button>
+                                    </StackPanel>                                
+                                </Grid>
+                            </AdornerDecorator>
+                        </Border>
+                        <Thumb Background="Transparent"
+                               Style="{StaticResource InvisibleThumbStyle}"
+                               x:Name="PART_WindowResizeThumb"/>
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="WindowState" Value="Maximized">
                             <Setter TargetName="PART_WindowRestoreThumb" Property="IsHitTestVisible" Value="True" />
