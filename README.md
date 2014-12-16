@@ -4,6 +4,8 @@ Dragablz
 
 ## Dragable and tearable tab control for WPF.
 
+![Alt text](http://dragablz.files.wordpress.com/2014/12/dragablzwindowsnap.gif "Demo shot")
+
 - Docs 'n' help 'n' stuff: [dragablz.net](http://dragablz.net/)
 - NuGet details here: http://www.nuget.org/packages/Dragablz/
 - You can criticise the developer here: [@James_Willock](http://twitter.com/James_Willock)
@@ -20,6 +22,9 @@ Dragablz
 - User friendly docking
 - Floating tool windows
 - Supports MVVM
+- IE style transparent Windows
+- Chrome style trapzoid tabs
+- Custom (and optional) Window which supports transparency, resizing, snapping, full Window content.
 - Miminal XAML required, but hooks provided for advanced control from client code
 
 ## In the pipeline:
