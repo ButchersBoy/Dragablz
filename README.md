@@ -10,6 +10,7 @@ Dragablz
 - NuGet details here: http://www.nuget.org/packages/Dragablz/
 - You can criticise the developer here: [@James_Willock](http://twitter.com/James_Willock)
   - No, seriously, please get involved and give me a ping with any questions/requests.
+- **If you like it, or where it's going, please *star* it!!!**  A bit of love goes a long way ;)
 
 ## A note on the demo project:
 
@@ -31,8 +32,6 @@ Dragablz
 
 - Layout persistance and restore
 - Extra themes
-
-**If you like it, or where it's going, please *star* it!!!**  A bit of love goes a long way ;)
 
 
 
