@@ -8,6 +8,7 @@ namespace Dragablz
     public interface IItemsOrganiser
     {
         void Organise(Size bounds, IEnumerable<DragablzItem> items);
+        void OrganiseOnDragStarted(Size bounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem);
         void OrganiseOnDrag(Size bounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem);
         void OrganiseOnDragCompleted(Size bounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem);        
         Point ConstrainLocation(Size bounds, Point desiredLocation, Size itemDesiredSize);

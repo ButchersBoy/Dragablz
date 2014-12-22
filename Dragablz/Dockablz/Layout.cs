@@ -293,10 +293,10 @@ namespace Dragablz.Dockablz
         private static TabablzControl AssertGetSourceTabControl(DragablzItem dragablzItem)
         {
             var sourceOfDragItemsControl = ItemsControl.ItemsControlFromItemContainer(dragablzItem) as DragablzItemsControl;
-            if (sourceOfDragItemsControl == null) throw new ApplicationException("Unable to determin source items control.");
+            if (sourceOfDragItemsControl == null) throw new ApplicationException("Unable to determine source items control.");
 
             var sourceTabControl = TabablzControl.GetOwnerOfHeaderItems(sourceOfDragItemsControl);
-            if (sourceTabControl == null) throw new ApplicationException("Unable to determin source tab control.");
+            if (sourceTabControl == null) throw new ApplicationException("Unable to determine source tab control.");
 
             return sourceTabControl;
         }
