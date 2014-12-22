@@ -355,16 +355,17 @@ namespace Dragablz
                 {
                     var vector = cursorPos - _interTabTransfer.DragStartWindowOffset;
                     myWindow.Left = vector.X;
-                    myWindow.Top = vector.Y;
+                    myWindow.Top = vector.Y;                
                 }
                 else
                 {
+                    Console.WriteLine("Aligning x={0},hash={1}", _interTabTransfer.OriginatorContainer.MouseAtDragStart.X, GetHashCode());
                     var offset = e.DragablzItem.TranslatePoint(_interTabTransfer.OriginatorContainer.MouseAtDragStart, myWindow);
                     var borderVector = myWindow.PointToScreen(new Point()) - new Point(myWindow.Left, myWindow.Top);
                     offset.Offset(borderVector.X, borderVector.Y);
                     myWindow.Left = cursorPos.X - offset.X;
                     myWindow.Top = cursorPos.Y - offset.Y;
-                }
+                }                 
             }
             else
             {
@@ -401,10 +402,12 @@ namespace Dragablz
 
             if (target != null)
             {
+                var mousePositionOnItem = Mouse.GetPosition(e.DragablzItem);
+
                 e.DragablzItem.IsDropTargetFound = true;
                 var item = RemoveItem(e.DragablzItem);
 
-                var interTabTransfer = new InterTabTransfer(item, e.DragablzItem, Mouse.GetPosition(e.DragablzItem));
+                var interTabTransfer = new InterTabTransfer(item, e.DragablzItem, mousePositionOnItem);
                 e.DragablzItem.IsDragging = false;
 
                 target.tc.ReceiveDrag(interTabTransfer);
@@ -527,6 +530,7 @@ namespace Dragablz
             if (myWindow == null) throw new ApplicationException("Unable to find owning window.");
             myWindow.Activate();
 
+            Console.WriteLine("Receiving x={0},hash={1}", interTabTransfer.OriginatorContainer.MouseAtDragStart.X, GetHashCode());
             _interTabTransfer = interTabTransfer;
 
             if (Items.Count == 0)

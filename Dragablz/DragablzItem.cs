@@ -381,8 +381,8 @@ namespace Dragablz
 
         private void ThumbOnDragCompleted(object sender, DragCompletedEventArgs dragCompletedEventArgs)
         {
+            OnDragCompleted(dragCompletedEventArgs);
             MouseAtDragStart = new Point();
-            OnDragCompleted(dragCompletedEventArgs);            
         }        
 
         private void ThumbOnDragDelta(object sender, DragDeltaEventArgs dragDeltaEventArgs)
