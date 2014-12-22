@@ -510,8 +510,12 @@ namespace Dragablz.Dockablz
         {
             var dragablzItem = executedRoutedEventArgs.Parameter as DragablzItem;
             if (dragablzItem == null) return;
+            
+            var branch = this.LogicalTreeDepthFirstTraversal().OfType<Branch>();
 
-            var exemplarTab = this.LogicalTreeDepthFirstTraversal().OfType<TabablzControl>()
+            var exemplarTab = branch.Any()
+                ? branch.First().FirstItem as TabablzControl
+                : this.LogicalTreeDepthFirstTraversal().OfType<TabablzControl>()
                 .FirstOrDefault(t => t.InterTabController != null && t.InterTabController.Partition == Partition);
 
             if (exemplarTab == null) return;
