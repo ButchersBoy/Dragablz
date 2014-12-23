@@ -23,13 +23,19 @@
             <dragablz:InterTabController />
         </dragablz:TabablzControl.InterTabController>
         <TabItem Header="1 - one">
-            <TextBlock Margin="2">This is the first</TextBlock>
+            <TextBlock Margin="2" FontSize="24">This is the first</TextBlock>
         </TabItem>
         <TabItem Header="2 - two">
-            <TextBlock Margin="2">This is the second</TextBlock>
+            <TextBox Margin="2" FontSize="24">This is the second</TextBox>
         </TabItem>
         <TabItem Header="3 - three">
-            <TextBlock Margin="2">This is the third</TextBlock>
+            <TextBlock Margin="2" FontSize="24">This is the third</TextBlock>
+        </TabItem>
+        <TabItem Header="4 - four">
+            <TextBlock Margin="2" FontSize="24">This is the fourth</TextBlock>
+        </TabItem>
+        <TabItem Header="5 - five">
+            <TextBlock Margin="2" FontSize="24">This is the fifth</TextBlock>
         </TabItem>
     </dragablz:TabablzControl>        
 </dragablz:DragablzWindow>

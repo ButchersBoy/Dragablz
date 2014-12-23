@@ -195,16 +195,24 @@ namespace Dragablz
 
         internal Size? LockedMeasure { get; set; }
 
-        private void ItemDragStarted(object sender, DragablzDragStartedEventArgs dragablzDragStartedEventArgs)
+        private void ItemDragStarted(object sender, DragablzDragStartedEventArgs eventArgs)
         {            
             foreach (var dragableItem in DragablzItems()
-                .Except(new [] { dragablzDragStartedEventArgs.DragablzItem}))
+                .Except(new[] { eventArgs.DragablzItem }))
             {
                 dragableItem.IsSiblingDragging = true;
-            }            
-            dragablzDragStartedEventArgs.DragablzItem.IsDragging = true;
+            }
+            eventArgs.DragablzItem.IsDragging = true;
 
-            dragablzDragStartedEventArgs.Handled = true;
+            if (ItemsOrganiser != null)
+            {
+                var bounds = new Size(ActualWidth, ActualHeight);
+                ItemsOrganiser.OrganiseOnDragStarted(bounds,
+                    DragablzItems().Except(new[] { eventArgs.DragablzItem }).ToList(),
+                    eventArgs.DragablzItem);
+            }
+
+            eventArgs.Handled = true;
         }
 
         private void ItemDragCompleted(object sender, DragablzDragCompletedEventArgs eventArgs)

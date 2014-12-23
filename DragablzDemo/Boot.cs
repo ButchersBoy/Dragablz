@@ -18,12 +18,12 @@ namespace DragablzDemo
         {            
             var app = new App {ShutdownMode = ShutdownMode.OnLastWindowClose};
             app.InitializeComponent();
-        
+            
             new BasicExampleMainWindow
             {
                 DataContext = new BasicExampleMainModel()
-            }.Show();                          
-            
+            }.Show();                                      
+                
             var boundExampleModel = new BoundExampleModel(
                 new SimpleViewModel { Name = "Mon", SimpleContent = "Monday's child is fair of face" },
                 new SimpleViewModel { Name = "Tues", SimpleContent = "Tuesday's child is full of grace" },
@@ -42,7 +42,7 @@ namespace DragablzDemo
             {
                 DataContext = boundExampleModel
             }.Show();
-
+            
             new QuickStartWindow().Show();
             
             app.Run();

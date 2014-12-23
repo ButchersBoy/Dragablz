@@ -12,6 +12,11 @@ namespace Dragablz
             
         }
 
+        public void OrganiseOnDragStarted(Size bounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
+        {
+            
+        }
+
         public void OrganiseOnDrag(Size bounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
         {
             

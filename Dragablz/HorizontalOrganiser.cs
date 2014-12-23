@@ -1,4 +1,7 @@
+using System;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Animation;
 
 namespace Dragablz
 {
@@ -7,5 +10,5 @@ namespace Dragablz
         public HorizontalOrganiser() : base(Orientation.Horizontal)
         {
         }
-    }
+    }    
 }
