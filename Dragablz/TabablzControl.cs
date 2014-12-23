@@ -190,9 +190,12 @@ namespace Dragablz
                     CustomHeaderItemStyle);
             }
 
+            if (SelectedItem == null)
+                SetCurrentValue(SelectedItemProperty, Items.OfType<object>().FirstOrDefault());
+
             _itemsHolder = GetTemplateChild(ItemsHolderPartName) as Panel;
             UpdateSelectedItem();
-            MarkInitialSelection();
+            MarkInitialSelection();            
 
             base.OnApplyTemplate();
         }
@@ -294,12 +297,19 @@ namespace Dragablz
             if (_dragablzItemsControl == null ||
                 _dragablzItemsControl.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) return;
 
-            if (_dragablzItemsControl != null && SelectedItem != null && !(SelectedItem is TabItem))
+            if (_dragablzItemsControl == null || SelectedItem == null) return;
+
+            var tabItem = SelectedItem as TabItem;
+            if (tabItem != null)
             {
-                var containerFromItem = _dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(SelectedItem) as DragablzItem;
-                if (containerFromItem != null)
-                    containerFromItem.IsSelected = true;
-            }
+                tabItem.SetCurrentValue(IsSelectedProperty, true);
+            }            
+            var containerFromItem =
+                _dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(SelectedItem) as DragablzItem;
+            if (containerFromItem != null)
+            {
+                containerFromItem.SetCurrentValue(DragablzItem.IsSelectedProperty, true);                    
+            }            
         }
 
         private void ItemDragStarted(object sender, DragablzDragStartedEventArgs e)
@@ -359,7 +369,6 @@ namespace Dragablz
                 }
                 else
                 {
-                    Console.WriteLine("Aligning x={0},hash={1}", _interTabTransfer.OriginatorContainer.MouseAtDragStart.X, GetHashCode());
                     var offset = e.DragablzItem.TranslatePoint(_interTabTransfer.OriginatorContainer.MouseAtDragStart, myWindow);
                     var borderVector = myWindow.PointToScreen(new Point()) - new Point(myWindow.Left, myWindow.Top);
                     offset.Offset(borderVector.X, borderVector.Y);
@@ -530,7 +539,6 @@ namespace Dragablz
             if (myWindow == null) throw new ApplicationException("Unable to find owning window.");
             myWindow.Activate();
 
-            Console.WriteLine("Receiving x={0},hash={1}", interTabTransfer.OriginatorContainer.MouseAtDragStart.X, GetHashCode());
             _interTabTransfer = interTabTransfer;
 
             if (Items.Count == 0)
@@ -556,7 +564,7 @@ namespace Dragablz
                         newContainer.X = interTabTransfer.OriginatorContainer.X;
                 }
                 else
-                {
+                {                    
                     var mouseXOnItemsControl = Native.GetCursorPos().X - _dragablzItemsControl.PointToScreen(new Point()).X;
                     newContainer.X = mouseXOnItemsControl - interTabTransfer.DragStartItemOffset.X;                    
                     newContainer.Y = 0;                    
