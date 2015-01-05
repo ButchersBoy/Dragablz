@@ -27,6 +27,7 @@
 - Chrome style trapzoid tabs
 - Custom (and optional) Window which supports transparency, resizing, snapping, full Window content.
 - Miminal XAML required, but hooks provided for advanced control from client code
+- Single light weight assembly targeting .net 4.* frameworks, no additional dependencies
 
 ## In the pipeline:
 

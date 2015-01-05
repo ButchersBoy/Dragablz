@@ -57,12 +57,6 @@ namespace Dragablz
             CommandBindings.Add(new CommandBinding(MaximizeWindowCommand, MaximizeWindowExecuted));
             CommandBindings.Add(new CommandBinding(MinimizeWindowCommand, MinimizeWindowExecuted));
             CommandBindings.Add(new CommandBinding(RestoreWindowCommand, RestoreWindowExecuted));
-            
-            this.StateChanged += (sender, args) =>
-            {
-                Console.WriteLine("RESTOREBOUNDS: " + RestoreBounds.Left + ", " + RestoreBounds.Top + ", " + WindowState);
-
-            };
         }        
 
         private static readonly DependencyPropertyKey IsWindowBeingDraggedByTabPropertyKey =
