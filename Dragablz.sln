@@ -10,7 +10,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragablz.Test", "Dragablz.Test\Dragablz.Test.csproj", "{BA0DAD50-C09F-4ED6-92D3-185CB5A39225}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragablzModernUIDemo", "DragablzModernUIDemo\DragablzModernUIDemo.csproj", "{CC771231-EF3A-45FF-8C17-B95251B329B0}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragablz.net40", "Dragablz\Dragablz.net40.csproj", "{886AD9DE-BCED-4A99-8376-5177B376C0AC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CC771231-EF3A-45FF-8C17-B95251B329B0} = {CC771231-EF3A-45FF-8C17-B95251B329B0}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragablzDemo.net40", "DragablzDemo\DragablzDemo.net40.csproj", "{B127C87D-C212-40D1-895E-3B6341E81C21}"
 EndProject
