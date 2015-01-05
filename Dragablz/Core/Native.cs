@@ -81,6 +81,23 @@ namespace Dragablz.Core
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         internal static extern IntPtr SendMessage(IntPtr hWnd, WindowMessage msg, IntPtr wParam, IntPtr lParam);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        internal static extern IntPtr PostMessage(IntPtr hWnd, WindowMessage msg, IntPtr wParam, IntPtr lParam); 
+        internal static extern IntPtr PostMessage(IntPtr hWnd, WindowMessage msg, IntPtr wParam, IntPtr lParam);
+
+
+        [DllImport("dwmapi.dll", EntryPoint = "#127")]
+        internal static extern void DwmGetColorizationParameters(ref DWMCOLORIZATIONPARAMS dp);
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct DWMCOLORIZATIONPARAMS
+        {
+            public UInt32 ColorizationColor;
+            public UInt32 ColorizationAfterglow;
+            public UInt32 ColorizationColorBalance;
+            public UInt32 ColorizationAfterglowBalance;
+            public UInt32 ColorizationBlurBalance;
+            public UInt32 ColorizationGlassReflectionIntensity;
+            public UInt32 ColorizationOpaqueBlend;
+        }
+
     }
 }

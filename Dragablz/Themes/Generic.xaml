@@ -20,6 +20,8 @@
         </Setter>
     </Style>
 
+    <Color x:Key="CloseMenuCommandHighlightColor">#e04343</Color>
+    
     <!-- these tab styles are as close as possible to the default .net styles, so the tab will fit straight in to an unstyled app -->
     <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#ACACAC"/>
@@ -59,8 +61,8 @@
     </Style>
 
     <Style TargetType="{x:Type themes:SystemCommandIcon}">
-        <Setter Property="Width" Value="12" />
-        <Setter Property="Height" Value="12" />        
+        <Setter Property="Width" Value="10" />
+        <Setter Property="Height" Value="10" />        
         <Setter Property="Margin" Value="4 2 4 2" />
         <Setter Property="Template">
             <Setter.Value>
@@ -69,21 +71,28 @@
                           Data="M0.5,71 L70,0.5 M0.5,1 L70,70.5" 
                           Stretch="Uniform"
                           Stroke="{TemplateBinding Foreground}"
-                          StrokeThickness="1"
-                          StrokeStartLineCap="Triangle" 
-                          StrokeEndLineCap="Triangle"
+                          StrokeThickness="1.5"
+                          StrokeStartLineCap="Square" 
+                          StrokeEndLineCap="Square"
+                          SnapsToDevicePixels="True"                          
                           />                    
                     <ControlTemplate.Triggers>
                         <Trigger Property="SystemCommandType" Value="MaximizeWindow">
                             <Setter TargetName="Path" Property="Data" Value="M2.5,2.5 L67.5,2.5 L67.5,68 L2.5,68 z" />
+                            <Setter TargetName="Path" Property="StrokeThickness" Value="1.25" />
+                            <Setter TargetName="Path" Property="RenderOptions.EdgeMode" Value="Aliased" />
                         </Trigger>
                         <Trigger Property="SystemCommandType" Value="MinimzeWindow">
                             <Setter TargetName="Path" Property="Data" Value="M165,40 L234.5,39.5" />
                             <Setter TargetName="Path" Property="StrokeStartLineCap" Value="Flat" />
                             <Setter TargetName="Path" Property="StrokeEndLineCap" Value="Flat" />
+                            <Setter TargetName="Path" Property="StrokeThickness" Value="1.25" />
+                            <Setter TargetName="Path" Property="RenderOptions.EdgeMode" Value="Aliased" />
                         </Trigger>
                         <Trigger Property="SystemCommandType" Value="RestoreWindow">
                             <Setter TargetName="Path" Property="Data" Value="M2.5,13 L57.576,13 L57.576,69 L2.5,69 z M12.424,2.5 L67.5,2.5 67.5,58.5 57.576,58.5 57.576,13 12.424,13 z" />
+                            <Setter TargetName="Path" Property="StrokeThickness" Value="1.25" />
+                            <Setter TargetName="Path" Property="RenderOptions.EdgeMode" Value="Aliased" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -92,15 +101,18 @@
         </Setter>
     </Style>
     
-    <Style TargetType="{x:Type Button}" x:Key="MinimalistButtonStyle">
+    <Style TargetType="{x:Type Button}" x:Key="MenuCommandButtonStyle">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-        <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="1"/>
+        <Setter Property="Opacity" Value=".8"/>
+        <Setter Property="Width" Value="24"/>
+        <Setter Property="Height" Value="20"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -110,15 +122,7 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsDefaulted" Value="true">
                             <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
-                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
-                        </Trigger>
+                        </Trigger>                        
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
                             <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
@@ -128,8 +132,38 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Background" Value="{x:Static local:DragablzColors.WindowGlassBrush}"/>
+                <Setter Property="Foreground" Value="{x:Static SystemColors.HighlightTextBrush}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter Property="Opacity" Value="1"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
-
+    
+    <Style TargetType="{x:Type Button}" x:Key="CloseMenuCommandButtonStyle" BasedOn="{StaticResource MenuCommandButtonStyle}">
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Color="{x:Static SystemColors.ActiveBorderColor}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Width" Value="46" />
+        <Setter Property="Margin" Value="0 0 4 0" />         
+        <Setter Property="Foreground" Value="{x:Static SystemColors.HighlightTextBrush}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{StaticResource CloseMenuCommandHighlightColor}" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Opacity" Value="1"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
     <ControlTemplate x:Key="WindowTemplateKey" TargetType="{x:Type local:DragablzWindow}">
         <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
             <Grid>
@@ -161,7 +195,7 @@
         <Setter Property="WindowStyle" Value="None" />
         <Setter Property="AllowsTransparency" Value="True" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+        <Setter Property="Background" Value="{x:Static local:DragablzColors.WindowInactiveBrush}"/>
         <Setter Property="BorderBrush" Value="{x:Static SystemColors.ActiveBorderBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="ResizeMode" Value="CanResize" />
@@ -181,29 +215,30 @@
                                                 VerticalAlignment="Top"
                                                 Orientation="Horizontal">                                    
                                         <Button Command="{x:Static local:DragablzWindow.MinimizeWindowCommand}"
-                                                Style="{StaticResource MinimalistButtonStyle}">
+                                                Style="{StaticResource MenuCommandButtonStyle}">
                                             <themes:SystemCommandIcon SystemCommandType="MinimzeWindow" />
                                         </Button>
                                         <Button Command="{x:Static local:DragablzWindow.RestoreWindowCommand}"
                                                 Visibility="{TemplateBinding WindowState, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static WindowState.Maximized}}"
-                                                Style="{StaticResource MinimalistButtonStyle}">
+                                                Style="{StaticResource MenuCommandButtonStyle}">
                                             <themes:SystemCommandIcon SystemCommandType="RestoreWindow" />
                                         </Button>                                  
                                         <Button Command="{x:Static local:DragablzWindow.MaximizeWindowCommand}"
                                                 Visibility="{TemplateBinding WindowState, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter={x:Static WindowState.Normal}}"
-                                                Style="{StaticResource MinimalistButtonStyle}">
+                                                Style="{StaticResource MenuCommandButtonStyle}">
                                             <themes:SystemCommandIcon SystemCommandType="MaximizeWindow" />
                                         </Button>
                                         <Button Command="{x:Static local:DragablzWindow.CloseWindowCommand}"
-                                                Style="{StaticResource MinimalistButtonStyle}">
+                                                Style="{StaticResource CloseMenuCommandButtonStyle}"
+                                                x:Name="CloseWindowCommandButton"
+                                                >
                                             <themes:SystemCommandIcon SystemCommandType="CloseWindow" />
                                         </Button>
                                     </StackPanel>                                
                                 </Grid>
                             </AdornerDecorator>
                         </Border>
-                        <Thumb Background="Transparent"
-                               Style="{StaticResource InvisibleThumbStyle}"
+                        <Thumb Style="{StaticResource InvisibleThumbStyle}"
                                x:Name="PART_WindowResizeThumb"/>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -213,6 +248,13 @@
                         <Trigger Property="IsBeingDraggedByTab" Value="True">
                             <Setter TargetName="SystemCommandsPanel" Property="Visibility" Value="Collapsed"></Setter>
                         </Trigger>
+                        <Trigger Property="IsActive" Value="True">
+                            <Setter TargetName="CloseWindowCommandButton" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{StaticResource CloseMenuCommandHighlightColor}" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -221,10 +263,13 @@
             <Trigger Property="ResizeMode" Value="CanResizeWithGrip">
                 <Setter Property="Template" Value="{StaticResource WindowTemplateKey}"/>
             </Trigger>
+            <Trigger Property="IsActive" Value="True">
+                <Setter Property="Background" Value="{x:Static local:DragablzColors.WindowGlassBalancedBrush}" />                
+            </Trigger>
             <Trigger Property="IsBeingDraggedByTab" Value="True">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderBrush" Value="Transparent" />                
-            </Trigger>
+            </Trigger>            
         </Style.Triggers>
     </Style>
 

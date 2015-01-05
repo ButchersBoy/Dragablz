@@ -1,13 +1,6 @@
 ﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -36,7 +29,7 @@ namespace Dragablz
         public static RoutedCommand CloseWindowCommand = new RoutedCommand();
         public static RoutedCommand RestoreWindowCommand = new RoutedCommand();
         public static RoutedCommand MaximizeWindowCommand = new RoutedCommand();
-        public static RoutedCommand MinimizeWindowCommand = new RoutedCommand();
+        public static RoutedCommand MinimizeWindowCommand = new RoutedCommand();        
 
         private const int ResizeMargin = 4;
         private Size _sizeWhenResizeBegan;
@@ -56,8 +49,8 @@ namespace Dragablz
             CommandBindings.Add(new CommandBinding(CloseWindowCommand, CloseWindowExecuted));
             CommandBindings.Add(new CommandBinding(MaximizeWindowCommand, MaximizeWindowExecuted));
             CommandBindings.Add(new CommandBinding(MinimizeWindowCommand, MinimizeWindowExecuted));
-            CommandBindings.Add(new CommandBinding(RestoreWindowCommand, RestoreWindowExecuted));
-        }        
+            CommandBindings.Add(new CommandBinding(RestoreWindowCommand, RestoreWindowExecuted));            
+        }                
 
         private static readonly DependencyPropertyKey IsWindowBeingDraggedByTabPropertyKey =
             DependencyProperty.RegisterReadOnly(
@@ -306,6 +299,6 @@ namespace Dragablz
         private void CloseWindowExecuted(object sender, ExecutedRoutedEventArgs executedRoutedEventArgs)
         {
             Native.PostMessage(new WindowInteropHelper(this).Handle, WindowMessage.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
-        }
+        }             
     }
 }

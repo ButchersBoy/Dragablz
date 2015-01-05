@@ -67,6 +67,7 @@
     <Compile Include="Core\FuncComparer.cs" />
     <Compile Include="Core\MultiComparer.cs" />
     <Compile Include="Core\CollectionTeaser.cs" />
+    <Compile Include="DragablzColors.cs" />
     <Compile Include="DragablzDragCompletedEventArgs.cs" />
     <Compile Include="DragablzDragDeltaEventArgs.cs" />
     <Compile Include="DragablzDragStartedEventArgs.cs" />

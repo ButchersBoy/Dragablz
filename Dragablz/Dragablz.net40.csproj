@@ -64,6 +64,7 @@
     <Compile Include="Dockablz\FloatRequestedEvent.cs" />
     <Compile Include="Dockablz\FloatTransfer.cs" />
     <Compile Include="Dockablz\Layout.cs" />
+    <Compile Include="DragablzColors.cs" />
     <Compile Include="DragablzDragCompletedEventArgs.cs" />
     <Compile Include="DragablzDragDeltaEventArgs.cs" />
     <Compile Include="DragablzDragStartedEventArgs.cs" />

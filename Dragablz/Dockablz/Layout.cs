@@ -290,15 +290,14 @@ namespace Dragablz.Dockablz
             }
         }
 
-        private static TabablzControl AssertGetSourceTabControl(DragablzItem dragablzItem)
+        private static bool TryGetSourceTabControl(DragablzItem dragablzItem, out TabablzControl tabablzControl)
         {
             var sourceOfDragItemsControl = ItemsControl.ItemsControlFromItemContainer(dragablzItem) as DragablzItemsControl;
             if (sourceOfDragItemsControl == null) throw new ApplicationException("Unable to determine source items control.");
 
-            var sourceTabControl = TabablzControl.GetOwnerOfHeaderItems(sourceOfDragItemsControl);
-            if (sourceTabControl == null) throw new ApplicationException("Unable to determine source tab control.");
-
-            return sourceTabControl;
+            tabablzControl = TabablzControl.GetOwnerOfHeaderItems(sourceOfDragItemsControl);
+            
+            return tabablzControl != null;
         }
 
         private void Branch(DropZoneLocation location, DragablzItem sourceDragablzItem)
@@ -421,13 +420,16 @@ namespace Dragablz.Dockablz
 
             if (_currentlyOfferedDropZone == null || e.DragablzItem.IsDropTargetFound) return;
 
-            var assertGetSourceTabControl = AssertGetSourceTabControl(e.DragablzItem);
-            if (assertGetSourceTabControl.Items.Count > 1) return;            
+            TabablzControl tabablzControl;
+            if (TryGetSourceTabControl(e.DragablzItem, out tabablzControl))
+            {
+                if (tabablzControl.Items.Count > 1) return;
 
-            if (_currentlyOfferedDropZone.Item2.Location == DropZoneLocation.Floating)
-                Float(_currentlyOfferedDropZone.Item1, e.DragablzItem);
-            else
-                _currentlyOfferedDropZone.Item1.Branch(_currentlyOfferedDropZone.Item2.Location, e.DragablzItem);
+                if (_currentlyOfferedDropZone.Item2.Location == DropZoneLocation.Floating)
+                    Float(_currentlyOfferedDropZone.Item1, e.DragablzItem);
+                else
+                    _currentlyOfferedDropZone.Item1.Branch(_currentlyOfferedDropZone.Item2.Location, e.DragablzItem);
+            }
 
             _currentlyOfferedDropZone = null;
         }
