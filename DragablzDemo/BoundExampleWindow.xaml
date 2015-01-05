@@ -25,7 +25,7 @@
             <Style TargetType="{x:Type dragablz:TabablzControl}" x:Key="TabablzControlStyle">
                 <Setter Property="HeaderPrefixContent">
                     <Setter.Value>
-                        <TextBlock>D</TextBlock>
+                        <dragablz:DragablzIcon Width="24" Height="24" Margin="0 -8 0 0" />
                     </Setter.Value>                    
                 </Setter>
                 <Setter Property="HeaderSuffixContent">
