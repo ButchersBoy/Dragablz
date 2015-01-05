@@ -217,7 +217,7 @@ namespace Dragablz
             var timeline = new DoubleAnimationUsingKeyFrames();
             timeline.SetValue(Storyboard.TargetPropertyProperty, new PropertyPath(_canvasDependencyProperty));
             timeline.KeyFrames.Add(
-                new EasingDoubleKeyFrame(location, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(100)))
+                new EasingDoubleKeyFrame(location, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(200)))
                 {
                     EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut }
                 });

@@ -997,14 +997,18 @@
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Background" Value="{StaticResource TabItem.Static.Background}"/>
         <Setter Property="BorderBrush" Value="{StaticResource TabItem.Static.Border}"/>
-        <Setter Property="Margin" Value="0"/>        
+        <Setter Property="Margin" Value="0 0 0 0"/>        
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:DragablzItem}">
-                    <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
-                        <local:Trapezoid x:Name="Trapezoid" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,1,1,0" Background="{TemplateBinding Background}" Margin="0 0 0 1">
+                    <Grid x:Name="templateRoot" SnapsToDevicePixels="true" Margin="0 1 0 -1">
+                        <local:Trapezoid x:Name="Trapezoid" 
+                                         BorderBrush="{TemplateBinding BorderBrush}" 
+                                         Background="{TemplateBinding Background}"                                          
+                                         PenThickness="2"
+                                         Margin="0 0 0 0">
                             <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
                                           x:Name="contentPresenter"                                          
                                           IsHitTestVisible="False"/>
@@ -1012,11 +1016,11 @@
                         <Thumb HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" x:Name="PART_Thumb"
                                Style="{StaticResource InvisibleThumbStyle}" 
                                Clip="{Binding ElementName=Trapezoid, Path=Clip, Mode=OneWay}" />
-                        
                     </Grid>                    
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="{StaticResource TabItem.Selected.Background}" TargetName="Trapezoid"/>
+                            <Setter Property="LongBasePenBrush" Value="{StaticResource TabItem.Selected.Background}" TargetName="Trapezoid"/>
                         </Trigger>
                     </ControlTemplate.Triggers>                    
                 </ControlTemplate>
@@ -1262,6 +1266,7 @@
                             <local:DragablzItemsControl x:Name="PART_HeaderItemsControl"                                                         
                                                     Grid.Column="1"
                                                     ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Items}"                                                    
+                                                        
                                                     KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"
                                                     ItemTemplate="{TemplateBinding CustomHeaderItemTemplate}"
                                                     Style="{StaticResource TabablzDragablzItemsControlStyle}"

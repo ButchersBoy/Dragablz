@@ -18,16 +18,15 @@
                 <TextBlock Text="{Binding Name}" />
             </DataTemplate>
             <DataTemplate x:Key="ContentTemplate" DataType="{x:Type dragablzDemo:SimpleViewModel}">
-                <TextBlock Text="{Binding SimpleContent}" />
+                <TextBlock Text="{Binding SimpleContent}" Margin="4 4 4 4" FontSize="14" />
             </DataTemplate>
             <dragablz:InterTabController x:Key="InterTabController" x:Shared="False" InterTabClient="{Binding InterTabClient}" Partition="2AE89D18-F236-4D20-9605-6C03319038E6" />
+
+            <dragablz:DragablzIcon Width="24" Height="24" Margin="0 -8 0 0"
+                                   x:Key="WindowIcon" x:Shared="False"/>
             
             <Style TargetType="{x:Type dragablz:TabablzControl}" x:Key="TabablzControlStyle">
-                <Setter Property="HeaderPrefixContent">
-                    <Setter.Value>
-                        <dragablz:DragablzIcon Width="24" Height="24" Margin="0 -8 0 0" />
-                    </Setter.Value>                    
-                </Setter>
+                <Setter Property="HeaderPrefixContent" Value="{StaticResource WindowIcon}" />                    
                 <Setter Property="HeaderSuffixContent">
                     <Setter.Value>
                         <Grid Width="100" />
@@ -38,7 +37,6 @@
         </ResourceDictionary>        
     </Window.Resources>
 
-    
     <dockablz:Layout Partition="2AE89D18-F236-4D20-9605-6C03319038E6" x:Name="Layout"
                      FloatingItemsSource="{Binding ToolItems}"
                      FloatingItemHeaderMemberPath="Name"
@@ -67,8 +65,8 @@
                                 CustomHeaderItemStyle="{StaticResource TrapezoidDragableTabItemStyle}"
                                 CustomHeaderItemTemplate="{StaticResource HeaderTemplate}"
                                 ContentTemplate="{StaticResource ContentTemplate}"
-                                InterTabController="{StaticResource InterTabController}">            
+                                InterTabController="{StaticResource InterTabController}">
         </dragablz:TabablzControl>
     </dockablz:Layout>
-    
+
 </dragablz:DragablzWindow>

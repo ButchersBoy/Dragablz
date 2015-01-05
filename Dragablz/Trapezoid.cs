@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Baml2006;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -29,6 +30,15 @@ namespace Dragablz
             set { SetValue(PenBrushProperty, value); }
         }
 
+        public static readonly DependencyProperty LongBasePenBrushProperty = DependencyProperty.Register(
+            "LongBasePenBrush", typeof(Brush), typeof(Trapezoid), new FrameworkPropertyMetadata(new SolidColorBrush(Colors.Transparent), FrameworkPropertyMetadataOptions.AffectsMeasure));
+
+        public Brush LongBasePenBrush
+        {
+            get { return (Brush) GetValue(LongBasePenBrushProperty); }
+            set { SetValue(LongBasePenBrushProperty, value); }
+        }
+
         public static readonly DependencyProperty PenThicknessProperty = DependencyProperty.Register(
             "PenThickness", typeof (double), typeof (Trapezoid), new FrameworkPropertyMetadata(default(double), FrameworkPropertyMetadataOptions.AffectsMeasure));
 
@@ -50,7 +60,11 @@ namespace Dragablz
             _pathGeometry = CreateGeometry(contentDesiredSize);
             Clip = _pathGeometry;
 
-            return _pathGeometry.GetRenderBounds(CreatePen()).Size;
+            return _pathGeometry.GetRenderBounds(new Pen(PenBrush, 1)
+            {
+                EndLineCap = PenLineCap.Flat,
+                MiterLimit = 1
+            }).Size;
         }
 
         private Pen CreatePen()
@@ -88,9 +102,12 @@ namespace Dragablz
                 new LineSegment(new Point(topRightSegment.Point.X + triangleX,
                     topRightSegment.Point.Y + contentDesiredSize.Height), true);
 
-            var bottomRightSegment = new ArcSegment(new Point(rightSegment.Point.X + cheapRadiusSmall, rightSegment.Point.Y + cheapRadiusSmall),
+            var bottomRightPoint = new Point(rightSegment.Point.X + cheapRadiusSmall,
+                rightSegment.Point.Y + cheapRadiusSmall);
+            var bottomRightSegment = new ArcSegment(bottomRightPoint,
                 new Size(cheapRadiusSmall, cheapRadiusSmall), 25, false, SweepDirection.Counterclockwise, true);
-            var bottomSegment = new LineSegment(new Point(0, bottomRightSegment.Point.Y), true);
+            var bottomLeftPoint = new Point(0, bottomRightSegment.Point.Y);
+            var bottomSegment = new LineSegment(bottomLeftPoint, true);            
 
             var pathSegmentCollection = new PathSegmentCollection
             {
@@ -104,18 +121,21 @@ namespace Dragablz
             {
                 pathFigure
             };
-
             var geometryGroup = new PathGeometry(pathFigureCollection);            
-            geometryGroup.Freeze();            
+            geometryGroup.Freeze();                        
 
             return geometryGroup;
         }
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            base.OnRender(drawingContext);            
-
+            base.OnRender(drawingContext);                        
             drawingContext.DrawGeometry(Background, CreatePen(), _pathGeometry);
+            drawingContext.DrawGeometry(Background, new Pen(LongBasePenBrush, PenThickness)
+            {
+                EndLineCap = PenLineCap.Flat,
+                MiterLimit = 1
+            }, new LineGeometry(_pathGeometry.Bounds.BottomLeft + new Vector(3, 0), _pathGeometry.Bounds.BottomRight + new Vector(-3, 0)));
         }
     }
 }
