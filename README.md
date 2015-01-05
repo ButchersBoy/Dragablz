@@ -4,7 +4,7 @@
 
 ## Dragable and tearable tab control for WPF.
 
-![Alt text](http://dragablz.files.wordpress.com/2014/12/dragablzwindowsnap.gif "Demo shot")
+![Alt text](http://dragablz.files.wordpress.com/2014/11/dragablztabablz_2015_01_05.gif "Demo shot")
 
 - Docs 'n' help 'n' stuff: [dragablz.net](http://dragablz.net/)
 - NuGet details here: http://www.nuget.org/packages/Dragablz/
