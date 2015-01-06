@@ -28,11 +28,13 @@
                                    />
             
             <Style TargetType="{x:Type dragablz:TabablzControl}" x:Key="TabablzControlStyle">
+                <Setter Property="NewItemFactory" Value="{x:Static dragablzDemo:BoundExampleNewItem.Factory}" />
+                <Setter Property="ShowDefaultAddButton" Value="True" />
                 <Setter Property="ShowDefaultCloseButton" Value="True" />
                 <Setter Property="HeaderPrefixContent" Value="{StaticResource WindowIcon}" />                    
                 <Setter Property="HeaderSuffixContent">
                     <Setter.Value>
-                        <Grid Width="100" />
+                        <Grid Width="75" />
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Margin" Value="0 8 0 0" />

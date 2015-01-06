@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using Dragablz.Core;
 using Dragablz.Dockablz;
@@ -27,6 +28,7 @@ namespace Dragablz
         public const string ItemsHolderPartName = "PART_ItemsHolder";
 
         public static RoutedCommand CloseItemCommand = new RoutedCommand();
+        public static RoutedCommand AddItemCommand = new RoutedCommand();
 
         private static readonly HashSet<TabablzControl> LoadedInstances = new HashSet<TabablzControl>();        
 
@@ -47,10 +49,11 @@ namespace Dragablz
             AddHandler(DragablzItem.PreviewDragDelta, new DragablzDragDeltaEventHandler(PreviewItemDragDelta), true);
             AddHandler(DragablzItem.DragDelta, new DragablzDragDeltaEventHandler(ItemDragDelta), true);
             AddHandler(DragablzItem.DragCompleted, new DragablzDragCompletedEventHandler(ItemDragCompleted), true);
-            CommandBindings.Add(new CommandBinding(CloseItemCommand, CloseItemHandler));            
+            CommandBindings.Add(new CommandBinding(CloseItemCommand, CloseItemHandler));
+            CommandBindings.Add(new CommandBinding(AddItemCommand, AddItemHandler));            
             Loaded += (sender, args) => LoadedInstances.Add(this);
             Unloaded += (sender, args) => LoadedInstances.Remove(this);
-        }
+        }        
 
         public static readonly DependencyProperty CustomHeaderItemStyleProperty = DependencyProperty.Register(
             "CustomHeaderItemStyle", typeof (Style), typeof (TabablzControl), new PropertyMetadata(default(Style)));
@@ -167,6 +170,20 @@ namespace Dragablz
             set { SetValue(ShowDefaultCloseButtonProperty, value); }
         }
 
+        public static readonly DependencyProperty ShowDefaultAddButtonProperty = DependencyProperty.Register(
+            "ShowDefaultAddButton", typeof (bool), typeof (TabablzControl), new PropertyMetadata(default(bool)));
+
+        /// <summary>
+        /// Indicates whether a default add button should be displayed.  Alternately an add button
+        /// could be added in <see cref="HeaderPrefixContent"/> or <see cref="HeaderSuffixContent"/>, utilising 
+        /// <see cref="AddItemCommand"/>.
+        /// </summary>
+        public bool ShowDefaultAddButton
+        {
+            get { return (bool) GetValue(ShowDefaultAddButtonProperty); }
+            set { SetValue(ShowDefaultAddButtonProperty, value); }
+        }
+
         public static readonly DependencyProperty InterTabControllerProperty = DependencyProperty.Register(
             "InterTabController", typeof (InterTabController), typeof (TabablzControl), new PropertyMetadata(null, InterTabControllerPropertyChangedCallback));
 
@@ -183,6 +200,18 @@ namespace Dragablz
         {
             get { return (InterTabController) GetValue(InterTabControllerProperty); }
             set { SetValue(InterTabControllerProperty, value); }
+        }
+
+        public static readonly DependencyProperty NewItemFactoryProperty = DependencyProperty.Register(
+            "NewItemFactory", typeof (Func<object>), typeof (TabablzControl), new PropertyMetadata(default(Func<object>)));
+
+        /// <summary>
+        /// Allows a factory to be provided for generating new items. Typically used in conjunction with <see cref="AddItemCommand"/>.
+        /// </summary>
+        public Func<object> NewItemFactory
+        {
+            get { return (Func<object>) GetValue(NewItemFactoryProperty); }
+            set { SetValue(NewItemFactoryProperty, value); }
         }
 
         public override void OnApplyTemplate()
@@ -701,9 +730,21 @@ namespace Dragablz
         private void CloseItemHandler(object sender, ExecutedRoutedEventArgs executedRoutedEventArgs)
         {
             var dragablzItem = executedRoutedEventArgs.Parameter as DragablzItem;
-            if (dragablzItem == null) return;
+            if (dragablzItem == null) throw new ApplicationException("Parameter must be a DragablzItem");
 
             RemoveItem(dragablzItem);            
+        }
+
+        private void AddItemHandler(object sender, ExecutedRoutedEventArgs e)
+        {            
+            if (NewItemFactory == null)
+                throw new InvalidOperationException("NewItemFactory must be provided.");
+
+            var newItem = NewItemFactory();
+            if (newItem == null) throw new ApplicationException("NewItemFactory returned null.");
+
+            AddToSource(newItem);
+            SelectedItem = newItem;
         }
     }
 }

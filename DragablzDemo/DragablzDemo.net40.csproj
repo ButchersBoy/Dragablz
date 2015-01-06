@@ -58,6 +58,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BoundExampleInterTabClient.cs" />
+    <Compile Include="BoundExampleNewItem.cs" />
     <Compile Include="HeaderAndContentModel.cs" />
     <Compile Include="QuickStartWindow.xaml.cs">
       <DependentUpon>QuickStartWindow.xaml</DependentUpon>

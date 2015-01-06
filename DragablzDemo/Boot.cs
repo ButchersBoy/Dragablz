@@ -29,9 +29,9 @@ namespace DragablzDemo
                 new SimpleViewModel { Name = "Tues", SimpleContent = "Tuesday's child is full of grace" },
                 new SimpleViewModel { Name = "Wed", SimpleContent = "Wednesday's child is full of woe" },
                 new SimpleViewModel { Name = "Thu", SimpleContent = "Thursday's child has far to go" },
-                new SimpleViewModel { Name = "Fri", SimpleContent = "Friday's child loving and giving" },
-                new SimpleViewModel { Name = "Sat", SimpleContent = "Saturday's child works hard for a living" },
-                new SimpleViewModel { Name = "Sun", SimpleContent = "Sunday's child is awkwardly not fitting into this demo" }                 
+                new SimpleViewModel { Name = "Fri", SimpleContent = "Friday's child loving and giving" }//,
+                //new SimpleViewModel { Name = "Sat", SimpleContent = "Saturday's child works hard for a living" },
+                //new SimpleViewModel { Name = "Sun", SimpleContent = "Sunday's child is awkwardly not fitting into this demo" }                 
                 );
             boundExampleModel.ToolItems.Add(
                 new SimpleViewModel { Name = "January", SimpleContent = "Welcome to the January tool/float item." });
