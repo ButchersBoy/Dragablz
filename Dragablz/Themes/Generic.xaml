@@ -24,6 +24,7 @@
         <Setter Property="Width" Value="16" />
         <Setter Property="Height" Value="16" />
         <Setter Property="ToolTip" Value="Dragablz" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:DragablzIcon}">
@@ -40,7 +41,7 @@
         </Setter>
     </Style>
 
-    <Color x:Key="CloseMenuCommandHighlightColor">#e04343</Color>
+    <Color x:Key="CloseCommandHighlightColor">#e04343</Color>
     
     <!-- these tab styles are as close as possible to the default .net styles, so the tab will fit straight in to an unstyled app -->
     <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#FFFFFF"/>
@@ -163,7 +164,7 @@
         </Style.Triggers>
     </Style>
     
-    <Style TargetType="{x:Type Button}" x:Key="CloseMenuCommandButtonStyle" BasedOn="{StaticResource MenuCommandButtonStyle}">
+    <Style TargetType="{x:Type Button}" x:Key="CloseMenuCommandButtonStyle" BasedOn="{StaticResource MenuCommandButtonStyle}">        
         <Setter Property="Background">
             <Setter.Value>
                 <SolidColorBrush Color="{x:Static SystemColors.ActiveBorderColor}" />
@@ -176,14 +177,56 @@
             <Trigger Property="IsMouseOver" Value="true">
                 <Setter Property="Background">
                     <Setter.Value>
-                        <SolidColorBrush Color="{StaticResource CloseMenuCommandHighlightColor}" />
+                        <SolidColorBrush Color="{StaticResource CloseCommandHighlightColor}" />
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Opacity" Value="1"/>
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
+    <Style TargetType="{x:Type Button}" x:Key="CloseItemCommandButtonStyle" BasedOn="{StaticResource MenuCommandButtonStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid>
+                        <Ellipse Width="{TemplateBinding Width}"
+                                 Height="{TemplateBinding Height}"
+                                 Fill="{TemplateBinding Background}"/>
+                        <Path x:Name="Path"
+                              Data="M0.5,71 L70,0.5 M0.5,1 L70,70.5" 
+                              Width="6" Height="6"
+                              Stretch="Uniform"
+                              Stroke="{TemplateBinding Foreground}"
+                              StrokeThickness="1.5"
+                              StrokeStartLineCap="Square" 
+                              StrokeEndLineCap="Square"
+                              SnapsToDevicePixels="True" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Color="{x:Static SystemColors.ActiveBorderColor}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Width" Value="12" />
+        <Setter Property="Height" Value="12" />
+        <Setter Property="Margin" Value="4 0 2 0" />
+        <Setter Property="Foreground" Value="{x:Static SystemColors.HighlightTextBrush}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{StaticResource CloseCommandHighlightColor}" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Opacity" Value="1"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <ControlTemplate x:Key="WindowTemplateKey" TargetType="{x:Type local:DragablzWindow}">
         <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
             <Grid>
@@ -271,7 +314,7 @@
                         <Trigger Property="IsActive" Value="True">
                             <Setter TargetName="CloseWindowCommandButton" Property="Background">
                                 <Setter.Value>
-                                    <SolidColorBrush Color="{StaticResource CloseMenuCommandHighlightColor}" />
+                                    <SolidColorBrush Color="{StaticResource CloseCommandHighlightColor}" />
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
@@ -1003,19 +1046,30 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:DragablzItem}">
-                    <Grid x:Name="templateRoot" SnapsToDevicePixels="true" Margin="0 1 0 -1">
+                    <Grid x:Name="templateRoot" SnapsToDevicePixels="true" Margin="0 1 0 -1">                        
                         <local:Trapezoid x:Name="Trapezoid" 
                                          BorderBrush="{TemplateBinding BorderBrush}" 
                                          Background="{TemplateBinding Background}"                                          
                                          PenThickness="2"
                                          Margin="0 0 0 0">
-                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
-                                          x:Name="contentPresenter"                                          
-                                          IsHitTestVisible="False"/>
-                        </local:Trapezoid>
-                        <Thumb HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" x:Name="PART_Thumb"
-                               Style="{StaticResource InvisibleThumbStyle}" 
-                               Clip="{Binding ElementName=Trapezoid, Path=Clip, Mode=OneWay}" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                              x:Name="contentPresenter"                                          
+                                              IsHitTestVisible="False"/>
+                                <Thumb Grid.Column="0" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" 
+                                       x:Name="PART_Thumb"
+                                       Style="{StaticResource InvisibleThumbStyle}" />
+                                <Button Grid.Column="1"
+                                        Style="{StaticResource CloseItemCommandButtonStyle}"
+                                        Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:TabablzControl}, Path=ShowDefaultCloseButton, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Command="{x:Static local:TabablzControl.CloseItemCommand}"
+                                        CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
+                            </Grid>
+                        </local:Trapezoid>                        
                     </Grid>                    
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">

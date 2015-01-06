@@ -14,8 +14,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <DataTemplate x:Key="HeaderTemplate" DataType="{x:Type dragablzDemo:SimpleViewModel}">
-                <TextBlock Text="{Binding Name}" />
+            <DataTemplate x:Key="HeaderTemplate" DataType="{x:Type dragablzDemo:SimpleViewModel}">            
+                <TextBlock Text="{Binding Name}" />    
             </DataTemplate>
             <DataTemplate x:Key="ContentTemplate" DataType="{x:Type dragablzDemo:SimpleViewModel}">
                 <TextBlock Text="{Binding SimpleContent}" Margin="4 4 4 4" FontSize="14" />
@@ -23,9 +23,12 @@
             <dragablz:InterTabController x:Key="InterTabController" x:Shared="False" InterTabClient="{Binding InterTabClient}" Partition="2AE89D18-F236-4D20-9605-6C03319038E6" />
 
             <dragablz:DragablzIcon Width="24" Height="24" Margin="0 -8 0 0"
-                                   x:Key="WindowIcon" x:Shared="False"/>
+                                   x:Key="WindowIcon" x:Shared="False"
+                                   ToolTip="Added via the HeaderPrefixContent property"
+                                   />
             
             <Style TargetType="{x:Type dragablz:TabablzControl}" x:Key="TabablzControlStyle">
+                <Setter Property="ShowDefaultCloseButton" Value="True" />
                 <Setter Property="HeaderPrefixContent" Value="{StaticResource WindowIcon}" />                    
                 <Setter Property="HeaderSuffixContent">
                     <Setter.Value>
@@ -54,19 +57,17 @@
                                          CustomHeaderItemStyle="{StaticResource TrapezoidDragableTabItemStyle}"
                                          CustomHeaderItemTemplate="{StaticResource HeaderTemplate}"
                                          ContentTemplate="{StaticResource ContentTemplate}"
-                                         InterTabController="{StaticResource InterTabController}">
-                </dragablz:TabablzControl>
+                                         InterTabController="{StaticResource InterTabController}" />
             </DataTemplate>
         </dockablz:Layout.BranchTemplate>
         <!-- a root, named tab control is needed, so when a tab is torn and a new window is created, the new target tab control can be identified -->
         <dragablz:TabablzControl x:Name="InitialTabablzControl"
                                  Style="{StaticResource TabablzControlStyle}"
-                                ItemsSource="{Binding Items}"
-                                CustomHeaderItemStyle="{StaticResource TrapezoidDragableTabItemStyle}"
-                                CustomHeaderItemTemplate="{StaticResource HeaderTemplate}"
-                                ContentTemplate="{StaticResource ContentTemplate}"
-                                InterTabController="{StaticResource InterTabController}">
-        </dragablz:TabablzControl>
+                                 ItemsSource="{Binding Items}"
+                                 CustomHeaderItemStyle="{StaticResource TrapezoidDragableTabItemStyle}"
+                                 CustomHeaderItemTemplate="{StaticResource HeaderTemplate}"
+                                 ContentTemplate="{StaticResource ContentTemplate}"
+                                 InterTabController="{StaticResource InterTabController}" />
     </dockablz:Layout>
 
 </dragablz:DragablzWindow>

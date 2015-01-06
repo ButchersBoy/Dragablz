@@ -26,6 +26,8 @@ namespace Dragablz
         public const string HeaderItemsControlPartName = "PART_HeaderItemsControl";
         public const string ItemsHolderPartName = "PART_ItemsHolder";
 
+        public static RoutedCommand CloseItemCommand = new RoutedCommand();
+
         private static readonly HashSet<TabablzControl> LoadedInstances = new HashSet<TabablzControl>();        
 
         private Panel _itemsHolder;
@@ -45,7 +47,7 @@ namespace Dragablz
             AddHandler(DragablzItem.PreviewDragDelta, new DragablzDragDeltaEventHandler(PreviewItemDragDelta), true);
             AddHandler(DragablzItem.DragDelta, new DragablzDragDeltaEventHandler(ItemDragDelta), true);
             AddHandler(DragablzItem.DragCompleted, new DragablzDragCompletedEventHandler(ItemDragCompleted), true);
-
+            CommandBindings.Add(new CommandBinding(CloseItemCommand, CloseItemHandler));            
             Loaded += (sender, args) => LoadedInstances.Add(this);
             Unloaded += (sender, args) => LoadedInstances.Remove(this);
         }
@@ -150,6 +152,19 @@ namespace Dragablz
         {
             get { return (DataTemplateSelector)GetValue(HeaderSuffixContentTemplateSelectorProperty); }
             set { SetValue(HeaderSuffixContentTemplateSelectorProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowDefaultCloseButtonProperty = DependencyProperty.Register(
+            "ShowDefaultCloseButton", typeof (bool), typeof (TabablzControl), new PropertyMetadata(default(bool)));
+
+        /// <summary>
+        /// Indicates whether a default close button should be displayed.  If manually templating the tab header content the close command 
+        /// can be called by executing the <see cref="TabablzControl.CloseItemCommand"/> command (typically via a <see cref="Button"/>).
+        /// </summary>
+        public bool ShowDefaultCloseButton
+        {
+            get { return (bool) GetValue(ShowDefaultCloseButtonProperty); }
+            set { SetValue(ShowDefaultCloseButtonProperty, value); }
         }
 
         public static readonly DependencyProperty InterTabControllerProperty = DependencyProperty.Register(
@@ -434,10 +449,13 @@ namespace Dragablz
             var contentPresenter = FindChildContentPresenter(item);
             RemoveFromSource(item);
             _itemsHolder.Children.Remove(contentPresenter);
-            var window = Window.GetWindow(this);
-            if (window != null &&
-                InterTabController.InterTabClient.TabEmptiedHandler(this, window) == TabEmptiedResponse.CloseWindow)
-                window.Close();
+            if (Items.Count == 0)
+            {
+                var window = Window.GetWindow(this);
+                if (window != null &&
+                    InterTabController.InterTabClient.TabEmptiedHandler(this, window) == TabEmptiedResponse.CloseWindow)
+                    window.Close();
+            }
             return item;
         }
 
@@ -678,6 +696,14 @@ namespace Dragablz
         private void ItemContainerGeneratorOnStatusChanged(object sender, EventArgs eventArgs)
         {
             MarkInitialSelection();
+        }
+
+        private void CloseItemHandler(object sender, ExecutedRoutedEventArgs executedRoutedEventArgs)
+        {
+            var dragablzItem = executedRoutedEventArgs.Parameter as DragablzItem;
+            if (dragablzItem == null) return;
+
+            RemoveItem(dragablzItem);            
         }
     }
 }
