@@ -29,9 +29,14 @@
             
             <Style TargetType="{x:Type dragablz:TabablzControl}" x:Key="TabablzControlStyle">
                 <Setter Property="NewItemFactory" Value="{x:Static dragablzDemo:BoundExampleNewItem.Factory}" />
+                <Setter Property="ItemsSource" Value="{Binding Items}" />
                 <Setter Property="ShowDefaultAddButton" Value="True" />
                 <Setter Property="ShowDefaultCloseButton" Value="True" />
                 <Setter Property="AdjacentHeaderItemOffset" Value="-10" />
+                <Setter Property="CustomHeaderItemStyle" Value="{StaticResource TrapezoidDragableTabItemStyle}" />
+                <Setter Property="CustomHeaderItemTemplate" Value="{StaticResource HeaderTemplate}" />
+                <Setter Property="ContentTemplate" Value="{StaticResource ContentTemplate}" />
+                <Setter Property="InterTabController" Value="{StaticResource InterTabController}" />                
                 <Setter Property="HeaderPrefixContent" Value="{StaticResource WindowIcon}" />                    
                 <Setter Property="HeaderSuffixContent">
                     <Setter.Value>
@@ -43,6 +48,7 @@
         </ResourceDictionary>        
     </Window.Resources>
 
+    <!-- this example uses a Layout, which is what provides docking.  A layout is not a requirement for tear-out tabs -->
     <dockablz:Layout Partition="2AE89D18-F236-4D20-9605-6C03319038E6" x:Name="Layout"
                      FloatingItemsSource="{Binding ToolItems}"
                      FloatingItemHeaderMemberPath="Name"
@@ -55,22 +61,12 @@
         <!-- branch template lets dragablz create a new tab control after a window is split via docking -->
         <dockablz:Layout.BranchTemplate>
             <DataTemplate>
-                <dragablz:TabablzControl Style="{StaticResource TabablzControlStyle}"
-                                         ItemsSource="{Binding Items}"
-                                         CustomHeaderItemStyle="{StaticResource TrapezoidDragableTabItemStyle}"
-                                         CustomHeaderItemTemplate="{StaticResource HeaderTemplate}"
-                                         ContentTemplate="{StaticResource ContentTemplate}"
-                                         InterTabController="{StaticResource InterTabController}" />
+                <dragablz:TabablzControl Style="{StaticResource TabablzControlStyle}" />
             </DataTemplate>
         </dockablz:Layout.BranchTemplate>
         <!-- a root, named tab control is needed, so when a tab is torn and a new window is created, the new target tab control can be identified -->
         <dragablz:TabablzControl x:Name="InitialTabablzControl"
-                                 Style="{StaticResource TabablzControlStyle}"
-                                 ItemsSource="{Binding Items}"
-                                 CustomHeaderItemStyle="{StaticResource TrapezoidDragableTabItemStyle}"
-                                 CustomHeaderItemTemplate="{StaticResource HeaderTemplate}"
-                                 ContentTemplate="{StaticResource ContentTemplate}"
-                                 InterTabController="{StaticResource InterTabController}" />
+                                 Style="{StaticResource TabablzControlStyle}" />
     </dockablz:Layout>
 
 </dragablz:DragablzWindow>
