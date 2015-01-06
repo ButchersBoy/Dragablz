@@ -1360,13 +1360,12 @@
                                             ContentTemplate="{TemplateBinding HeaderPrefixContentStringFormat}"
                                             ContentTemplateSelector="{TemplateBinding HeaderPrefixContentTemplateSelector}"/>  
                             <local:DragablzItemsControl x:Name="PART_HeaderItemsControl"                                                         
-                                                    Grid.Column="1"
-                                                    ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Items}"                                                    
-                                                        
-                                                    KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"
-                                                    ItemTemplate="{TemplateBinding CustomHeaderItemTemplate}"
-                                                    Style="{StaticResource TabablzDragablzItemsControlStyle}"
-                                                >
+                                                        Grid.Column="1"
+                                                        ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Items}"                                                                                                            
+                                                        ItemsOrganiser="{TemplateBinding HeaderItemsOrganiser}"
+                                                        KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"
+                                                        ItemTemplate="{TemplateBinding CustomHeaderItemTemplate}"
+                                                        Style="{StaticResource TabablzDragablzItemsControlStyle}">
                                 <local:DragablzItemsControl.MaxWidth>
                                     <MultiBinding>
                                         <MultiBinding.Converter>
@@ -1378,9 +1377,6 @@
                                         <Binding ElementName="SuffixContentControl" Path="DesiredSize.Width" />
                                     </MultiBinding>
                                 </local:DragablzItemsControl.MaxWidth>
-                                <local:DragablzItemsControl.ItemsOrganiser>
-                                    <local:HorizontalOrganiser />
-                                </local:DragablzItemsControl.ItemsOrganiser>
                             </local:DragablzItemsControl>                            
                             <Button Style="{StaticResource AddItemCommandButtonStyle}"
                                     Grid.Column="2"

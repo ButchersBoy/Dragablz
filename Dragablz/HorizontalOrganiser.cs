@@ -8,7 +8,9 @@ namespace Dragablz
     public class HorizontalOrganiser : LinearOrganiser
     {
         public HorizontalOrganiser() : base(Orientation.Horizontal)
-        {
-        }
+        { }
+
+        public HorizontalOrganiser(double itemOffset) : base(Orientation.Horizontal, itemOffset)
+        { }
     }    
 }

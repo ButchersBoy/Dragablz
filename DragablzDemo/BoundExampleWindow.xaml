@@ -31,6 +31,7 @@
                 <Setter Property="NewItemFactory" Value="{x:Static dragablzDemo:BoundExampleNewItem.Factory}" />
                 <Setter Property="ShowDefaultAddButton" Value="True" />
                 <Setter Property="ShowDefaultCloseButton" Value="True" />
+                <Setter Property="AdjacentHeaderItemOffset" Value="-10" />
                 <Setter Property="HeaderPrefixContent" Value="{StaticResource WindowIcon}" />                    
                 <Setter Property="HeaderSuffixContent">
                     <Setter.Value>

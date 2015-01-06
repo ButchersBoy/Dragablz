@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Dragablz.Core;
 using Dragablz.Dockablz;
 using Dragablz.Referenceless;
@@ -84,6 +85,35 @@ namespace Dragablz
             get { return (Style) GetValue(DefaultHeaderItemStyleProperty); }
             set { SetValue(DefaultHeaderItemStyleProperty, value); }
         }
+
+        public static readonly DependencyProperty AdjacentHeaderItemOffsetProperty = DependencyProperty.Register(
+            "AdjacentHeaderItemOffset", typeof (double), typeof (TabablzControl), new PropertyMetadata(default(double), AdjacentHeaderItemOffsetPropertyChangedCallback));
+
+        private static void AdjacentHeaderItemOffsetPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            dependencyObject.SetValue(HeaderItemsOrganiserPropertyKey, new HorizontalOrganiser((double)dependencyPropertyChangedEventArgs.NewValue));
+        }
+
+        public double AdjacentHeaderItemOffset
+        {
+            get { return (double) GetValue(AdjacentHeaderItemOffsetProperty); }
+            set { SetValue(AdjacentHeaderItemOffsetProperty, value); }
+        }
+
+        private static readonly DependencyPropertyKey HeaderItemsOrganiserPropertyKey =
+            DependencyProperty.RegisterReadOnly(
+                "HeaderItemsOrganiser", typeof (IItemsOrganiser), typeof (TabablzControl),
+                new PropertyMetadata(new HorizontalOrganiser()));
+
+        public static readonly DependencyProperty HeaderItemsOrganiserProperty =
+            HeaderItemsOrganiserPropertyKey.DependencyProperty;
+
+        public IItemsOrganiser HeaderItemsOrganiser
+        {
+            get { return (IItemsOrganiser) GetValue(HeaderItemsOrganiserProperty); }
+            private set { SetValue(HeaderItemsOrganiserPropertyKey, value); }
+        }
+
 
         public static readonly DependencyProperty HeaderPrefixContentProperty = DependencyProperty.Register(
             "HeaderPrefixContent", typeof (object), typeof (TabablzControl), new PropertyMetadata(default(object)));

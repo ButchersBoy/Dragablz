@@ -13,15 +13,17 @@ namespace Dragablz
     public abstract class LinearOrganiser : IItemsOrganiser
     {
         private readonly Orientation _orientation;
+        private readonly double _itemOffset;
         private readonly Func<DragablzItem, double> _getDesiredSize;
         private readonly Func<DragablzItem, double> _getLocation;
         private readonly DependencyProperty _canvasDependencyProperty;
         private readonly Action<DragablzItem, double> _setLocation;
         private readonly Dictionary<DragablzItem, double> _activeStoryboardTargetLocations = new Dictionary<DragablzItem, double>();
 
-        protected LinearOrganiser(Orientation orientation)
+        protected LinearOrganiser(Orientation orientation, double itemOffset = 0)
         {
             _orientation = orientation;
+            _itemOffset = itemOffset;
 
             switch (orientation)
             {
@@ -85,13 +87,14 @@ namespace Dragablz
         public Orientation Orientation
         {
             get { return _orientation; }
-        }
+        }        
 
         public void Organise(Size bounds, IEnumerable<DragablzItem> items)
         {
             if (items == null) throw new ArgumentNullException("items");
 
             var currentCoord = 0.0;
+            var z = int.MaxValue;
             foreach (
                 var newItem in
                     items.Select((di, idx) => new Tuple<int, DragablzItem>(idx, di))
@@ -100,9 +103,10 @@ namespace Dragablz
                                 .ThenAscending(tuple => tuple.Item1))
                         .Select(tuple => tuple.Item2))
             {
+                Panel.SetZIndex(newItem, newItem.IsSelected ? int.MaxValue : --z);
                 SetLocation(newItem, currentCoord);
                 newItem.Measure(bounds);
-                currentCoord += _getDesiredSize(newItem);
+                currentCoord += _getDesiredSize(newItem) + _itemOffset;
             }
         }
 
@@ -126,17 +130,17 @@ namespace Dragablz
                 .OrderBy(loc => loc.Item == dragItem ? loc.Start : _siblingItemLocationOnDragStart[loc.Item].Start);
 
             var currentCoord = 0.0;
-            var zIndex = 0;
+            var zIndex = int.MaxValue;
             foreach (var location in currentLocations)
             {
                 if (!Equals(location.Item, dragItem))
                 {
                     SendToLocation(location.Item, currentCoord);
-                    Panel.SetZIndex(location.Item, zIndex++);
+                    Panel.SetZIndex(location.Item, --zIndex);
                 }
-                currentCoord += _getDesiredSize(location.Item);
+                currentCoord += _getDesiredSize(location.Item) + _itemOffset;
             }
-            Panel.SetZIndex(dragItem, zIndex);
+            Panel.SetZIndex(dragItem, int.MaxValue);
         }
 
         public void OrganiseOnDragCompleted(Size bounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
@@ -148,11 +152,14 @@ namespace Dragablz
                 .OrderBy(loc => loc.Item == dragItem ? loc.Start : _siblingItemLocationOnDragStart[loc.Item].Start);
 
             var currentCoord = 0.0;
+            var z = int.MaxValue;
             foreach (var location in currentLocations)
             {
                 SetLocation(location.Item, currentCoord);
-                currentCoord += _getDesiredSize(location.Item);
+                currentCoord += _getDesiredSize(location.Item) + _itemOffset;                
+                Panel.SetZIndex(location.Item, --z);
             }
+            Panel.SetZIndex(dragItem, int.MaxValue);
         }
 
         public Point ConstrainLocation(Size bounds, Point desiredLocation, Size itemDesiredSize)
@@ -170,19 +177,26 @@ namespace Dragablz
             var size = new Size(double.PositiveInfinity, double.PositiveInfinity);
 
             double width = 0, height = 0;
+            var isFirst = true;
             foreach (var dragablzItem in items)
             {
                 dragablzItem.Measure(size);
                 if (_orientation == Orientation.Horizontal)
                 {
                     width += !dragablzItem.IsLoaded ? dragablzItem.DesiredSize.Width : dragablzItem.ActualWidth;
+                    if (!isFirst)
+                        width += _itemOffset;
                     height = Math.Max(height, !dragablzItem.IsLoaded ? dragablzItem.DesiredSize.Height : dragablzItem.ActualHeight);
                 }
                 else
                 {
                     width = Math.Max(width, !dragablzItem.IsLoaded ? dragablzItem.DesiredSize.Width : dragablzItem.ActualWidth);
-                    height += !dragablzItem.IsLoaded ? dragablzItem.DesiredSize.Height : dragablzItem.ActualHeight;                    
-                }                
+                    height += !dragablzItem.IsLoaded ? dragablzItem.DesiredSize.Height : dragablzItem.ActualHeight;
+                    if (!isFirst)
+                        height += _itemOffset;
+                }
+
+                isFirst = false;
             }
 
             return new Size(width, height);
