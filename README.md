@@ -16,6 +16,7 @@
 
 - You will have to restore NuGet packages
 - I've seen Visual Studio get confused with both the .net 4.0 and 4.5 projects.  If you see this compile Dragablz.net4*, and then DragablzDemo.net4* by right clicking on the project in the solution explorer.  I'll try and improve this at some point...
+- Are you using **MahApps**?  If so then check [this demo project](https://github.com/ButchersBoy/DragablzMeetzMahApps) showing Dragablz and MahApps working together.
 
 ## Features:
 
