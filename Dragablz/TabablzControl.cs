@@ -244,6 +244,18 @@ namespace Dragablz
             set { SetValue(NewItemFactoryProperty, value); }
         }
 
+        public static readonly DependencyProperty ClosingItemCallbackProperty = DependencyProperty.Register(
+            "ClosingItemCallback", typeof(Action<ClosingItemCallbackArgs>), typeof(TabablzControl), new PropertyMetadata(default(Action<ClosingItemCallbackArgs>)));
+
+        /// <summary>
+        /// Optionally allows a close item hook to be bound in.  If this propety is provided, the func must return true for the close to continue.
+        /// </summary>
+        public Action<ClosingItemCallbackArgs> ClosingItemCallback
+        {
+            get { return (Action<ClosingItemCallbackArgs>)GetValue(ClosingItemCallbackProperty); }
+            set { SetValue(ClosingItemCallbackProperty, value); }
+        }
+
         public override void OnApplyTemplate()
         {            
             if (_templateSubscription != null)
@@ -762,7 +774,16 @@ namespace Dragablz
             var dragablzItem = executedRoutedEventArgs.Parameter as DragablzItem;
             if (dragablzItem == null) throw new ApplicationException("Parameter must be a DragablzItem");
 
-            RemoveItem(dragablzItem);            
+            var cancel = false;
+            if (ClosingItemCallback != null)
+            {
+                var callbackArgs = new ClosingItemCallbackArgs(Window.GetWindow(this), this, dragablzItem);
+                ClosingItemCallback(callbackArgs);
+                cancel = callbackArgs.IsCancelled;
+            }
+
+            if (!cancel)
+                RemoveItem(dragablzItem);            
         }
 
         private void AddItemHandler(object sender, ExecutedRoutedEventArgs e)

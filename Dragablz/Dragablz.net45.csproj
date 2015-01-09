@@ -52,6 +52,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClosingItemCallbackArgs.cs" />
     <Compile Include="Converters\BooleanAndToVisibilityConverter.cs" />
     <Compile Include="Converters\EqualityToVisibilityConverter.cs" />
     <Compile Include="Core\SystemCommand.cs" />
