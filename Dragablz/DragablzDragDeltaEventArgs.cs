@@ -6,35 +6,32 @@ namespace Dragablz
 {
     public delegate void DragablzDragDeltaEventHandler(object sender, DragablzDragDeltaEventArgs e);
 
-    public class DragablzDragDeltaEventArgs : RoutedEventArgs
+    public class DragablzDragDeltaEventArgs : DragablzItemEventArgs
     {
-        private readonly DragablzItem _dragablzItem;
         private readonly DragDeltaEventArgs _dragDeltaEventArgs;
 
         public DragablzDragDeltaEventArgs(DragablzItem dragablzItem, DragDeltaEventArgs dragDeltaEventArgs)
+            : base(dragablzItem)
         {
-            if (dragablzItem == null) throw new ArgumentNullException("dragablzItem");
             if (dragDeltaEventArgs == null) throw new ArgumentNullException("dragDeltaEventArgs");
 
-            _dragablzItem = dragablzItem;
             _dragDeltaEventArgs = dragDeltaEventArgs;
         }
 
-        public DragablzDragDeltaEventArgs(RoutedEvent routedEvent, DragablzItem dragablzItem, DragDeltaEventArgs dragDeltaEventArgs) : base(routedEvent)
+        public DragablzDragDeltaEventArgs(RoutedEvent routedEvent, DragablzItem dragablzItem, DragDeltaEventArgs dragDeltaEventArgs) 
+            : base(routedEvent, dragablzItem)
         {
-            _dragablzItem = dragablzItem;
+            if (dragDeltaEventArgs == null) throw new ArgumentNullException("dragDeltaEventArgs");
+
             _dragDeltaEventArgs = dragDeltaEventArgs;
         }
 
-        public DragablzDragDeltaEventArgs(RoutedEvent routedEvent, object source, DragablzItem dragablzItem, DragDeltaEventArgs dragDeltaEventArgs) : base(routedEvent, source)
+        public DragablzDragDeltaEventArgs(RoutedEvent routedEvent, object source, DragablzItem dragablzItem, DragDeltaEventArgs dragDeltaEventArgs) 
+            : base(routedEvent, source, dragablzItem)
         {
-            _dragablzItem = dragablzItem;
-            _dragDeltaEventArgs = dragDeltaEventArgs;
-        }
+            if (dragDeltaEventArgs == null) throw new ArgumentNullException("dragDeltaEventArgs");
 
-        public DragablzItem DragablzItem
-        {
-            get { return _dragablzItem; }
+            _dragDeltaEventArgs = dragDeltaEventArgs;
         }
 
         public DragDeltaEventArgs DragDeltaEventArgs

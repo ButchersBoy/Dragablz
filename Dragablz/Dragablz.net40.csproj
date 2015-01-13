@@ -72,6 +72,7 @@
     <Compile Include="DragablzDragStartedEventArgs.cs" />
     <Compile Include="DragablzIcon.cs" />
     <Compile Include="DragablzItem.cs" />
+    <Compile Include="DragablzItemEventArgs.cs" />
     <Compile Include="DragablzItemsControl.cs" />
     <Compile Include="DragablzWindow.cs" />
     <Compile Include="HeaderedDragablzItem.cs" />

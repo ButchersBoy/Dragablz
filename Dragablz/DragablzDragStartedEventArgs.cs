@@ -6,37 +6,28 @@ namespace Dragablz
 {
     public delegate void DragablzDragStartedEventHandler(object sender, DragablzDragStartedEventArgs e);
 
-    public class DragablzDragStartedEventArgs : RoutedEventArgs
+    public class DragablzDragStartedEventArgs : DragablzItemEventArgs
     {
-        private readonly DragablzItem _dragablzItem;
         private readonly DragStartedEventArgs _dragStartedEventArgs;
 
         public DragablzDragStartedEventArgs(DragablzItem dragablzItem, DragStartedEventArgs dragStartedEventArgs)
+            : base(dragablzItem)
         {
-            if (dragablzItem == null) throw new ArgumentNullException("dragablzItem");
             if (dragStartedEventArgs == null) throw new ArgumentNullException("dragStartedEventArgs");
 
-            _dragablzItem = dragablzItem;
             _dragStartedEventArgs = dragStartedEventArgs;
         }
 
         public DragablzDragStartedEventArgs(RoutedEvent routedEvent, DragablzItem dragablzItem, DragStartedEventArgs dragStartedEventArgs)
-            : base(routedEvent)
+            : base(routedEvent, dragablzItem)
         {
-            _dragablzItem = dragablzItem;
             _dragStartedEventArgs = dragStartedEventArgs;
         }
 
         public DragablzDragStartedEventArgs(RoutedEvent routedEvent, object source, DragablzItem dragablzItem, DragStartedEventArgs dragStartedEventArgs)
-            : base(routedEvent, source)
+            : base(routedEvent, source, dragablzItem)
         {
-            _dragablzItem = dragablzItem;
             _dragStartedEventArgs = dragStartedEventArgs;
-        }
-
-        public DragablzItem DragablzItem
-        {
-            get { return _dragablzItem; }
         }
 
         public DragStartedEventArgs DragStartedEventArgs

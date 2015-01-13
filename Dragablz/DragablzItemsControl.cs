@@ -47,7 +47,8 @@ namespace Dragablz
             AddHandler(DragablzItem.DragDelta, new DragablzDragDeltaEventHandler(ItemDragDelta));
             AddHandler(DragablzItem.DragCompleted, new DragablzDragCompletedEventHandler(ItemDragCompleted));
             AddHandler(DragablzItem.DragStarted, new DragablzDragStartedEventHandler(ItemDragStarted));
-        }
+            AddHandler(DragablzItem.MouseDownWithinEvent, new DragablzItemEventHandler(ItemMouseDownWithinHandlerTarget));
+        }        
 
         private void ItemContainerGeneratorOnItemsChanged(object sender, ItemsChangedEventArgs itemsChangedEventArgs)
         {
@@ -294,6 +295,16 @@ namespace Dragablz
                 linearPositionMonitor.OnOrderChanged(new OrderChangedEventArgs(_previousSortQueryResult, sortedItems));
 
             _previousSortQueryResult = sortedItems;
+        }
+
+        private void ItemMouseDownWithinHandlerTarget(object sender, DragablzItemEventArgs e)
+        {            
+            if (ItemsOrganiser == null) return;
+
+            var bounds = new Size(ActualWidth, ActualHeight);
+            ItemsOrganiser.OrganiseOnMouseDownWithing(bounds,
+                DragablzItems().Except(e.DragablzItem).ToList(),
+                e.DragablzItem);
         }
     }
 }

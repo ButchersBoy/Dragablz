@@ -110,6 +110,11 @@ namespace Dragablz
             }
         }
 
+        public void OrganiseOnMouseDownWithing(Size bounds, List<DragablzItem> siblingItems, DragablzItem dragablzItem)
+        {
+            
+        }
+
         private IDictionary<DragablzItem, LocationInfo> _siblingItemLocationOnDragStart;
         public void OrganiseOnDragStarted(Size bounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
         {

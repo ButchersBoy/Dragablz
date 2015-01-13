@@ -38,7 +38,12 @@ namespace Dragablz
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DragablzItem), new FrameworkPropertyMetadata(typeof(DragablzItem)));            
         }
-        
+
+        public DragablzItem()
+        {
+            AddHandler(MouseDownEvent, new RoutedEventHandler(MouseDownHandler), true);
+        }        
+
         public static readonly DependencyProperty XProperty = DependencyProperty.Register(
             "X", typeof (double), typeof (DragablzItem), new PropertyMetadata(default(double), OnXChanged));
 
@@ -223,6 +228,29 @@ namespace Dragablz
             remove { RemoveHandler(IsDraggingChangedEvent, value); }
         }
 
+        private static void OnIsDraggingChanged(
+            DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var instance = (DragablzItem)d;
+            var args = new RoutedPropertyChangedEventArgs<bool>(
+                (bool)e.OldValue,
+                (bool)e.NewValue) { RoutedEvent = IsDraggingChangedEvent };
+            instance.RaiseEvent(args);
+        }
+
+        public static readonly RoutedEvent MouseDownWithinEvent =
+            EventManager.RegisterRoutedEvent(
+                "MouseDownWithin",
+                RoutingStrategy.Bubble,
+                typeof(DragablzItemEventHandler),
+                typeof (DragablzItem));
+
+        private static void OnMouseDownWithin(DependencyObject d)
+        {
+            var instance = (DragablzItem)d;
+            instance.RaiseEvent(new DragablzItemEventArgs(MouseDownWithinEvent, instance));
+        }
+
         private static readonly DependencyPropertyKey IsSiblingDraggingPropertyKey =
             DependencyProperty.RegisterReadOnly(
                 "IsSiblingDragging", typeof (bool), typeof (DragablzItem),
@@ -261,17 +289,7 @@ namespace Dragablz
                 RoutedEvent = IsSiblingDraggingChangedEvent
             };
             instance.RaiseEvent(args);
-        } 
-
-        private static void OnIsDraggingChanged(
-            DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var instance = (DragablzItem)d;
-            var args = new RoutedPropertyChangedEventArgs<bool>(
-                (bool) e.OldValue,
-                (bool) e.NewValue) {RoutedEvent = IsDraggingChangedEvent};
-            instance.RaiseEvent(args);            
-        }
+        }         
 
         public static readonly RoutedEvent DragStarted =
             EventManager.RegisterRoutedEvent(
@@ -406,6 +424,11 @@ namespace Dragablz
         {
             MouseAtDragStart = Mouse.GetPosition(this);
             OnDragStarted(new DragablzDragStartedEventArgs(DragStarted, this, dragStartedEventArgs));            
+        }
+
+        private void MouseDownHandler(object sender, RoutedEventArgs routedEventArgs)
+        {
+            OnMouseDownWithin(this);
         }
     }
 }

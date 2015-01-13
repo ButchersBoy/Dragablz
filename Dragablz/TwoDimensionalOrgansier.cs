@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Dragablz
 {
@@ -10,6 +11,17 @@ namespace Dragablz
         public void Organise(Size bounds, IEnumerable<DragablzItem> items)
         {
             
+        }
+
+        public void OrganiseOnMouseDownWithing(Size bounds, List<DragablzItem> siblingItems, DragablzItem dragablzItem)
+        {
+            var zIndex = int.MaxValue;
+            foreach (var source in siblingItems.OrderByDescending(Panel.GetZIndex))
+            {
+                Panel.SetZIndex(source, --zIndex);
+
+            }
+            Panel.SetZIndex(dragablzItem, int.MaxValue);
         }
 
         public void OrganiseOnDragStarted(Size bounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
