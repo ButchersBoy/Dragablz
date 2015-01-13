@@ -67,7 +67,7 @@ namespace Dragablz
                 var dragablzItems = DragablzItems().ToList();
                 if (ItemsOrganiser == null) return;
                 ItemsOrganiser.Organise(new Size(ItemsPresenterWidth, ItemsPresenterHeight), dragablzItems);
-                var measure = ItemsOrganiser.Measure(dragablzItems);
+                var measure = ItemsOrganiser.Measure(new Size(ActualWidth, ActualHeight), dragablzItems);
                 ItemsPresenterWidth = measure.Width;
                 ItemsPresenterHeight = measure.Height;
             }), DispatcherPriority.Input);            
@@ -173,7 +173,7 @@ namespace Dragablz
             var maxConstraint = new Size(double.PositiveInfinity, double.PositiveInfinity);
 
             ItemsOrganiser.Organise(maxConstraint, dragablzItems);
-            var measure = ItemsOrganiser.Measure(dragablzItems);
+            var measure = ItemsOrganiser.Measure(new Size(ActualWidth, ActualHeight), dragablzItems);
             ItemsPresenterWidth = measure.Width;
             ItemsPresenterHeight = measure.Height;
 
@@ -238,7 +238,7 @@ namespace Dragablz
             eventArgs.Handled = true;
 
             if (ItemsOrganiser == null) return;
-            var measure = ItemsOrganiser.Measure(dragablzItems);
+            var measure = ItemsOrganiser.Measure(new Size(ActualWidth, ActualHeight), dragablzItems);
             ItemsPresenterWidth = measure.Width;
             ItemsPresenterHeight = measure.Height;
         }

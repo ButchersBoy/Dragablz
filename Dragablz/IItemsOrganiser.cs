@@ -7,12 +7,12 @@ namespace Dragablz
 {
     public interface IItemsOrganiser
     {
-        void Organise(Size bounds, IEnumerable<DragablzItem> items);
-        void OrganiseOnMouseDownWithing(Size bounds, List<DragablzItem> siblingItems, DragablzItem dragablzItem);
-        void OrganiseOnDragStarted(Size bounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem);
-        void OrganiseOnDrag(Size bounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem);
-        void OrganiseOnDragCompleted(Size bounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem);
-        Point ConstrainLocation(Size bounds, Point desiredLocation, Size itemDesiredSize);
-        Size Measure(IEnumerable<DragablzItem> items);
+        void Organise(Size measureBounds, IEnumerable<DragablzItem> items);
+        void OrganiseOnMouseDownWithing(Size measureBounds, List<DragablzItem> siblingItems, DragablzItem dragablzItem);
+        void OrganiseOnDragStarted(Size measureBounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem);
+        void OrganiseOnDrag(Size measureBounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem);
+        void OrganiseOnDragCompleted(Size measureBounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem);
+        Point ConstrainLocation(Size measureBounds, Point desiredLocation, Size itemDesiredSize);
+        Size Measure(Size availableSize, IEnumerable<DragablzItem> items);
     }
 }

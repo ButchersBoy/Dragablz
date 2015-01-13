@@ -8,12 +8,12 @@ namespace Dragablz
 {
     public class TwoDimensionalOrgansier : IItemsOrganiser
     {
-        public void Organise(Size bounds, IEnumerable<DragablzItem> items)
+        public void Organise(Size measureBounds, IEnumerable<DragablzItem> items)
         {
             
         }
 
-        public void OrganiseOnMouseDownWithing(Size bounds, List<DragablzItem> siblingItems, DragablzItem dragablzItem)
+        public void OrganiseOnMouseDownWithing(Size measureBounds, List<DragablzItem> siblingItems, DragablzItem dragablzItem)
         {
             var zIndex = int.MaxValue;
             foreach (var source in siblingItems.OrderByDescending(Panel.GetZIndex))
@@ -24,38 +24,31 @@ namespace Dragablz
             Panel.SetZIndex(dragablzItem, int.MaxValue);
         }
 
-        public void OrganiseOnDragStarted(Size bounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
+        public void OrganiseOnDragStarted(Size measureBounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
         {
             
         }
 
-        public void OrganiseOnDrag(Size bounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
+        public void OrganiseOnDrag(Size measureBounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
         {
             
         }
 
-        public void OrganiseOnDragCompleted(Size bounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
+        public void OrganiseOnDragCompleted(Size measureBounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
         {
             
         }
 
-        public Point ConstrainLocation(Size bounds, Point desiredLocation, Size itemDesiredSize)
+        public Point ConstrainLocation(Size measureBounds, Point desiredLocation, Size itemDesiredSize)
         {
-            return desiredLocation;
+            return new Point(
+                Math.Min(Math.Max(desiredLocation.X, 0), measureBounds.Width - itemDesiredSize.Width),
+                Math.Min(Math.Max(desiredLocation.Y, 0), measureBounds.Height - itemDesiredSize.Height));
         }
 
-        public Size Measure(IEnumerable<DragablzItem> items)
+        public Size Measure(Size availableSize, IEnumerable<DragablzItem> items)
         {
-            if (items == null) throw new ArgumentNullException("items");
-
-            double width = 0.0, height = 0.0;
-            foreach (var dragablzItem in items.Where(i => i != null))
-            {
-                width = Math.Max(width, dragablzItem.DesiredSize.Width);
-                height = Math.Max(height, dragablzItem.DesiredSize.Height);
-            }
-
-            return new Size(width, height);
+            return availableSize;
         }
     }
 }
