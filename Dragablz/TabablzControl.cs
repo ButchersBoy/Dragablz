@@ -256,6 +256,47 @@ namespace Dragablz
             set { SetValue(ClosingItemCallbackProperty, value); }
         }
 
+        private static readonly DependencyPropertyKey IsDraggingWindowPropertyKey =
+            DependencyProperty.RegisterReadOnly(
+                "IsDraggingWindow", typeof (bool), typeof (TabablzControl),
+                new PropertyMetadata(default(bool), OnIsDraggingWindowChanged));
+
+        public static readonly DependencyProperty IsDraggingWindowProperty =
+            IsDraggingWindowPropertyKey.DependencyProperty;
+
+        public bool IsDraggingWindow
+        {
+            get { return (bool) GetValue(IsDraggingWindowProperty); }
+            private set { SetValue(IsDraggingWindowPropertyKey, value); }
+        }
+
+        public static readonly RoutedEvent IsDraggingWindowChangedEvent =
+            EventManager.RegisterRoutedEvent(
+                "IsDraggingWindowChanged",
+                RoutingStrategy.Bubble,
+                typeof (RoutedPropertyChangedEventHandler<bool>),
+                typeof (TabablzControl));
+
+        public event RoutedPropertyChangedEventHandler<bool> IsDraggingWindowChanged
+        {
+            add { AddHandler(IsDraggingWindowChangedEvent, value); }
+            remove { RemoveHandler(IsDraggingWindowChangedEvent, value); }
+        }
+
+        private static void OnIsDraggingWindowChanged(
+            DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var instance = (TabablzControl) d;
+            var args = new RoutedPropertyChangedEventArgs<bool>(
+                (bool) e.OldValue,
+                (bool) e.NewValue)
+            {
+                RoutedEvent = IsDraggingWindowChangedEvent
+            };
+            instance.RaiseEvent(args);
+            
+        } 
+
         public override void OnApplyTemplate()
         {            
             if (_templateSubscription != null)
@@ -424,7 +465,17 @@ namespace Dragablz
                     tabItem.IsSelected = true;
                 else
                     SelectedItem = item;
+
+                if (ShouldDragWindow(sourceOfDragItemsControl))
+                    IsDraggingWindow = true;
             }
+        }
+
+        private bool ShouldDragWindow(DragablzItemsControl sourceOfDragItemsControl)
+        {
+            return (Items.Count == 1
+                    && (InterTabController == null || InterTabController.MoveWindowWithSolitaryTabs)
+                    && !Layout.IsContainedWithinBranch(sourceOfDragItemsControl));
         }
 
         private void PreviewItemDragDelta(object sender, DragablzDragDeltaEventArgs e)
@@ -434,10 +485,7 @@ namespace Dragablz
             var sourceOfDragItemsControl = ItemsControlFromItemContainer(e.DragablzItem) as DragablzItemsControl;
             if (sourceOfDragItemsControl == null || !Equals(sourceOfDragItemsControl, _dragablzItemsControl)) return;
 
-            if (Items.Count != 1 
-                || (InterTabController != null && !InterTabController.MoveWindowWithSolitaryTabs)
-                || Layout.IsContainedWithinBranch(sourceOfDragItemsControl))
-                return;
+            if (!ShouldDragWindow(sourceOfDragItemsControl)) return;
 
             if (MonitorReentry(e)) return;
 
@@ -535,7 +583,8 @@ namespace Dragablz
             if (!IsMyItem(e.DragablzItem)) return;
 
             _interTabTransfer = null;
-            _dragablzItemsControl.LockedMeasure = null;            
+            _dragablzItemsControl.LockedMeasure = null;
+            IsDraggingWindow = false;
         }
 
         private void ItemDragDelta(object sender, DragablzDragDeltaEventArgs e)

@@ -1379,10 +1379,11 @@
                                 </local:DragablzItemsControl.MaxWidth>
                             </local:DragablzItemsControl>                            
                             <Button Style="{StaticResource AddItemCommandButtonStyle}"
+                                    x:Name="DefaultAddButton"
                                     Grid.Column="2"
                                     Command="{x:Static local:TabablzControl.AddItemCommand}"
                                     Visibility="{TemplateBinding ShowDefaultAddButton, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    >+</Button>
+                                    />
                             <ContentControl Grid.Column="3" x:Name="SuffixContentControl" 
                                             Content="{TemplateBinding HeaderSuffixContent}"
                                             ContentStringFormat="{TemplateBinding HeaderSuffixContentStringFormat}"
@@ -1424,6 +1425,9 @@
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        </Trigger>
+                        <Trigger Property="IsDraggingWindow" Value="True">
+                            <Setter TargetName="DefaultAddButton" Property="Visibility" Value="Hidden" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
