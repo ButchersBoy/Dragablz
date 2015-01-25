@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using Dragablz.Dockablz;
 
 namespace Dragablz.Core
 {
@@ -19,16 +21,19 @@ namespace Dragablz.Core
         private readonly Point _dragStartItemOffset;
         private readonly Point _itemPositionWithinHeader;
         private readonly Size _itemSize;
+        private readonly IList<FloatingItemSnapShot> _floatingItemSnapShots;
         private readonly InterTabTransferReason _transferReason; 
 
         public InterTabTransfer(
             object item, DragablzItem originatorContainer,
             Orientation breachOrientation, 
             Point dragStartWindowOffset, Point dragStartItemOffset,
-            Point itemPositionWithinHeader, Size itemSize)
+            Point itemPositionWithinHeader, Size itemSize,
+            IList<FloatingItemSnapShot> floatingItemSnapShots)
         {
             if (item == null) throw new ArgumentNullException("item");
             if (originatorContainer == null) throw new ArgumentNullException("originatorContainer");
+            if (floatingItemSnapShots == null) throw new ArgumentNullException("floatingItemSnapShots");
 
             _transferReason = InterTabTransferReason.Breach;
 
@@ -39,18 +44,22 @@ namespace Dragablz.Core
             _dragStartItemOffset = dragStartItemOffset;
             _itemPositionWithinHeader = itemPositionWithinHeader;
             _itemSize = itemSize;
+            _floatingItemSnapShots = floatingItemSnapShots;
         }
 
-        public InterTabTransfer(object item, DragablzItem originatorContainer, Point dragStartItemOffset)
+        public InterTabTransfer(object item, DragablzItem originatorContainer, Point dragStartItemOffset,
+            IList<FloatingItemSnapShot> floatingItemSnapShots)
         {
             if (item == null) throw new ArgumentNullException("item");
             if (originatorContainer == null) throw new ArgumentNullException("originatorContainer");
-            
+            if (floatingItemSnapShots == null) throw new ArgumentNullException("floatingItemSnapShots");
+
             _transferReason = InterTabTransferReason.Reentry;
 
             _item = item;
             _originatorContainer = originatorContainer;
             _dragStartItemOffset = dragStartItemOffset;
+            _floatingItemSnapShots = floatingItemSnapShots;
         }
 
         public Orientation BreachOrientation
@@ -91,6 +100,11 @@ namespace Dragablz.Core
         public Size ItemSize
         {
             get { return _itemSize; }
+        }
+
+        public IList<FloatingItemSnapShot> FloatingItemSnapShots
+        {
+            get { return _floatingItemSnapShots; }
         }
     }
 }

@@ -60,6 +60,9 @@
     <Compile Include="BoundExampleInterTabClient.cs" />
     <Compile Include="BoundExampleNewItem.cs" />
     <Compile Include="HeaderAndContentModel.cs" />
+    <Compile Include="MdiExample.xaml.cs">
+      <DependentUpon>MdiExample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="QuickStartWindow.xaml.cs">
       <DependentUpon>QuickStartWindow.xaml</DependentUpon>
     </Compile>
@@ -84,6 +87,10 @@
     <Page Include="BoundExampleWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MdiExample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="QuickStartWindow.xaml">
       <SubType>Designer</SubType>

@@ -31,6 +31,13 @@ namespace Dragablz.Dockablz
     
         private readonly IDictionary<DropZoneLocation, DropZone> _dropZones = new Dictionary<DropZoneLocation, DropZone>();
         private static Tuple<Layout, DropZone> _currentlyOfferedDropZone;
+
+        public static RoutedCommand UnfloatItemCommand = new RoutedCommand();
+        public static RoutedCommand MaximiseFloatingItem = new RoutedCommand();
+        public static RoutedCommand RestoreFloatingItem = new RoutedCommand();
+        public static RoutedCommand TileFloatingItemsCommand = new RoutedCommand();
+        public static RoutedCommand TileFloatingItemsVerticallyCommand = new RoutedCommand();
+        public static RoutedCommand TileFloatingItemsHorizontallyCommand = new RoutedCommand();
         
         private readonly DragablzItemsControl _floatingItems;
         private static bool _isDragOpWireUpPending;
@@ -39,20 +46,24 @@ namespace Dragablz.Dockablz
         static Layout()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Layout), new FrameworkPropertyMetadata(typeof(Layout)));
-
+            
             EventManager.RegisterClassHandler(typeof(DragablzItem), DragablzItem.DragStarted, new DragablzDragStartedEventHandler(ItemDragStarted));
             EventManager.RegisterClassHandler(typeof(DragablzItem), DragablzItem.PreviewDragDelta, new DragablzDragDeltaEventHandler(PreviewItemDragDelta), true);            
             EventManager.RegisterClassHandler(typeof(DragablzItem), DragablzItem.DragCompleted, new DragablzDragCompletedEventHandler(ItemDragCompleted));            
-        }
-
-        public static RoutedCommand UnfloatCommand = new RoutedCommand();
+        }        
 
         public Layout()
         {
             Loaded += (sender, args) => LoadedLayouts.Add(this);
             Unloaded += (sender, args) => LoadedLayouts.Remove(this);
 
-            CommandBindings.Add(new CommandBinding(UnfloatCommand, UnfloatExecuted));
+            CommandBindings.Add(new CommandBinding(UnfloatItemCommand, UnfloatExecuted, CanExecuteUnfloat));
+            CommandBindings.Add(new CommandBinding(MaximiseFloatingItem, MaximiseFloatingItemExecuted, CanExecuteMaximiseFloatingItem));
+            CommandBindings.Add(new CommandBinding(RestoreFloatingItem, RestoreFloatingItemExecuted, CanExecuteRestoreFloatingItem));
+            CommandBindings.Add(new CommandBinding(TileFloatingItemsCommand, TileFloatingItemsExecuted));
+            CommandBindings.Add(new CommandBinding(TileFloatingItemsCommand, TileFloatingItemsExecuted));
+            CommandBindings.Add(new CommandBinding(TileFloatingItemsVerticallyCommand, TileFloatingItemsVerticallyExecuted));
+            CommandBindings.Add(new CommandBinding(TileFloatingItemsHorizontallyCommand, TileFloatingItemsHorizontallyExecuted));            
 
             _floatingItems = new DragablzItemsControl(
                 GetFloatingContainerForItemOverride, 
@@ -238,7 +249,12 @@ namespace Dragablz.Dockablz
             _dropZones[DropZoneLocation.Bottom] = GetTemplateChild(BottomDropZonePartName) as DropZone;
             _dropZones[DropZoneLocation.Left] = GetTemplateChild(LeftDropZonePartName) as DropZone;
             _dropZones[DropZoneLocation.Floating] = GetTemplateChild(FloatingDropZonePartName) as DropZone;
-        }                 
+        }
+
+        internal IEnumerable<DragablzItem> FloatingDragablzItems()
+        {
+            return _floatingItems.DragablzItems();
+        }
 
         private static void ItemDragStarted(object sender, DragablzDragStartedEventArgs e)
         {
@@ -480,8 +496,13 @@ namespace Dragablz.Dockablz
             SetIsFloatingInLayout(dependencyObject, true);
 
             var headerBinding = new Binding(FloatingItemHeaderMemberPath) {Source = o};
-
             headeredDragablzItem.SetBinding(HeaderedDragablzItem.HeaderContentProperty, headerBinding);
+
+            if (!string.IsNullOrWhiteSpace(FloatingItemDisplayMemberPath))
+            {
+                var contentBinding = new Binding(FloatingItemDisplayMemberPath) {Source = o};
+                headeredDragablzItem.SetBinding(ContentProperty, contentBinding);
+            }
 
             if (_floatTransfer != null && (o == _floatTransfer.Content || dependencyObject == _floatTransfer.Content))
             {
@@ -508,18 +529,98 @@ namespace Dragablz.Dockablz
             SetIsFloatingInLayout(dependencyObject, false);
         }
 
+        private void TileFloatingItemsExecuted(object sender, ExecutedRoutedEventArgs executedRoutedEventArgs)
+        {
+            var dragablzItems = _floatingItems.DragablzItems();
+            Tiler.Tile(dragablzItems, new Size(_floatingItems.ActualWidth, _floatingItems.ActualHeight));
+        }
+
+        private void TileFloatingItemsHorizontallyExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dragablzItems = _floatingItems.DragablzItems();
+            Tiler.TileHorizontally(dragablzItems, new Size(_floatingItems.ActualWidth, _floatingItems.ActualHeight));
+        }
+
+        private void TileFloatingItemsVerticallyExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dragablzItems = _floatingItems.DragablzItems();
+            Tiler.TileVertically(dragablzItems, new Size(_floatingItems.ActualWidth, _floatingItems.ActualHeight));
+        }
+
+        public static readonly DependencyProperty FloatingItemStateProperty = DependencyProperty.RegisterAttached(
+            "FloatingItemState", typeof (WindowState), typeof (Layout), new PropertyMetadata(default(WindowState)));
+
+        public static void SetFloatingItemState(DependencyObject element, WindowState value)
+        {
+            element.SetValue(FloatingItemStateProperty, value);
+        }
+
+        public static WindowState GetFloatingItemState(DependencyObject element)
+        {
+            return (WindowState) element.GetValue(FloatingItemStateProperty);
+        }
+
+        private void CanExecuteMaximiseFloatingItem(object sender, CanExecuteRoutedEventArgs canExecuteRoutedEventArgs)
+        {
+            canExecuteRoutedEventArgs.CanExecute = false;
+            canExecuteRoutedEventArgs.Handled = true;
+
+            var dragablzItem = canExecuteRoutedEventArgs.Parameter as DragablzItem;
+            if (dragablzItem != null)
+            {
+                canExecuteRoutedEventArgs.CanExecute = new[] {WindowState.Normal, WindowState.Minimized}.Contains(GetFloatingItemState(dragablzItem));
+            }
+        }
+
+        private void CanExecuteRestoreFloatingItem(object sender, CanExecuteRoutedEventArgs canExecuteRoutedEventArgs)
+        {
+            canExecuteRoutedEventArgs.CanExecute = false;
+            canExecuteRoutedEventArgs.Handled = true;
+
+            var dragablzItem = canExecuteRoutedEventArgs.Parameter as DragablzItem;
+            if (dragablzItem != null)
+            {
+                canExecuteRoutedEventArgs.CanExecute = new[] { WindowState.Maximized, WindowState.Minimized }.Contains(GetFloatingItemState(dragablzItem));
+            }
+        }
+
+        private static void MaximiseFloatingItemExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dragablzItem = e.Parameter as DragablzItem;
+            if (dragablzItem == null) return;
+
+            SetFloatingItemState(dragablzItem, WindowState.Maximized);
+        }
+
+        private void RestoreFloatingItemExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dragablzItem = e.Parameter as DragablzItem;
+            if (dragablzItem == null) return;
+
+            SetFloatingItemState(dragablzItem, WindowState.Normal);
+        }
+
+        private bool IsHostingTab()
+        {
+            return this.VisualTreeDepthFirstTraversal().OfType<TabablzControl>()
+                .FirstOrDefault(t => t.InterTabController != null && t.InterTabController.Partition == Partition)
+                != null;
+        }
+
+        private void CanExecuteUnfloat(object sender, CanExecuteRoutedEventArgs canExecuteRoutedEventArgs)
+        {
+            canExecuteRoutedEventArgs.CanExecute = IsHostingTab();
+            canExecuteRoutedEventArgs.ContinueRouting = false;
+            canExecuteRoutedEventArgs.Handled = true;
+        }
+
         private void UnfloatExecuted(object sender, ExecutedRoutedEventArgs executedRoutedEventArgs)
         {
             var dragablzItem = executedRoutedEventArgs.Parameter as DragablzItem;
             if (dragablzItem == null) return;
             
-            var containsBranch = this.LogicalTreeDepthFirstTraversal().OfType<Branch>().Any();
-
-            var exemplarTab = containsBranch //use Visual Traversal when branches exist 
-                ? this.VisualTreeDepthFirstTraversal().OfType<TabablzControl>()
-                .FirstOrDefault(t => t.InterTabController != null && t.InterTabController.Partition == Partition)
-                : this.LogicalTreeDepthFirstTraversal().OfType<TabablzControl>()
-                .FirstOrDefault(t => t.InterTabController != null && t.InterTabController.Partition == Partition);
+            var exemplarTab = this.VisualTreeDepthFirstTraversal().OfType<TabablzControl>()
+                .FirstOrDefault(t => t.InterTabController != null && t.InterTabController.Partition == Partition);                
 
             if (exemplarTab == null) return;
 

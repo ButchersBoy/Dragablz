@@ -26,6 +26,7 @@ namespace DragablzDemo
                 
             var boundExampleModel = new BoundExampleModel(
                 new SimpleViewModel { Name = "Mon", SimpleContent = "Monday's child is fair of face" },
+                new SimpleViewModel { Name = "MDI Demo", SimpleContent = new MdiExample() },
                 new SimpleViewModel { Name = "Tues", SimpleContent = "Tuesday's child is full of grace" },
                 new SimpleViewModel { Name = "Wed", SimpleContent = "Wednesday's child is full of woe" },
                 new SimpleViewModel { Name = "Thu", SimpleContent = "Thursday's child has far to go" },

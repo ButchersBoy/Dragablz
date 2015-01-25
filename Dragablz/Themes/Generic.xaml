@@ -267,6 +267,15 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
+    <Style TargetType="{x:Type Button}" x:Key="HideDisabledButtonStyle">
+        <Setter Property="Visibility" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(dockablz:Layout.IsFloatingInLayout), Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Visibility" Value="Collapsed" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
     <ControlTemplate x:Key="WindowTemplateKey" TargetType="{x:Type local:DragablzWindow}">
         <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
@@ -626,13 +635,30 @@
                                         <Thumb HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" x:Name="PART_Thumb"
                                                Style="{StaticResource InvisibleThumbStyle}"
                                                />
-                                        <DockPanel Margin="{TemplateBinding Control.Padding }">
+                                        <DockPanel Margin="{TemplateBinding Control.Padding }">                                            
                                             <Button DockPanel.Dock="Right"
-                                                    Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(dockablz:Layout.IsFloatingInLayout), Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                    Command="{x:Static dockablz:Layout.UnfloatCommand}"
+                                                    Command="{x:Static dockablz:Layout.UnfloatItemCommand}"
                                                     CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                                    Margin="1 0 0 0"
+                                                    Style="{StaticResource HideDisabledButtonStyle}"
                                                     >
-                                                <Path Width="12" Height="12" Stretch="UniformToFill" Fill="#000000" Data="M 19 19 H 5 V 5 h 7 V 3 H 5 C 3.89 3 3 3.9 3 5 v 14 c 0 1.1 0.89 2 2 2 h 14 c 1.1 0 2 -0.9 2 -2 v -7 h -2 v 7 z M 14 3 v 2 h 3.59 L 7.76 14.83 9.17 16.24 19 6.41 V 10 h 2 V 3 h -7 z" />
+                                                <Path Width="12" Height="12" Stretch="UniformToFill" Fill="#000000" Data="M 19 19 H 5 V 5 h 7 V 3 H 5 C 3.89 3 3 3.9 3 5 v 14 c 0 1.1 0.89 2 2 2 h 14 c 1.1 0 2 -0.9 2 -2 v -7 h -2 v 7 z M 14 3 v 2 h 3.59 L 7.76 14.83 9.17 16.24 19 6.41 V 10 h 2 V 3 h -7 z" />                                                
+                                            </Button>
+                                            <Button DockPanel.Dock="Right"
+                                                    Command="{x:Static dockablz:Layout.MaximiseFloatingItem}"
+                                                    CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                                    Margin="1 0 0 0"
+                                                    Style="{StaticResource HideDisabledButtonStyle}"
+                                                    >
+                                                <themes:SystemCommandIcon Height="10" Width="10" SystemCommandType="MaximizeWindow" />
+                                            </Button>
+                                            <Button DockPanel.Dock="Right"
+                                                    Command="{x:Static dockablz:Layout.RestoreFloatingItem}"
+                                                    CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                                    Margin="1 0 0 0"
+                                                    Style="{StaticResource HideDisabledButtonStyle}"
+                                                    >
+                                                <themes:SystemCommandIcon Height="10" Width="10" SystemCommandType="RestoreWindow" />
                                             </Button>
                                             <ContentPresenter Content="{TemplateBinding HeaderContent}"                                                               
                                                               ContentTemplate="{TemplateBinding HeaderContentTemplate}" 
@@ -712,6 +738,15 @@
                 </Setter.Value>
             </Setter>
         </Style.Setters>
+        <Style.Triggers>
+            <Trigger Property="dockablz:Layout.FloatingItemState" Value="Maximized">
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Canvas.Left" Value="0" />
+                <Setter Property="Canvas.Top" Value="0" />
+                <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type dockablz:Layout}}, Path=ActualWidth}" />
+                <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type dockablz:Layout}}, Path=ActualHeight}" />                
+            </Trigger>            
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="{x:Type local:DragablzItem}" x:Key="SizableFromBottomRightDragablzItemStyle">

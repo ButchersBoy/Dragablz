@@ -547,10 +547,15 @@ namespace Dragablz
             {
                 var mousePositionOnItem = Mouse.GetPosition(e.DragablzItem);
 
-                e.DragablzItem.IsDropTargetFound = true;
-                var item = RemoveItem(e.DragablzItem);
+                var floatingItemSnapShots = this.VisualTreeDepthFirstTraversal()
+                    .OfType<Layout>()
+                    .SelectMany(l => l.FloatingDragablzItems().Select(FloatingItemSnapShot.Take))
+                    .ToList();
 
-                var interTabTransfer = new InterTabTransfer(item, e.DragablzItem, mousePositionOnItem);
+                e.DragablzItem.IsDropTargetFound = true;
+                var item = RemoveItem(e.DragablzItem);                
+
+                var interTabTransfer = new InterTabTransfer(item, e.DragablzItem, mousePositionOnItem, floatingItemSnapShots);
                 e.DragablzItem.IsDragging = false;
 
                 target.tc.ReceiveDrag(interTabTransfer);
@@ -640,8 +645,12 @@ namespace Dragablz
 
                 var dragableItemHeaderPoint = e.DragablzItem.TranslatePoint(new Point(), _dragablzItemsControl);
                 var dragableItemSize = new Size(e.DragablzItem.ActualWidth, e.DragablzItem.ActualHeight);
+                var floatingItemSnapShots = this.VisualTreeDepthFirstTraversal()
+                    .OfType<Layout>()
+                    .SelectMany(l => l.FloatingDragablzItems().Select(FloatingItemSnapShot.Take))
+                    .ToList();
 
-                var interTabTransfer = new InterTabTransfer(item, e.DragablzItem, breachOrientation.Value, dragStartWindowOffset, e.DragablzItem.MouseAtDragStart, dragableItemHeaderPoint, dragableItemSize);
+                var interTabTransfer = new InterTabTransfer(item, e.DragablzItem, breachOrientation.Value, dragStartWindowOffset, e.DragablzItem.MouseAtDragStart, dragableItemHeaderPoint, dragableItemSize, floatingItemSnapShots);
 
                 newTabHost.Container.Left = myWindow.Left;
                 newTabHost.Container.Top = myWindow.Top;
@@ -689,6 +698,19 @@ namespace Dragablz
             AddToSource(interTabTransfer.Item);
             SelectedItem = interTabTransfer.Item;
             
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                var layouts = this.VisualTreeDepthFirstTraversal().OfType<Layout>().ToList();
+
+                foreach (var floatingDragablzItem in layouts.SelectMany(l => l.FloatingDragablzItems()))
+                {
+                    var floatingItemSnapShot = interTabTransfer.FloatingItemSnapShots.FirstOrDefault(
+                        ss => ss.Content == floatingDragablzItem.Content);
+                    if (floatingItemSnapShot != null)
+                        floatingItemSnapShot.Apply(floatingDragablzItem);                        
+                }                
+            }), DispatcherPriority.Loaded);
+
             _dragablzItemsControl.InstigateDrag(interTabTransfer.Item, newContainer =>
             {
                 newContainer.PartitionAtDragStart = interTabTransfer.OriginatorContainer.PartitionAtDragStart;
