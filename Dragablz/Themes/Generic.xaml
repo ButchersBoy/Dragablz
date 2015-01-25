@@ -728,7 +728,7 @@
                             <Thumb Style="{StaticResource InvisibleThumbStyle}"
                                    Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
                                    Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
-                                   local:DragablzItem.SizeGrip="BottomLeft"
+                                   local:DragablzItem.SizeGrip="BottomLeft"                                   
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Bottom"
                                    Cursor="SizeNESW"

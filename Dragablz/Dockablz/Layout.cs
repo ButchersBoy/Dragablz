@@ -560,7 +560,20 @@ namespace Dragablz.Dockablz
             return (WindowState) element.GetValue(FloatingItemStateProperty);
         }
 
-        private void CanExecuteMaximiseFloatingItem(object sender, CanExecuteRoutedEventArgs canExecuteRoutedEventArgs)
+        internal static readonly DependencyProperty LocationSnapShotProperty = DependencyProperty.RegisterAttached(
+            "LocationSnapShot", typeof (LocationSnapShot), typeof (Layout), new PropertyMetadata(default(LocationSnapShot)));
+
+        internal static void SetLocationSnapShot(FrameworkElement element, LocationSnapShot value)
+        {
+            element.SetValue(LocationSnapShotProperty, value);
+        }
+
+        internal static LocationSnapShot GetLocationSnapShot(FrameworkElement element)
+        {
+            return (LocationSnapShot) element.GetValue(LocationSnapShotProperty);
+        }
+
+        private static void CanExecuteMaximiseFloatingItem(object sender, CanExecuteRoutedEventArgs canExecuteRoutedEventArgs)
         {
             canExecuteRoutedEventArgs.CanExecute = false;
             canExecuteRoutedEventArgs.Handled = true;
@@ -572,7 +585,7 @@ namespace Dragablz.Dockablz
             }
         }
 
-        private void CanExecuteRestoreFloatingItem(object sender, CanExecuteRoutedEventArgs canExecuteRoutedEventArgs)
+        private static void CanExecuteRestoreFloatingItem(object sender, CanExecuteRoutedEventArgs canExecuteRoutedEventArgs)
         {
             canExecuteRoutedEventArgs.CanExecute = false;
             canExecuteRoutedEventArgs.Handled = true;
@@ -588,16 +601,20 @@ namespace Dragablz.Dockablz
         {
             var dragablzItem = e.Parameter as DragablzItem;
             if (dragablzItem == null) return;
-
+            
+            SetLocationSnapShot(dragablzItem, LocationSnapShot.Take(dragablzItem));
             SetFloatingItemState(dragablzItem, WindowState.Maximized);
         }
 
-        private void RestoreFloatingItemExecuted(object sender, ExecutedRoutedEventArgs e)
+        private static void RestoreFloatingItemExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var dragablzItem = e.Parameter as DragablzItem;
             if (dragablzItem == null) return;
-
+            
             SetFloatingItemState(dragablzItem, WindowState.Normal);
+            var locationSnapShot = GetLocationSnapShot(dragablzItem);
+            if (locationSnapShot != null)
+                locationSnapShot.Apply(dragablzItem);            
         }
 
         private bool IsHostingTab()
