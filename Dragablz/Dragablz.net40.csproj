@@ -69,6 +69,7 @@
     <Compile Include="Dockablz\Layout.cs" />
     <Compile Include="Dockablz\LocationSnapShot.cs" />
     <Compile Include="Dockablz\Tiler.cs" />
+    <Compile Include="Dockablz\TilerCalculator.cs" />
     <Compile Include="DragablzColors.cs" />
     <Compile Include="DragablzDragCompletedEventArgs.cs" />
     <Compile Include="DragablzDragDeltaEventArgs.cs" />

@@ -17,31 +17,20 @@ namespace Dragablz.Dockablz
             if (dragablzItems == null) throw new ArgumentNullException("dragablzItems");            
 
             var items = new Queue<DragablzItem>(dragablzItems.OrderBy(Panel.GetZIndex));
-            var sqrt = Math.Sqrt(items.Count());
-            var lowerRowCount = Math.Floor(sqrt);
-            var columns = Math.Round(sqrt, MidpointRounding.AwayFromZero);
 
+            var cellCountPerColumn = TilerCalculator.GetCellCountPerColumn(items.Count());
             var x = 0d;
-            var cellWidth = bounds.Width/columns;
-            for (var column = 0; column < columns; column++)
-            {                
-                var minumumAvailableAfterThisColumn = items.Count - lowerRowCount;
-                var cellsThisColumn = lowerRowCount;
-                if (column < columns - 1)
-                {
-                    var remainingAfterThisColumnOverColumns = minumumAvailableAfterThisColumn/(column + 1);
-                    if (unchecked(remainingAfterThisColumnOverColumns == (int) remainingAfterThisColumnOverColumns))
-                        cellsThisColumn = cellsThisColumn + 1;
-                }
-
+            var cellWidth = bounds.Width / cellCountPerColumn.Length;
+            foreach (var cellCount in cellCountPerColumn)
+            {
                 var y = 0d;
-                for (var cell = 0; cell < cellsThisColumn; cell++)
+                var cellHeight = bounds.Height / cellCount;
+                for (var cell = 0; cell < cellCount; cell++)
                 {
-                    var cellHeight = bounds.Height/cellsThisColumn;
                     var item = items.Dequeue();
                     Layout.SetFloatingItemState(item, WindowState.Normal);
                     item.SetCurrentValue(DragablzItem.XProperty, x);
-                    item.SetCurrentValue(DragablzItem.YProperty, y);                    
+                    item.SetCurrentValue(DragablzItem.YProperty, y);
                     item.SetCurrentValue(FrameworkElement.WidthProperty, cellWidth);
                     item.SetCurrentValue(FrameworkElement.HeightProperty, cellHeight);
 

@@ -21,11 +21,23 @@
                          FloatingItemHeaderMemberPath="Name"
                          FloatingItemDisplayMemberPath="SimpleContent">            
             <dockablz:Layout.FloatingItems>                
-                <dragablzDemo:SimpleViewModel Name="One" SimpleContent="MDI Child One" />                
+                <dragablzDemo:SimpleViewModel Name="One" SimpleContent="MDI Child One" />
+                
                 <dragablzDemo:SimpleViewModel Name="Two" SimpleContent="MDI Child Two" />
+                
                 <dragablzDemo:SimpleViewModel Name="Three" SimpleContent="MDI Child Three" />
+                
                 <dragablzDemo:SimpleViewModel Name="Four" SimpleContent="MDI Child Four" />
-                <dragablzDemo:SimpleViewModel Name="Five" SimpleContent="MDI Child Five" />                
+                
+                <dragablzDemo:SimpleViewModel Name="Five" SimpleContent="MDI Child Five" />
+                <dragablzDemo:SimpleViewModel Name="Six" SimpleContent="MDI Child Six" />
+                <dragablzDemo:SimpleViewModel Name="Seven" SimpleContent="MDI Child Seven" />
+                <!--
+                <dragablzDemo:SimpleViewModel Name="Eight" SimpleContent="MDI Child Eight" />
+                <dragablzDemo:SimpleViewModel Name="Nine" SimpleContent="MDI Child Nine" />
+                <dragablzDemo:SimpleViewModel Name="Ten" SimpleContent="MDI Child Ten" />
+                
+                -->
             </dockablz:Layout.FloatingItems>
         </dockablz:Layout>
     </DockPanel>
