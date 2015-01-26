@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="ClosingItemCallbackArgs.cs" />
     <Compile Include="Converters\BooleanAndToVisibilityConverter.cs" />
+    <Compile Include="Converters\EqualityToBooleanConverter.cs" />
     <Compile Include="Converters\EqualityToVisibilityConverter.cs" />
     <Compile Include="Core\SystemCommand.cs" />
     <Compile Include="Core\WindowMessage.cs" />

@@ -9,6 +9,7 @@
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <converters:EqualityToVisibilityConverter x:Key="EqualityToVisibilityConverter" />
     <converters:BooleanAndToVisibilityConverter x:Key="BooleanAndToVisibilityConverter" />
+    <converters:EqualityToBooleanConverter x:Key="EqualityToBooleanConverter" />
 
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">
@@ -675,6 +676,7 @@
                             </Border>
                             <Thumb Style="{StaticResource InvisibleThumbStyle}"
                                    Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Left}"
+                                   IsEnabled="{Binding Path=(dockablz:Layout.FloatingItemState), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static WindowState.Normal}}"
                                    local:DragablzItem.SizeGrip="Left"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Stretch"
@@ -682,6 +684,7 @@
                                    />
                             <Thumb Style="{StaticResource InvisibleThumbStyle}"
                                    Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Top}"
+                                   IsEnabled="{Binding Path=(dockablz:Layout.FloatingItemState), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static WindowState.Normal}}"
                                    local:DragablzItem.SizeGrip="Top"
                                    HorizontalAlignment="Stretch"
                                    VerticalAlignment="Top"
@@ -689,6 +692,7 @@
                                    />
                             <Thumb Style="{StaticResource InvisibleThumbStyle}"
                                    Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
+                                   IsEnabled="{Binding Path=(dockablz:Layout.FloatingItemState), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static WindowState.Normal}}"
                                    local:DragablzItem.SizeGrip="Right"
                                    HorizontalAlignment="Right"
                                    VerticalAlignment="Stretch"
@@ -696,6 +700,7 @@
                                    />
                             <Thumb Style="{StaticResource InvisibleThumbStyle}"
                                    Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   IsEnabled="{Binding Path=(dockablz:Layout.FloatingItemState), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static WindowState.Normal}}"
                                    local:DragablzItem.SizeGrip="Bottom"
                                    HorizontalAlignment="Stretch"
                                    VerticalAlignment="Bottom"
@@ -704,6 +709,7 @@
                             <Thumb Style="{StaticResource InvisibleThumbStyle}"
                                    Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
                                    Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   IsEnabled="{Binding Path=(dockablz:Layout.FloatingItemState), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static WindowState.Normal}}"
                                    local:DragablzItem.SizeGrip="TopLeft"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Top"
@@ -712,6 +718,7 @@
                             <Thumb Style="{StaticResource InvisibleThumbStyle}"
                                    Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
                                    Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   IsEnabled="{Binding Path=(dockablz:Layout.FloatingItemState), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static WindowState.Normal}}"
                                    local:DragablzItem.SizeGrip="TopRight"
                                    HorizontalAlignment="Right"
                                    VerticalAlignment="Top"
@@ -720,6 +727,7 @@
                             <Thumb Style="{StaticResource InvisibleThumbStyle}"
                                    Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
                                    Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   IsEnabled="{Binding Path=(dockablz:Layout.FloatingItemState), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static WindowState.Normal}}"
                                    local:DragablzItem.SizeGrip="BottomRight"
                                    HorizontalAlignment="Right"
                                    VerticalAlignment="Bottom"
@@ -728,6 +736,7 @@
                             <Thumb Style="{StaticResource InvisibleThumbStyle}"
                                    Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Right}"
                                    Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderThickness.Bottom}"
+                                   IsEnabled="{Binding Path=(dockablz:Layout.FloatingItemState), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource EqualityToBooleanConverter}, ConverterParameter={x:Static WindowState.Normal}}"
                                    local:DragablzItem.SizeGrip="BottomLeft"                                   
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Bottom"
