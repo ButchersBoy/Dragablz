@@ -12,6 +12,24 @@
   - No, seriously, please get involved and give me a ping with any questions/requests.
 - **If you like it, or where it's going, please *star* it!!!**  A bit of love goes a long way ;)
 
+## Minimal XAML:
+
+XAML as simple as this will give you a tab the tears out (using the basic theme).  
+
+```xml
+<dragablz:TabablzControl Margin="8">
+    <dragablz:TabablzControl.InterTabController>
+        <dragablz:InterTabController />
+    </dragablz:TabablzControl.InterTabController>
+    <TabItem Header="Tab No. 1" IsSelected="True">
+        <TextBlock>Hello World</TextBlock>
+    </TabItem>
+    <TabItem Header="Tab No. 2">
+        <TextBlock>We Have Tearable Tabs!</TextBlock>
+    </TabItem>
+</dragablz:TabablzControl>
+```
+
 ## A note on the demo project:
 
 - You will have to restore NuGet packages
@@ -23,6 +41,7 @@
 - Drag and tear tabs
 - User friendly docking
 - Floating tool windows
+- MDI
 - Supports MVVM
 - IE style transparent Windows
 - Chrome style trapzoid tabs
@@ -35,7 +54,15 @@
 - Layout persistance and restore
 - Extra themes
 
+## Some more examples:
 
+Docking:
+
+![Alt text](http://dragablz.files.wordpress.com/2014/11/dockablzone1.gif "Docking demo")
+
+MDI:
+
+![Alt text](https://dragablz.files.wordpress.com/2015/01/mdidemo2.gif "MDI demo")
 
 
 
