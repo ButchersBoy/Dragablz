@@ -256,6 +256,19 @@ namespace Dragablz.Dockablz
             return _floatingItems.DragablzItems();
         }
 
+        internal static void RestoreFloatingItemSnapShots(DependencyObject ancestor, IEnumerable<FloatingItemSnapShot> floatingItemSnapShots)
+        {
+            var layouts = ancestor.VisualTreeDepthFirstTraversal().OfType<Layout>().ToList();
+            foreach (var floatingDragablzItem in layouts.SelectMany(l => l.FloatingDragablzItems()))
+            {
+                var itemSnapShots = floatingItemSnapShots as FloatingItemSnapShot[] ?? floatingItemSnapShots.ToArray();
+                var floatingItemSnapShot = itemSnapShots.FirstOrDefault(
+                    ss => ss.Content == floatingDragablzItem.Content);
+                if (floatingItemSnapShot != null)
+                    floatingItemSnapShot.Apply(floatingDragablzItem);
+            }
+        }
+
         private static void ItemDragStarted(object sender, DragablzDragStartedEventArgs e)
         {
             //we wait until drag is in full flow so we know the partition has been setup by the owning tab control
@@ -319,14 +332,19 @@ namespace Dragablz.Dockablz
         private void Branch(DropZoneLocation location, DragablzItem sourceDragablzItem)
         {
             if (InterLayoutClient == null)
-                throw new InvalidOperationException("InterLayoutClient is not set.");
+                throw new InvalidOperationException("InterLayoutClient is not set.");            
 
             var sourceOfDragItemsControl = ItemsControl.ItemsControlFromItemContainer(sourceDragablzItem) as DragablzItemsControl;
             if (sourceOfDragItemsControl == null) throw new ApplicationException("Unable to determin source items control.");
             
             var sourceTabControl = TabablzControl.GetOwnerOfHeaderItems(sourceOfDragItemsControl);
             if (sourceTabControl == null) throw new ApplicationException("Unable to determin source tab control.");
-            
+
+            var floatingItemSnapShots = sourceTabControl.VisualTreeDepthFirstTraversal()
+                    .OfType<Layout>()
+                    .SelectMany(l => l.FloatingDragablzItems().Select(FloatingItemSnapShot.Take))
+                    .ToList();
+
             var sourceItem = sourceOfDragItemsControl.ItemContainerGenerator.ItemFromContainer(sourceDragablzItem);
             sourceTabControl.RemoveItem(sourceDragablzItem);
 
@@ -344,6 +362,8 @@ namespace Dragablz.Dockablz
                 newTabHost.TabablzControl.AddToSource(sourceItem);
                 newTabHost.TabablzControl.SelectedItem = sourceItem;
                 newContent = newTabHost.Container;
+
+                Dispatcher.BeginInvoke(new Action(() => RestoreFloatingItemSnapShots(newTabHost.TabablzControl, floatingItemSnapShots)), DispatcherPriority.Loaded);
             }
             else
             {
@@ -355,13 +375,13 @@ namespace Dragablz.Dockablz
                 ((ContentControl) newContent).Dispatcher.BeginInvoke(new Action(() =>
                 {
                     //TODO might need to improve this a bit, make it a bit more declarative for complex trees
-                    var newTabControl = ((ContentControl)newContent).VisualTreeDepthFirstTraversal().OfType<TabablzControl>().FirstOrDefault();                    
-                    if (newTabControl != null)
-                    {
-                        newTabControl.DataContext = sourceTabControl.DataContext;
-                        newTabControl.AddToSource(sourceItem);
-                        newTabControl.SelectedItem = sourceItem;
-                    }
+                    var newTabControl = ((ContentControl)newContent).VisualTreeDepthFirstTraversal().OfType<TabablzControl>().FirstOrDefault();
+                    if (newTabControl == null) return;
+
+                    newTabControl.DataContext = sourceTabControl.DataContext;
+                    newTabControl.AddToSource(sourceItem);
+                    newTabControl.SelectedItem = sourceItem;
+                    Dispatcher.BeginInvoke(new Action(() => RestoreFloatingItemSnapShots(newTabControl, floatingItemSnapShots)), DispatcherPriority.Loaded);
                 }), DispatcherPriority.Loaded);                
             }
             
@@ -460,6 +480,10 @@ namespace Dragablz.Dockablz
             var sourceOfDragItemsControl = ItemsControl.ItemsControlFromItemContainer(dragablzItem) as DragablzItemsControl;
             if (sourceOfDragItemsControl == null) throw new ApplicationException("Unable to determin source items control.");            
             var sourceTabControl = TabablzControl.GetOwnerOfHeaderItems(sourceOfDragItemsControl);
+            var floatingItemSnapShots = sourceTabControl.VisualTreeDepthFirstTraversal()
+                    .OfType<Layout>()
+                    .SelectMany(l => l.FloatingDragablzItems().Select(FloatingItemSnapShot.Take))
+                    .ToList();
             if (sourceTabControl == null) throw new ApplicationException("Unable to determin source tab control.");            
             sourceTabControl.RemoveItem(dragablzItem);
             
@@ -469,6 +493,8 @@ namespace Dragablz.Dockablz
                 collectionTeaser.Add(layout._floatTransfer.Content);
             else
                 layout.FloatingItems.Add(layout._floatTransfer.Content);
+
+            layout.Dispatcher.BeginInvoke(new Action(() => RestoreFloatingItemSnapShots(layout, floatingItemSnapShots)), DispatcherPriority.Loaded);
         }
 
         private static void PreviewItemDragDelta(object sender, DragablzDragDeltaEventArgs e)
@@ -647,6 +673,11 @@ namespace Dragablz.Dockablz
             if (newTabHost == null || newTabHost.TabablzControl == null || newTabHost.Container == null)
                 throw new ApplicationException("New tab host was not correctly provided");
 
+            var floatingItemSnapShots = dragablzItem.VisualTreeDepthFirstTraversal()
+                    .OfType<Layout>()
+                    .SelectMany(l => l.FloatingDragablzItems().Select(FloatingItemSnapShot.Take))
+                    .ToList();
+
             var content = dragablzItem.Content ?? dragablzItem;
 
             //remove from source
@@ -670,6 +701,9 @@ namespace Dragablz.Dockablz
                 newTabHost.TabablzControl.SelectedItem = content;
                 newTabHost.Container.Show();
                 newTabHost.Container.Activate();
+
+                Dispatcher.BeginInvoke(
+                    new Action(() => RestoreFloatingItemSnapShots(newTabHost.TabablzControl, floatingItemSnapShots)));
             }), DispatcherPriority.DataBind);            
         }
     }

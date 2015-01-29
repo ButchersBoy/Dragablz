@@ -724,18 +724,7 @@ namespace Dragablz
             AddToSource(interTabTransfer.Item);
             SelectedItem = interTabTransfer.Item;
             
-            Dispatcher.BeginInvoke(new Action(() =>
-            {
-                var layouts = this.VisualTreeDepthFirstTraversal().OfType<Layout>().ToList();
-
-                foreach (var floatingDragablzItem in layouts.SelectMany(l => l.FloatingDragablzItems()))
-                {
-                    var floatingItemSnapShot = interTabTransfer.FloatingItemSnapShots.FirstOrDefault(
-                        ss => ss.Content == floatingDragablzItem.Content);
-                    if (floatingItemSnapShot != null)
-                        floatingItemSnapShot.Apply(floatingDragablzItem);                        
-                }                
-            }), DispatcherPriority.Loaded);
+            Dispatcher.BeginInvoke(new Action(() => Layout.RestoreFloatingItemSnapShots(this, interTabTransfer.FloatingItemSnapShots)), DispatcherPriority.Loaded);
 
             _dragablzItemsControl.InstigateDrag(interTabTransfer.Item, newContainer =>
             {
@@ -757,7 +746,7 @@ namespace Dragablz
                 }
                 newContainer.MouseAtDragStart = interTabTransfer.DragStartItemOffset;
             });
-        }
+        }        
 
         internal void AddToSource(object item)
         {                    
