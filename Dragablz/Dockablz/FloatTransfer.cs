@@ -17,18 +17,22 @@ namespace Dragablz.Dockablz
             _content = content;
         }
 
-        public static FloatTransfer TakeSnapshot(DragablzItem dragablzItem)
+        public static FloatTransfer TakeSnapshot(DragablzItem dragablzItem, TabablzControl sourceTabControl)
         {
             if (dragablzItem == null) throw new ArgumentNullException("dragablzItem");
 
-            return new FloatTransfer(dragablzItem.ActualWidth, dragablzItem.ActualHeight, dragablzItem.Content ?? dragablzItem);
+            return new FloatTransfer(sourceTabControl.ActualWidth, sourceTabControl.ActualHeight, dragablzItem.Content ?? dragablzItem);
         }
 
+        [Obsolete]
+        //TODO width and height transfer obsolete
         public double Width
         {
             get { return _width; }
         }
 
+        [Obsolete]
+        //TODO width and height transfer obsolete
         public double Height
         {
             get { return _height; }

@@ -1507,7 +1507,7 @@
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <Canvas IsItemsHost="True" />
+                    <Canvas IsItemsHost="True" ClipToBounds="True" />
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>

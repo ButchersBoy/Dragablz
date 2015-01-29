@@ -472,14 +472,13 @@ namespace Dragablz.Dockablz
 
         private static void Float(Layout layout, DragablzItem dragablzItem)
         {
-            //TODO we need eq of IManualInterTabClient here, so consumer can control this op'.
-
-            layout._floatTransfer = FloatTransfer.TakeSnapshot(dragablzItem);
+            //TODO we need eq of IManualInterTabClient here, so consumer can control this op'.            
 
             //remove from source
             var sourceOfDragItemsControl = ItemsControl.ItemsControlFromItemContainer(dragablzItem) as DragablzItemsControl;
             if (sourceOfDragItemsControl == null) throw new ApplicationException("Unable to determin source items control.");            
             var sourceTabControl = TabablzControl.GetOwnerOfHeaderItems(sourceOfDragItemsControl);
+            layout._floatTransfer = FloatTransfer.TakeSnapshot(dragablzItem, sourceTabControl);
             var floatingItemSnapShots = sourceTabControl.VisualTreeDepthFirstTraversal()
                     .OfType<Layout>()
                     .SelectMany(l => l.FloatingDragablzItems().Select(FloatingItemSnapShot.Take))
@@ -530,16 +529,24 @@ namespace Dragablz.Dockablz
                 headeredDragablzItem.SetBinding(ContentProperty, contentBinding);
             }
 
-            if (_floatTransfer != null && (o == _floatTransfer.Content || dependencyObject == _floatTransfer.Content))
+            if (_floatTransfer == null || (o != _floatTransfer.Content && dependencyObject != _floatTransfer.Content))
+                return;
+
+            var dragablzItem = (DragablzItem) dependencyObject;
+
+            Dispatcher.BeginInvoke(new Action(() =>
             {
-                //TODO might be nice to allow user a bit of control over sizing
-
-                var dragablzItem = (DragablzItem) dependencyObject;
-                dragablzItem.SetCurrentValue(DragablzItem.XProperty, _floatingItems.ActualWidth / 2 - _floatTransfer.Width / 2);
-                dragablzItem.SetCurrentValue(DragablzItem.YProperty, _floatingItems.ActualHeight / 2 - _floatTransfer.Height / 2);
-
-                _floatTransfer = null;
-            }
+                //TODO might be nice to allow user a bit of control over sizing...especially the .75 thing i have handily hard coded.  shoot me.
+                dragablzItem.Measure(new Size(_floatingItems.ActualWidth, _floatingItems.ActualHeight));
+                var newWidth = Math.Min(_floatingItems.ActualWidth*.75, dragablzItem.DesiredSize.Width);
+                var newHeight = Math.Min(_floatingItems.ActualHeight * .75, dragablzItem.DesiredSize.Height);
+                dragablzItem.SetCurrentValue(DragablzItem.XProperty, _floatingItems.ActualWidth/2 - newWidth/2);
+                dragablzItem.SetCurrentValue(DragablzItem.YProperty, _floatingItems.ActualHeight/2 - newHeight/2);
+                dragablzItem.SetCurrentValue(WidthProperty, newWidth);
+                dragablzItem.SetCurrentValue(HeightProperty, newHeight);
+            }), DispatcherPriority.Loaded);                
+                
+            _floatTransfer = null;
         }
 
         private DragablzItem GetFloatingContainerForItemOverride()
