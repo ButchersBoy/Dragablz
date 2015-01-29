@@ -22,7 +22,7 @@ namespace DragablzDemo
             new BasicExampleMainWindow
             {
                 DataContext = new BasicExampleMainModel()
-            }.Show();                                      
+            };//.Show();                                      
                 
             var boundExampleModel = new BoundExampleModel(
                 new SimpleViewModel { Name = "Mon", SimpleContent = "Monday's child is fair of face" },
@@ -34,17 +34,19 @@ namespace DragablzDemo
                 //new SimpleViewModel { Name = "Sat", SimpleContent = "Saturday's child works hard for a living" },
                 //new SimpleViewModel { Name = "Sun", SimpleContent = "Sunday's child is awkwardly not fitting into this demo" }                 
                 );
+            /*
             boundExampleModel.ToolItems.Add(
                 new SimpleViewModel { Name = "January", SimpleContent = "Welcome to the January tool/float item." });
             boundExampleModel.ToolItems.Add(
                 new SimpleViewModel { Name = "July", SimpleContent = "Welcome to the July tool/float item." });
+             */
                        
             new BoundExampleWindow()
             {
                 DataContext = boundExampleModel
             }.Show();
             
-            new QuickStartWindow().Show();
+            //new QuickStartWindow().Show();
             
             app.Run();
         }

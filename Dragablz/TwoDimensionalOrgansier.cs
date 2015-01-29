@@ -39,11 +39,19 @@ namespace Dragablz
             
         }
 
-        public Point ConstrainLocation(Size measureBounds, Point desiredLocation, Size itemDesiredSize)
+        public Point ConstrainLocation(Size measureBounds, Point itemCurrentLocation, Size itemCurrentSize, Point itemDesiredLocation, Size itemDesiredSize)
         {
+            //we will stop it pushing beyond the bounds...unless it's already beyond...
+            var reduceBoundsWidth = itemCurrentLocation.X + itemCurrentSize.Width > measureBounds.Width
+                ? 0
+                : itemDesiredSize.Width;
+            var reduceBoundsHeight = itemCurrentLocation.Y + itemCurrentSize.Height > measureBounds.Height
+                ? 0
+                : itemDesiredSize.Height;
+
             return new Point(
-                Math.Min(Math.Max(desiredLocation.X, 0), measureBounds.Width - itemDesiredSize.Width),
-                Math.Min(Math.Max(desiredLocation.Y, 0), measureBounds.Height - itemDesiredSize.Height));
+                Math.Min(Math.Max(itemDesiredLocation.X, 0), measureBounds.Width - reduceBoundsWidth),
+                Math.Min(Math.Max(itemDesiredLocation.Y, 0), measureBounds.Height - reduceBoundsHeight));
         }
 
         public Size Measure(Size availableSize, IEnumerable<DragablzItem> items)

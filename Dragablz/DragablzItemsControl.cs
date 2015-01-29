@@ -248,10 +248,13 @@ namespace Dragablz
             var bounds = new Size(ItemsPresenterWidth, ItemsPresenterHeight);
             var desiredLocation = new Point(
                 eventArgs.DragablzItem.X + eventArgs.DragDeltaEventArgs.HorizontalChange,
-                eventArgs.DragablzItem.Y += eventArgs.DragDeltaEventArgs.VerticalChange
+                eventArgs.DragablzItem.Y + eventArgs.DragDeltaEventArgs.VerticalChange
                 );
             if (ItemsOrganiser != null)
-                desiredLocation = ItemsOrganiser.ConstrainLocation(bounds, desiredLocation, eventArgs.DragablzItem.DesiredSize);
+                desiredLocation = ItemsOrganiser.ConstrainLocation(bounds,
+                    new Point(eventArgs.DragablzItem.X, eventArgs.DragablzItem.Y), 
+                    new Size(eventArgs.DragablzItem.ActualWidth, eventArgs.DragablzItem.ActualHeight), 
+                    desiredLocation, eventArgs.DragablzItem.DesiredSize);
 
             eventArgs.DragablzItem.X = desiredLocation.X;
             eventArgs.DragablzItem.Y = desiredLocation.Y;

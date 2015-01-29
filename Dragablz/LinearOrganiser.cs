@@ -167,11 +167,11 @@ namespace Dragablz
             Panel.SetZIndex(dragItem, int.MaxValue);
         }
 
-        public Point ConstrainLocation(Size measureBounds, Point desiredLocation, Size itemDesiredSize)
+        public Point ConstrainLocation(Size measureBounds, Point itemCurrentLocation, Size itemCurrentSize, Point itemDesiredLocation, Size itemDesiredSize)
         {
             return new Point(
-                _orientation == Orientation.Vertical ? 0 : Math.Min(Math.Max(-1, desiredLocation.X), (measureBounds.Width) + 1),
-                _orientation == Orientation.Horizontal ? 0 : Math.Min(Math.Max(-1, desiredLocation.Y), (measureBounds.Height) + 1)
+                _orientation == Orientation.Vertical ? 0 : Math.Min(Math.Max(-1, itemDesiredLocation.X), (measureBounds.Width) + 1),
+                _orientation == Orientation.Horizontal ? 0 : Math.Min(Math.Max(-1, itemDesiredLocation.Y), (measureBounds.Height) + 1)
                 );
         }
 

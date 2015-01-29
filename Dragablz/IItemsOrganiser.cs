@@ -12,7 +12,9 @@ namespace Dragablz
         void OrganiseOnDragStarted(Size measureBounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem);
         void OrganiseOnDrag(Size measureBounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem);
         void OrganiseOnDragCompleted(Size measureBounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem);
-        Point ConstrainLocation(Size measureBounds, Point desiredLocation, Size itemDesiredSize);
+
+        Point ConstrainLocation(Size measureBounds, Point itemCurrentLocation, Size itemCurrentSize,
+            Point itemDesiredLocation, Size itemDesiredSize);
         Size Measure(Size availableSize, IEnumerable<DragablzItem> items);
     }
 }
