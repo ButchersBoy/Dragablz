@@ -295,7 +295,23 @@ namespace Dragablz
             };
             instance.RaiseEvent(args);
             
-        } 
+        }
+
+        /// <summary>
+        /// Temporarily set by the framework if a users drag opration causes a Window to close (e.g if a tab is dragging into another tab).
+        /// </summary>
+        public static readonly DependencyProperty IsClosingAsPartOfDragOperationProperty = DependencyProperty.RegisterAttached(
+            "IsClosingAsPartOfDragOperation", typeof (bool), typeof (TabablzControl), new FrameworkPropertyMetadata(default(bool), FrameworkPropertyMetadataOptions.NotDataBindable));
+
+        internal static void SetIsClosingAsPartOfDragOperation(Window element, bool value)
+        {
+            element.SetValue(IsClosingAsPartOfDragOperationProperty, value);
+        }
+
+        public static bool GetIsClosingAsPartOfDragOperation(Window element)
+        {
+            return (bool) element.GetValue(IsClosingAsPartOfDragOperationProperty);
+        }
 
         public override void OnApplyTemplate()
         {            
@@ -578,7 +594,17 @@ namespace Dragablz
                 var window = Window.GetWindow(this);
                 if (window != null &&
                     InterTabController.InterTabClient.TabEmptiedHandler(this, window) == TabEmptiedResponse.CloseWindow)
-                    window.Close();
+                {
+                    try
+                    {
+                        SetIsClosingAsPartOfDragOperation(window, true);
+                        window.Close();
+                    }
+                    finally
+                    {
+                        SetIsClosingAsPartOfDragOperation(window, false);
+                    }                    
+                }
             }
             return item;
         }
