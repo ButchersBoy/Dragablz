@@ -49,7 +49,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <dockablz:Layout Partition="2AE89D18-F236-4D20-9605-6C03319038E6" x:Name="Layout"
+    <dockablz:Layout Partition="2AE89D18-F236-4D20-9605-6C03319038E6" Name="RootLayout"
                     FloatingItemsSource="{Binding ToolItems}"
                     FloatingItemHeaderMemberPath="Name"
                     IsFloatDropZoneEnabled="True">

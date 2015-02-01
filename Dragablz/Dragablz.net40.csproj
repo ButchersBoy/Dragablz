@@ -61,13 +61,17 @@
     <Compile Include="DefaultInterLayoutClient.cs" />
     <Compile Include="DefaultInterTabClient.cs" />
     <Compile Include="Dockablz\Branch.cs" />
+    <Compile Include="Dockablz\BranchAccessor.cs" />
+    <Compile Include="Dockablz\BranchItem.cs" />
     <Compile Include="Dockablz\CouldBeHeaderedStyleSelector.cs" />
     <Compile Include="Dockablz\DropZone.cs" />
     <Compile Include="Dockablz\DropZoneLocation.cs" />
+    <Compile Include="Dockablz\Extensions.cs" />
     <Compile Include="Dockablz\FloatingItemSnapShot.cs" />
     <Compile Include="Dockablz\FloatRequestedEvent.cs" />
     <Compile Include="Dockablz\FloatTransfer.cs" />
     <Compile Include="Dockablz\Layout.cs" />
+    <Compile Include="Dockablz\LayoutAccessor.cs" />
     <Compile Include="Dockablz\LocationSnapShot.cs" />
     <Compile Include="Dockablz\Tiler.cs" />
     <Compile Include="Dockablz\TilerCalculator.cs" />
