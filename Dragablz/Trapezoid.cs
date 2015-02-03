@@ -131,6 +131,8 @@ namespace Dragablz
         {
             base.OnRender(drawingContext);                        
             drawingContext.DrawGeometry(Background, CreatePen(), _pathGeometry);
+
+            if (_pathGeometry == null) return;
             drawingContext.DrawGeometry(Background, new Pen(LongBasePenBrush, PenThickness)
             {
                 EndLineCap = PenLineCap.Flat,
