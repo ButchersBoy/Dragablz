@@ -40,10 +40,10 @@ XAML as simple as this will give you a tab the tears out (using the basic theme)
 
 - Drag and tear tabs
 - User friendly docking
-- Floating tool windows
-- MDI
+- Floating tool windows & MDI
 - Supports MVVM
 - IE style transparent Windows
+- Styles included to work with [MahApps](https://github.com/MahApps/MahApps.Metro)
 - Chrome style trapzoid tabs
 - Custom (and optional) Window which supports transparency, resizing, snapping, full Window content.
 - Miminal XAML required, but hooks provided for advanced control from client code
@@ -63,6 +63,10 @@ Docking:
 MDI:
 
 ![Alt text](https://dragablz.files.wordpress.com/2015/01/mdidemo2.gif "MDI demo")
+
+MahApps styles for Dragablz controls
+
+![Alt text](https://dragablz.files.wordpress.com/2015/02/mahappsstylez2.gif "https://dragablz.files.wordpress.com/2015/02/mahappsstylez2.gif")
 
 ```
 ________                            ___.   .__          
