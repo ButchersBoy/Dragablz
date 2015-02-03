@@ -22,7 +22,7 @@ namespace DragablzDemo
             new BasicExampleMainWindow
             {
                 DataContext = new BasicExampleMainModel()
-            };//.Show();                                      
+            }.Show();                                      
                 
             var boundExampleModel = new BoundExampleModel(
                 new SimpleViewModel { Name = "Mon", SimpleContent = "Monday's child is fair of face" },
@@ -47,7 +47,7 @@ namespace DragablzDemo
                 DataContext = boundExampleModel
             }.Show();
             
-            //new QuickStartWindow().Show();
+            new QuickStartWindow().Show();
             
             app.Run();
         }

@@ -13,6 +13,8 @@ using Dragablz.Core;
 
 namespace Dragablz.Dockablz
 {
+    public delegate void ClosingFloatingItemCallback(ClosingItemCallbackArgs<Layout> args);
+
     [TemplatePart(Name = TopDropZonePartName, Type = typeof(DropZone))]
     [TemplatePart(Name = RightDropZonePartName, Type = typeof(DropZone))]
     [TemplatePart(Name = BottomDropZonePartName, Type = typeof(DropZone))]
@@ -35,6 +37,7 @@ namespace Dragablz.Dockablz
         public static RoutedCommand UnfloatItemCommand = new RoutedCommand();
         public static RoutedCommand MaximiseFloatingItem = new RoutedCommand();
         public static RoutedCommand RestoreFloatingItem = new RoutedCommand();
+        public static RoutedCommand CloseFloatingItem = new RoutedCommand();
         public static RoutedCommand TileFloatingItemsCommand = new RoutedCommand();
         public static RoutedCommand TileFloatingItemsVerticallyCommand = new RoutedCommand();
         public static RoutedCommand TileFloatingItemsHorizontallyCommand = new RoutedCommand();
@@ -59,6 +62,7 @@ namespace Dragablz.Dockablz
 
             CommandBindings.Add(new CommandBinding(UnfloatItemCommand, UnfloatExecuted, CanExecuteUnfloat));
             CommandBindings.Add(new CommandBinding(MaximiseFloatingItem, MaximiseFloatingItemExecuted, CanExecuteMaximiseFloatingItem));
+            CommandBindings.Add(new CommandBinding(CloseFloatingItem, CloseFloatingItemExecuted, CanExecuteCloseFloatingItem));
             CommandBindings.Add(new CommandBinding(RestoreFloatingItem, RestoreFloatingItemExecuted, CanExecuteRestoreFloatingItem));
             CommandBindings.Add(new CommandBinding(TileFloatingItemsCommand, TileFloatingItemsExecuted));
             CommandBindings.Add(new CommandBinding(TileFloatingItemsCommand, TileFloatingItemsExecuted));
@@ -221,6 +225,15 @@ namespace Dragablz.Dockablz
         {
             get { return (string) GetValue(FloatingItemDisplayMemberPathProperty); }
             set { SetValue(FloatingItemDisplayMemberPathProperty, value); }
+        }
+
+        public static readonly DependencyProperty ClosingFloatingItemCallbackProperty = DependencyProperty.Register(
+            "ClosingFloatingItemCallback", typeof (ClosingFloatingItemCallback), typeof (Layout), new PropertyMetadata(default(ClosingFloatingItemCallback)));
+
+        public ClosingFloatingItemCallback ClosingFloatingItemCallback
+        {
+            get { return (ClosingFloatingItemCallback) GetValue(ClosingFloatingItemCallbackProperty); }
+            set { SetValue(ClosingFloatingItemCallbackProperty, value); }
         }
 
         public static readonly DependencyPropertyKey KeyIsFloatingInLayoutPropertyKey = DependencyProperty.RegisterAttachedReadOnly(
@@ -628,6 +641,38 @@ namespace Dragablz.Dockablz
             {
                 canExecuteRoutedEventArgs.CanExecute = new[] { WindowState.Maximized, WindowState.Minimized }.Contains(GetFloatingItemState(dragablzItem));
             }
+        }
+
+        private static void CanExecuteCloseFloatingItem(object sender, CanExecuteRoutedEventArgs canExecuteRoutedEventArgs)
+        {
+            canExecuteRoutedEventArgs.CanExecute = true;
+            canExecuteRoutedEventArgs.Handled = true;
+        }
+
+        private void CloseFloatingItemExecuted(object sender, ExecutedRoutedEventArgs executedRoutedEventArgs)
+        {
+            var dragablzItem = executedRoutedEventArgs.Parameter as DragablzItem;
+            if (dragablzItem == null) throw new ApplicationException("Parameter must be a DragablzItem");
+
+            var cancel = false;
+            if (ClosingFloatingItemCallback != null)
+            {
+                var callbackArgs = new ClosingItemCallbackArgs<Layout>(Window.GetWindow(this), this, dragablzItem);
+                ClosingFloatingItemCallback(callbackArgs);
+                cancel = callbackArgs.IsCancelled;
+            }
+
+            if (cancel) return;
+
+            //TODO ...need a similar tp manual inter tab controlller here for the extra hook
+
+            var item = _floatingItems.ItemContainerGenerator.ItemFromContainer(dragablzItem);
+
+            CollectionTeaser collectionTeaser;
+            if (CollectionTeaser.TryCreate(_floatingItems.ItemsSource, out collectionTeaser))
+                collectionTeaser.Remove(item);
+            else
+                _floatingItems.Items.Remove(item);
         }
 
         private static void MaximiseFloatingItemExecuted(object sender, ExecutedRoutedEventArgs e)

@@ -636,7 +636,15 @@
                                         <Thumb HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" x:Name="PART_Thumb"
                                                Style="{StaticResource InvisibleThumbStyle}"
                                                />
-                                        <DockPanel Margin="{TemplateBinding Control.Padding }">                                            
+                                        <DockPanel Margin="{TemplateBinding Control.Padding }">
+                                            <Button DockPanel.Dock="Right"
+                                                    Command="{x:Static dockablz:Layout.CloseFloatingItem}"
+                                                    CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                                    Margin="1 0 0 0"
+                                                    Style="{StaticResource HideDisabledButtonStyle}"
+                                                    >
+                                                <themes:SystemCommandIcon Height="10" Width="10" SystemCommandType="CloseWindow" />
+                                            </Button>
                                             <Button DockPanel.Dock="Right"
                                                     Command="{x:Static dockablz:Layout.UnfloatItemCommand}"
                                                     CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"

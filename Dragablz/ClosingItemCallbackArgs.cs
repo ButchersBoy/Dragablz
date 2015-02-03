@@ -3,20 +3,20 @@ using System.Windows;
 
 namespace Dragablz
 {
-    public class ClosingItemCallbackArgs
+    public class ClosingItemCallbackArgs<TOwner> where TOwner : FrameworkElement
     {
         private readonly Window _window;
-        private readonly TabablzControl _tabablzControl;
+        private readonly TOwner _owner;
         private readonly DragablzItem _dragablzItem;
 
-        public ClosingItemCallbackArgs(Window window, TabablzControl tabablzControl, DragablzItem dragablzItem)
+        public ClosingItemCallbackArgs(Window window, TOwner owner, DragablzItem dragablzItem)
         {
             if (window == null) throw new ArgumentNullException("window");
-            if (tabablzControl == null) throw new ArgumentNullException("tabablzControl");
+            if (owner == null) throw new ArgumentNullException("owner");
             if (dragablzItem == null) throw new ArgumentNullException("dragablzItem");
 
             _window = window;
-            _tabablzControl = tabablzControl;
+            _owner = owner;
             _dragablzItem = dragablzItem;
         }
 
@@ -25,9 +25,9 @@ namespace Dragablz
             get { return _window; }
         }
 
-        public TabablzControl TabablzControl
+        public TOwner Owner
         {
-            get { return _tabablzControl; }
+            get { return _owner; }
         }
 
         public DragablzItem DragablzItem

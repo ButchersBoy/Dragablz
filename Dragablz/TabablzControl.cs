@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Dragablz.Core;
@@ -16,6 +15,8 @@ using Dragablz.Referenceless;
 namespace Dragablz
 {
     //original code specific to keeping visual tree "alive" sourced from http://stackoverflow.com/questions/12432062/binding-to-itemssource-of-tabcontrol-in-wpf
+
+    public delegate void ClosingTabItemCallback(ClosingItemCallbackArgs<TabablzControl> args);
 
     /// <summary>
     /// Extended tab control which supports tab repositioning, and drag and drop.  Also 
@@ -245,14 +246,14 @@ namespace Dragablz
         }
 
         public static readonly DependencyProperty ClosingItemCallbackProperty = DependencyProperty.Register(
-            "ClosingItemCallback", typeof(Action<ClosingItemCallbackArgs>), typeof(TabablzControl), new PropertyMetadata(default(Action<ClosingItemCallbackArgs>)));
+            "ClosingItemCallback", typeof(ClosingTabItemCallback), typeof(TabablzControl), new PropertyMetadata(default(ClosingTabItemCallback)));
 
         /// <summary>
         /// Optionally allows a close item hook to be bound in.  If this propety is provided, the func must return true for the close to continue.
         /// </summary>
-        public Action<ClosingItemCallbackArgs> ClosingItemCallback
+        public ClosingTabItemCallback ClosingItemCallback
         {
-            get { return (Action<ClosingItemCallbackArgs>)GetValue(ClosingItemCallbackProperty); }
+            get { return (ClosingTabItemCallback)GetValue(ClosingItemCallbackProperty); }
             set { SetValue(ClosingItemCallbackProperty, value); }
         }
 
@@ -863,7 +864,7 @@ namespace Dragablz
             var cancel = false;
             if (ClosingItemCallback != null)
             {
-                var callbackArgs = new ClosingItemCallbackArgs(Window.GetWindow(this), this, dragablzItem);
+                var callbackArgs = new ClosingItemCallbackArgs<TabablzControl>(Window.GetWindow(this), this, dragablzItem);
                 ClosingItemCallback(callbackArgs);
                 cancel = callbackArgs.IsCancelled;
             }

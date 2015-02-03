@@ -7,6 +7,7 @@ using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using Dragablz;
+using Dragablz.Dockablz;
 using DragablzDemo.Annotations;
 
 namespace DragablzDemo
@@ -47,18 +48,42 @@ namespace DragablzDemo
             get { return _toolItems; }
         }
 
-        public Action<ClosingItemCallbackArgs> ClosingItemHandler
+        public ClosingTabItemCallback ClosingTabItemHandler
         {
-            get {  return ClosingItemHandlerImpl; }
+            get { return ClosingTabItemHandlerImpl; }
         }
 
-        private void ClosingItemHandlerImpl(ClosingItemCallbackArgs args)
+        /// <summary>
+        /// Callback to handle tab closing.
+        /// </summary>        
+        private static void ClosingTabItemHandlerImpl(ClosingItemCallbackArgs<TabablzControl> args)
         {
             //in here you can dispose stuff or cancel the close
 
             //here's your view model:
             var simpleViewModel = args.DragablzItem.DataContext as SimpleViewModel;
             Debug.Assert(simpleViewModel != null);
+
+            //here's how you can cancel stuff:
+            //args.Cancel(); 
+        }
+
+        public ClosingFloatingItemCallback ClosingFloatingItemHandler
+        {
+            get { return ClosingFloatingItemHandlerImpl; }
+        }
+
+        /// <summary>
+        /// Callback to handle floating toolbar/MDI window closing.
+        /// </summary>        
+        private static void ClosingFloatingItemHandlerImpl(ClosingItemCallbackArgs<Layout> args)
+        {
+            //in here you can dispose stuff or cancel the close
+
+            //here's your view model: 
+            var disposable = args.DragablzItem.DataContext as IDisposable;
+            if (disposable != null)
+                disposable.Dispose();
 
             //here's how you can cancel stuff:
             //args.Cancel(); 

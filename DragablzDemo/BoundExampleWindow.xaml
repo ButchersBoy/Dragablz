@@ -30,7 +30,7 @@
             <Style TargetType="{x:Type dragablz:TabablzControl}" x:Key="TabablzControlStyle">
                 <Setter Property="NewItemFactory" Value="{x:Static dragablzDemo:BoundExampleNewItem.Factory}" />
                 <Setter Property="ItemsSource" Value="{Binding Items}" />
-                <Setter Property="ClosingItemCallback" Value="{Binding ClosingItemHandler}" />
+                <Setter Property="ClosingItemCallback" Value="{Binding ClosingTabItemHandler}" />
                 <Setter Property="ShowDefaultAddButton" Value="True" />
                 <Setter Property="ShowDefaultCloseButton" Value="True" />
                 <Setter Property="AdjacentHeaderItemOffset" Value="-10" />
@@ -50,9 +50,10 @@
     </Window.Resources>
 
     <dockablz:Layout Partition="2AE89D18-F236-4D20-9605-6C03319038E6" Name="RootLayout"
-                    FloatingItemsSource="{Binding ToolItems}"
-                    FloatingItemHeaderMemberPath="Name"
-                    IsFloatDropZoneEnabled="True">
+                     FloatingItemsSource="{Binding ToolItems}"
+                     FloatingItemHeaderMemberPath="Name"
+                     IsFloatDropZoneEnabled="True"
+                     ClosingFloatingItemCallback="{Binding ClosingFloatingItemHandler}">
         <dockablz:Layout.FloatingItemTemplate>
             <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
                 <ContentControl Content="{Binding SimpleContent}" />
