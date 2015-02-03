@@ -202,7 +202,6 @@
         </Setter>
     </Style>
 
-
     <Style x:Key="MahAppsMetroBaseWindowButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="{DynamicResource TransparentWhiteBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource WhiteColorBrush}" />
@@ -420,6 +419,13 @@
                 <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type dockablz:Layout}}, Path=ActualHeight}" />
             </Trigger>
         </Style.Triggers>
+    </Style>    
+
+    <Style TargetType="{x:Type dragablz:TabablzControl}" x:Key="MahAppsTababblzControlStyle"
+           BasedOn="{StaticResource {x:Type dragablz:TabablzControl}}">
+        <Setter Property="Background" Value="{DynamicResource WhiteColorBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>        
     </Style>
 
 </ResourceDictionary>
