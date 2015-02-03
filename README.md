@@ -10,6 +10,8 @@
 - NuGet details here: http://www.nuget.org/packages/Dragablz/
 - You can criticise the developer here: [@James_Willock](http://twitter.com/James_Willock)
   - No, seriously, please get involved and give me a ping with any questions/requests.
+  - Or even email me here: [james@dragablz.net](james@dragablz.net)
+- If you like it **_star_** it, a little love goes a long way!
 
 ## Minimal XAML:
 
