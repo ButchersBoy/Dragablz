@@ -2,7 +2,7 @@
 ========
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/ButchersBoy/Dragablz?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-## Dragable and tearable tab control for WPF.
+## Dragable and tearable tab control for WPF, which includes docking, tool windows and MDI.
 
 ![Alt text](http://dragablz.files.wordpress.com/2014/11/dragablztearout.gif "Demo shot")
 
