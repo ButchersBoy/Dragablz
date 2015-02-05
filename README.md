@@ -1,8 +1,8 @@
 ![Dragablz](https://dragablz.files.wordpress.com/2015/01/dragablztext22.png "Dragablz")
 ========
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/ButchersBoy/Dragablz?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-## Dragable and tearable tab control for WPF, which includes docking, tool windows and MDI.
+[![Downloads](https://img.shields.io/nuget/dt/Dragablz.svg)](http://www.nuget.org/packages/Dragablz/)
+## Tearable tab control for WPF, which includes docking, tool windows and MDI.
 
 ![Alt text](http://dragablz.files.wordpress.com/2014/11/dragablztearout.gif "Demo shot")
 
@@ -10,7 +10,7 @@
 - NuGet details here: http://www.nuget.org/packages/Dragablz/
 - You can criticise the developer here: [@James_Willock](http://twitter.com/James_Willock) or here: [james@dragablz.net]
   - No, seriously, please get involved and give me a ping with any questions/requests.
-- If you like it **_star_** it, a little love goes a long way!
+- If you like it **_star_** it, a little love goes a long way and keeps me motivated!
 
 ## Minimal XAML:
 
