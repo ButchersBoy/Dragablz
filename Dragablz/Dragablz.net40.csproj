@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClosingItemCallbackArgs.cs" />
+    <Compile Include="ContainerCustomisations.cs" />
     <Compile Include="Converters\BooleanAndToVisibilityConverter.cs" />
     <Compile Include="Converters\EqualityToBooleanConverter.cs" />
     <Compile Include="Converters\EqualityToVisibilityConverter.cs" />

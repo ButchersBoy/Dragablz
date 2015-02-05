@@ -69,11 +69,15 @@ namespace Dragablz.Dockablz
             CommandBindings.Add(new CommandBinding(TileFloatingItemsVerticallyCommand, TileFloatingItemsVerticallyExecuted));
             CommandBindings.Add(new CommandBinding(TileFloatingItemsHorizontallyCommand, TileFloatingItemsHorizontallyExecuted));            
 
-            _floatingItems = new DragablzItemsControl(
-                GetFloatingContainerForItemOverride, 
-                PrepareFloatingContainerForItemOverride,
-                ClearingFloatingContainerForItemOverride);
-            
+            //TODO bad bad behaviour.  Pick up this from the template.
+            _floatingItems = new DragablzItemsControl
+            {
+                ContainerCustomisations = new ContainerCustomisations(
+                    GetFloatingContainerForItemOverride,
+                    PrepareFloatingContainerForItemOverride,
+                    ClearingFloatingContainerForItemOverride)
+            };
+
             var floatingItemsSourceBinding = new Binding("FloatingItemsSource") { Source = this };
             _floatingItems.SetBinding(ItemsControl.ItemsSourceProperty, floatingItemsSourceBinding);
             var floatingItemsControlStyleBinding = new Binding("FloatingItemsControlStyle") { Source = this };

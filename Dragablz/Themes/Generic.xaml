@@ -885,24 +885,6 @@
             </Setter>
         </Style.Setters>
     </Style>       
-
-    <Style TargetType="{x:Type local:DragablzItem}" x:Key="FullyDragablzItemStyle">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Border BorderThickness="{TemplateBinding Border.BorderThickness}" Padding="{TemplateBinding Control.Padding}" BorderBrush="{TemplateBinding Border.BorderBrush}" Background="{TemplateBinding Panel.Background}" SnapsToDevicePixels="True">
-                        <Grid>
-                            <Thumb HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" x:Name="PART_Thumb"
-                                   Style="{StaticResource InvisibleThumbStyle}"
-                                   />
-                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
-                                              IsHitTestVisible="False"/>
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>   
     
     <Style x:Key="StandardEmbeddedButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -942,6 +924,7 @@
         </Setter>
     </Style>
     
+    <!-- TODO DITCH THIS -->
     <Style x:Key="StandardTabItemStyle" TargetType="{x:Type TabItem}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Foreground" Value="Black"/>
@@ -1165,6 +1148,9 @@
                         </local:Trapezoid>                        
                     </Grid>                    
                     <ControlTemplate.Triggers>
+                        <Trigger Property="local:TabablzControl.IsWrappingTabItem" Value="True">
+                            <Setter TargetName="contentPresenter" Property="Content" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Header}" />
+                        </Trigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="{StaticResource TabItem.Selected.Background}" TargetName="Trapezoid"/>
                             <Setter Property="LongBasePenBrush" Value="{StaticResource TabItem.Selected.Background}" TargetName="Trapezoid"/>
@@ -1200,6 +1186,9 @@
                                           IsHitTestVisible="False"/>
                     </Grid>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="local:TabablzControl.IsWrappingTabItem" Value="True">
+                            <Setter TargetName="contentPresenter" Property="Content" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Header}" />
+                        </Trigger>                        
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
@@ -1375,14 +1364,10 @@
         <Setter Property="BorderBrush" Value="{StaticResource TabItem.Selected.Border}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-        <Setter Property="DefaultHeaderItemStyle" Value="{StaticResource FullyDragablzItemStyle}"/>
-        <Setter Property="CustomHeaderItemStyle" Value="{StaticResource StandardDragablzTabItemStyle}"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource StandardDragablzTabItemStyle}"/>        
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:TabablzControl}">
-                    <ControlTemplate.Resources>
-                        <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource StandardTabItemStyle}" />
-                    </ControlTemplate.Resources>
                     <Grid x:Name="templateRoot" ClipToBounds="true" SnapsToDevicePixels="true" KeyboardNavigation.TabNavigation="Local">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition x:Name="ColumnDefinition0"/>
@@ -1414,6 +1399,7 @@
                             <local:DragablzItemsControl x:Name="PART_HeaderItemsControl"                                                         
                                                         Grid.Column="1"
                                                         ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Items}"                                                                                                            
+                                                        ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
                                                         ItemsOrganiser="{TemplateBinding HeaderItemsOrganiser}"
                                                         KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"
                                                         ItemTemplate="{TemplateBinding CustomHeaderItemTemplate}"

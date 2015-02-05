@@ -228,6 +228,8 @@ namespace Dragablz
             remove { RemoveHandler(IsDraggingChangedEvent, value); }
         }
 
+        internal object UnderlyingContent { get; set; }
+
         private static void OnIsDraggingChanged(
             DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

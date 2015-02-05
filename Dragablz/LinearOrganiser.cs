@@ -204,7 +204,8 @@ namespace Dragablz
                 isFirst = false;
             }
 
-            return new Size(width, height);
+            //return new Size(1000, 30);
+            return new Size(Math.Max(width, 0), Math.Max(height, 0));
         }
 
         private void SetLocation(DragablzItem dragablzItem, double location)

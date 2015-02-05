@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Dragablz.Core;
@@ -63,6 +64,7 @@ namespace Dragablz
         /// <summary>
         /// Style to apply to header items which are not their own item container (<see cref="TabItem"/>).  Typically items bound via the <see cref="ItemsSource"/> will use this style.
         /// </summary>
+        [Obsolete]
         public Style CustomHeaderItemStyle
         {
             get { return (Style) GetValue(CustomHeaderItemStyleProperty); }
@@ -81,6 +83,7 @@ namespace Dragablz
         public static readonly DependencyProperty DefaultHeaderItemStyleProperty = DependencyProperty.Register(
             "DefaultHeaderItemStyle", typeof (Style), typeof (TabablzControl), new PropertyMetadata(default(Style)));        
 
+        [Obsolete]
         public Style DefaultHeaderItemStyle
         {
             get { return (Style) GetValue(DefaultHeaderItemStyleProperty); }
@@ -115,6 +118,23 @@ namespace Dragablz
             private set { SetValue(HeaderItemsOrganiserPropertyKey, value); }
         }
 
+        public static readonly DependencyProperty HeaderMemberPathProperty = DependencyProperty.Register(
+            "HeaderMemberPath", typeof (string), typeof (TabablzControl), new PropertyMetadata(default(string)));
+
+        public string HeaderMemberPath
+        {
+            get { return (string) GetValue(HeaderMemberPathProperty); }
+            set { SetValue(HeaderMemberPathProperty, value); }
+        }
+
+        public static readonly DependencyProperty HeaderItemTemplateProperty = DependencyProperty.Register(
+            "HeaderItemTemplate", typeof (DataTemplate), typeof (TabablzControl), new PropertyMetadata(default(DataTemplate)));
+
+        public DataTemplate HeaderItemTemplate
+        {
+            get { return (DataTemplate) GetValue(HeaderItemTemplateProperty); }
+            set { SetValue(HeaderItemTemplateProperty, value); }
+        }
 
         public static readonly DependencyProperty HeaderPrefixContentProperty = DependencyProperty.Register(
             "HeaderPrefixContent", typeof (object), typeof (TabablzControl), new PropertyMetadata(default(object)));
@@ -314,6 +334,19 @@ namespace Dragablz
             return (bool) element.GetValue(IsClosingAsPartOfDragOperationProperty);
         }
 
+        public static readonly DependencyProperty IsWrappingTabItemProperty = DependencyProperty.RegisterAttached(
+            "IsWrappingTabItem", typeof (bool), typeof (TabablzControl), new PropertyMetadata(default(bool)));
+
+        internal static void SetIsWrappingTabItem(DependencyObject element, bool value)
+        {
+            element.SetValue(IsWrappingTabItemProperty, value);
+        }
+
+        public static bool GetIsWrappingTabItem(DependencyObject element)
+        {
+            return (bool) element.GetValue(IsWrappingTabItemProperty);
+        }
+
         public override void OnApplyTemplate()
         {            
             if (_templateSubscription != null)
@@ -328,10 +361,9 @@ namespace Dragablz
                     Disposable.Create(
                         () =>
                             _dragablzItemsControl.ItemContainerGenerator.StatusChanged -=
-                                ItemContainerGeneratorOnStatusChanged);
-                if (_dragablzItemsControl.ItemContainerStyleSelector == null) 
-                _dragablzItemsControl.ItemContainerStyleSelector = new TabablzItemStyleSelector(DefaultHeaderItemStyle,
-                    CustomHeaderItemStyle);
+                                ItemContainerGeneratorOnStatusChanged);                
+
+                _dragablzItemsControl.ContainerCustomisations = new ContainerCustomisations(null, PrepareChildContainerForItemOverride);
             }
 
             if (SelectedItem == null)
@@ -339,10 +371,11 @@ namespace Dragablz
 
             _itemsHolder = GetTemplateChild(ItemsHolderPartName) as Panel;
             UpdateSelectedItem();
+            MarkWrappedTabItems();
             MarkInitialSelection();            
 
             base.OnApplyTemplate();
-        }
+        }                
 
         /// <summary>
         /// update the visible child in the ItemsHolder
@@ -434,6 +467,17 @@ namespace Dragablz
         internal static TabablzControl GetOwnerOfHeaderItems(DragablzItemsControl itemsControl)
         {
             return LoadedInstances.FirstOrDefault(t => Equals(t._dragablzItemsControl, itemsControl));
+        }
+
+        private void MarkWrappedTabItems()
+        {
+            if (_dragablzItemsControl == null) return;
+
+            foreach (var dragablzItem in _dragablzItemsControl.Items.OfType<TabItem>().Select(ti => 
+                _dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(ti)).OfType<DragablzItem>())
+            {
+                SetIsWrappingTabItem(dragablzItem, true);
+            }
         }
 
         private void MarkInitialSelection()
@@ -853,6 +897,7 @@ namespace Dragablz
 
         private void ItemContainerGeneratorOnStatusChanged(object sender, EventArgs eventArgs)
         {
+            MarkWrappedTabItems();
             MarkInitialSelection();
         }
 
@@ -883,6 +928,19 @@ namespace Dragablz
 
             AddToSource(newItem);
             SelectedItem = newItem;
+        }
+
+        private void PrepareChildContainerForItemOverride(DependencyObject dependencyObject, object o)
+        {
+            var dragablzItem = dependencyObject as DragablzItem;
+            if (dragablzItem != null && HeaderMemberPath != null)
+            {
+                var contentBinding = new Binding(HeaderMemberPath) { Source = o };
+                dragablzItem.SetBinding(ContentControl.ContentProperty, contentBinding);
+                dragablzItem.UnderlyingContent = o;
+            }
+
+            SetIsWrappingTabItem(dependencyObject, o is TabItem);            
         }
     }
 }

@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:dragablz="clr-namespace:Dragablz"
                     xmlns:dockablz="clr-namespace:Dragablz.Dockablz"
-                    xmlns:converters="clr-namespace:Dragablz.Converters">
+                    xmlns:converters="clr-namespace:Dragablz.Converters"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <converters:EqualityToVisibilityConverter x:Key="EqualityToVisibilityConverter" />
@@ -159,22 +160,22 @@
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type dragablz:DragablzItem}">
+                <ControlTemplate TargetType="{x:Type dragablz:DragablzItem}">                    
                     <Grid x:Name="templateRoot" SnapsToDevicePixels="true" Margin="0 1 0 -1">
                         <dragablz:Trapezoid x:Name="Trapezoid" 
                                             BorderBrush="{TemplateBinding BorderBrush}" 
                                             Background="{TemplateBinding Background}"                                          
                                             LongBasePenBrush="{TemplateBinding Background}"                                          
                                             PenThickness="0"
-                                            Margin="0 0 0 0">
+                                            Margin="0 0 0 0">                            
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
-                                              x:Name="contentPresenter"                                          
-                                              IsHitTestVisible="False"/>
+                                                  x:Name="contentPresenter"                                          
+                                                  IsHitTestVisible="False" />                                    
                                 <Thumb Grid.Column="0" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" 
                                        x:Name="PART_Thumb"
                                        Style="{StaticResource MahAppsInvisibleThumbStyle}" />
@@ -187,6 +188,9 @@
                         </dragablz:Trapezoid>
                     </Grid>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="dragablz:TabablzControl.IsWrappingTabItem" Value="True">
+                            <Setter TargetName="contentPresenter" Property="Content" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext.Header}" />
+                        </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" Value="{DynamicResource AccentColorBrush3}" TargetName="Trapezoid"/>
                             <Setter Property="LongBasePenBrush" Value="{DynamicResource AccentColorBrush3}" TargetName="Trapezoid"/>
@@ -421,11 +425,12 @@
         </Style.Triggers>
     </Style>    
 
-    <Style TargetType="{x:Type dragablz:TabablzControl}" x:Key="MahAppsTababblzControlStyle"
-           BasedOn="{StaticResource {x:Type dragablz:TabablzControl}}">
+    <Style TargetType="{x:Type dragablz:TabablzControl}" x:Key="MahAppsTabablzControlStyle">
         <Setter Property="Background" Value="{DynamicResource WhiteColorBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}"/>
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>        
+        <Setter Property="Foreground" Value="{DynamicResource BlackColorBrush}"/>
+        <Setter Property="AdjacentHeaderItemOffset" Value="-12" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource MahAppsTrapezoidDragableTabItemStyle}" />        
     </Style>
 
 </ResourceDictionary>

@@ -15,28 +15,14 @@ namespace Dragablz
     /// Items control which typically uses a canvas and 
     /// </summary>
     public class DragablzItemsControl : ItemsControl
-    {
-        private readonly Func<DragablzItem> _getContainerForItemOverride;
-        private readonly Action<DependencyObject, object> _prepareContainerForItemOverride;
-        private readonly Action<DependencyObject, object> _clearingContainerForItemOverride;
+    {        
         private readonly IList<DragablzItem> _itemsPendingInitialArrangement = new List<DragablzItem>();
         private object[] _previousSortQueryResult;
 
         static DragablzItemsControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DragablzItemsControl), new FrameworkPropertyMetadata(typeof(DragablzItemsControl)));            
-        }
-
-        public DragablzItemsControl(
-            Func<DragablzItem> getContainerForItemOverride,
-            Action<DependencyObject, object> prepareContainerForItemOverride,
-            Action<DependencyObject, object> clearingContainerForItemOverride)
-            : this()
-        {
-            _getContainerForItemOverride = getContainerForItemOverride;
-            _prepareContainerForItemOverride = prepareContainerForItemOverride;
-            _clearingContainerForItemOverride = clearingContainerForItemOverride;
-        }
+        }        
 
         public DragablzItemsControl()
         {            
@@ -57,8 +43,8 @@ namespace Dragablz
 
         protected override void ClearContainerForItemOverride(DependencyObject element, object item)
         {
-            if (_clearingContainerForItemOverride != null)
-                _clearingContainerForItemOverride(element, item);            
+            if (ContainerCustomisations != null && ContainerCustomisations.ClearingContainerForItemOverride != null)
+                ContainerCustomisations.ClearingContainerForItemOverride(element, item);            
 
             base.ClearContainerForItemOverride(element, item);
 
@@ -119,6 +105,8 @@ namespace Dragablz
             private set { SetValue(ItemsPresenterHeightPropertyKey, value); }
         }
 
+        internal ContainerCustomisations ContainerCustomisations { get; set; }
+
         private void ItemContainerGeneratorOnStatusChanged(object sender, EventArgs eventArgs)
         {            
             if (ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) return;
@@ -140,8 +128,8 @@ namespace Dragablz
 
         protected override DependencyObject GetContainerForItemOverride()
         {
-            var result = _getContainerForItemOverride != null
-                ? _getContainerForItemOverride()
+            var result = ContainerCustomisations != null && ContainerCustomisations.GetContainerForItemOverride != null
+                ? ContainerCustomisations.GetContainerForItemOverride()
                 : new DragablzItem();
 
             _itemsPendingInitialArrangement.Add(result);
@@ -151,8 +139,8 @@ namespace Dragablz
 
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
-            if (_prepareContainerForItemOverride != null)
-                _prepareContainerForItemOverride(element, item);
+            if (ContainerCustomisations != null && ContainerCustomisations.PrepareContainerForItemOverride != null)
+                ContainerCustomisations.PrepareContainerForItemOverride(element, item);
 
             base.PrepareContainerForItemOverride(element, item);
         }

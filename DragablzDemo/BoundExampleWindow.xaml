@@ -14,9 +14,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <DataTemplate x:Key="HeaderTemplate" DataType="{x:Type dragablzDemo:SimpleViewModel}">
-                <TextBlock Text="{Binding Name}" />
-            </DataTemplate>
             <DataTemplate x:Key="ContentTemplate" DataType="{x:Type dragablzDemo:SimpleViewModel}">
                 <ContentControl Content="{Binding SimpleContent}" Margin="4 4 4 4" FontSize="14" />
             </DataTemplate>
@@ -34,8 +31,8 @@
                 <Setter Property="ShowDefaultAddButton" Value="True" />
                 <Setter Property="ShowDefaultCloseButton" Value="True" />
                 <Setter Property="AdjacentHeaderItemOffset" Value="-10" />
-                <Setter Property="CustomHeaderItemStyle" Value="{StaticResource TrapezoidDragableTabItemStyle}" />
-                <Setter Property="CustomHeaderItemTemplate" Value="{StaticResource HeaderTemplate}" />
+                <Setter Property="ItemContainerStyle" Value="{StaticResource TrapezoidDragableTabItemStyle}" />
+                <Setter Property="HeaderMemberPath" Value="Name" />                
                 <Setter Property="ContentTemplate" Value="{StaticResource ContentTemplate}" />                
                 <Setter Property="InterTabController" Value="{StaticResource InterTabController}" />
                 <Setter Property="HeaderPrefixContent" Value="{StaticResource WindowIcon}" />

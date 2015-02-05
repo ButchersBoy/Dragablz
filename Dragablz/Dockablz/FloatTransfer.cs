@@ -21,7 +21,7 @@ namespace Dragablz.Dockablz
         {
             if (dragablzItem == null) throw new ArgumentNullException("dragablzItem");
 
-            return new FloatTransfer(sourceTabControl.ActualWidth, sourceTabControl.ActualHeight, dragablzItem.Content ?? dragablzItem);
+            return new FloatTransfer(sourceTabControl.ActualWidth, sourceTabControl.ActualHeight, dragablzItem.UnderlyingContent ?? dragablzItem.Content ?? dragablzItem);
         }
 
         [Obsolete]
