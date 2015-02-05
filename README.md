@@ -1,8 +1,8 @@
 ![Dragablz](https://dragablz.files.wordpress.com/2015/01/dragablztext22.png "Dragablz")
 ========
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/ButchersBoy/Dragablz?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-## Dragable and tearable tab control for WPF.
+[![Downloads](https://img.shields.io/nuget/dt/Dragablz.svg)](http://www.nuget.org/packages/Dragablz/)
+## Tearable tab control for WPF, which includes docking, tool windows and MDI.
 
 ![Alt text](http://dragablz.files.wordpress.com/2014/11/dragablztearout.gif "Demo shot")
 
@@ -10,7 +10,7 @@
 - NuGet details here: http://www.nuget.org/packages/Dragablz/
 - You can criticise the developer here: [@James_Willock](http://twitter.com/James_Willock) or here: [james@dragablz.net]
   - No, seriously, please get involved and give me a ping with any questions/requests.
-- If you like it **_star_** it, a little love goes a long way!
+- If you like it **_star_** it, a little love goes a long way and keeps me motivated!
 
 ## Minimal XAML:
 
@@ -40,10 +40,10 @@ XAML as simple as this will give you a tab the tears out (using the basic theme)
 
 - Drag and tear tabs
 - User friendly docking
-- Floating tool windows
-- MDI
+- Floating tool windows & MDI
 - Supports MVVM
 - IE style transparent Windows
+- Styles included to work with [MahApps](https://github.com/MahApps/MahApps.Metro)
 - Chrome style trapzoid tabs
 - Custom (and optional) Window which supports transparency, resizing, snapping, full Window content.
 - Miminal XAML required, but hooks provided for advanced control from client code
@@ -63,6 +63,10 @@ Docking:
 MDI:
 
 ![Alt text](https://dragablz.files.wordpress.com/2015/01/mdidemo2.gif "MDI demo")
+
+MahApps styles for Dragablz controls
+
+![Alt text](https://dragablz.files.wordpress.com/2015/02/mahappsstylez2.gif "https://dragablz.files.wordpress.com/2015/02/mahappsstylez2.gif")
 
 ```
 ________                            ___.   .__          
