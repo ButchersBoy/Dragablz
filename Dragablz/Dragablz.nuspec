@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Dragable and tearable tab control for WPF</description>
     <releaseNotes>We are in alpha right now!.</releaseNotes>
-    <copyright>Copyright 2014 James Willock/Mulholland Software Ltd</copyright>
+    <copyright>Copyright 2014-15 James Willock/Mulholland Software Ltd</copyright>
     <tags>WPF TabControl Tab Tearable</tags>
   </metadata>
   <files>
