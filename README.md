@@ -2,6 +2,7 @@
 ========
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/ButchersBoy/Dragablz?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Downloads](https://img.shields.io/nuget/dt/Dragablz.svg)](http://www.nuget.org/packages/Dragablz/)
+[![Build](https://ci.appveyor.com/api/projects/status/7ckfd53w938q3iaa?svg=true)](https://ci.appveyor.com/project/ButchersBoy/dragablz)
 ## Tearable tab control for WPF, which includes docking, tool windows and MDI.
 
 ![Alt text](http://dragablz.files.wordpress.com/2014/11/dragablztearout.gif "Demo shot")
