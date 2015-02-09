@@ -59,7 +59,7 @@ XAML as simple as this will give you a tab the tears out (using the basic theme)
 
 ## Some more examples:
 
-Material Design theme
+Material Design theme:
 
 ![Alt text](https://dragablz.files.wordpress.com/2015/02/materialdesigndemo1.gif "Material Design style")
 
@@ -67,11 +67,11 @@ Docking:
 
 ![Alt text](http://dragablz.files.wordpress.com/2014/11/dockablzone1.gif "Docking demo")
 
-MDI
+MDI:
 
 ![Alt text](https://dragablz.files.wordpress.com/2015/01/mdidemo2.gif "MDI demo")
 
-MahApps themse
+MahApps theme:
 
 ![Alt text](https://dragablz.files.wordpress.com/2015/02/mahappsstylez2.gif "MahApps style")
 
