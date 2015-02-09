@@ -54,7 +54,7 @@ XAML as simple as this will give you a tab the tears out (using the basic theme)
 - Layout persistance and restore
 - Extra themes
 
-## Some more examples:
+## Some examples:
 
 Material Design theme:
 
