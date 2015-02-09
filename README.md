@@ -32,13 +32,6 @@ XAML as simple as this will give you a tab the tears out (using the basic theme)
     </TabItem>
 </dragablz:TabablzControl>
 ```
-
-## A note on the demo project:
-
-- You will have to restore NuGet packages
-- I've seen Visual Studio get confused with both the .net 4.0 and 4.5 projects.  If you see this compile Dragablz.net4*, and then DragablzDemo.net4* by right clicking on the project in the solution explorer.  I'll try and improve this at some point...
-- Are you using **MahApps**?  If so then check [this demo project](https://github.com/ButchersBoy/DragablzMeetzMahApps) showing Dragablz and MahApps working together.
-
 ## Features:
 
 - Drag and tear tabs
@@ -46,11 +39,15 @@ XAML as simple as this will give you a tab the tears out (using the basic theme)
 - Floating tool windows & MDI
 - Supports MVVM
 - IE style transparent Windows
-- Styles included to work with [MahApps](https://github.com/MahApps/MahApps.Metro)
+- Fully style-able, included styles:
+  - Basic
+  - MahApps: [demo](https://github.com/ButchersBoy/DragablzMeetzMahApps]) | [theme](https://github.com/ButchersBoy/Dragablz/blob/master/Dragablz/Themes/MahApps.xaml) |  [MahApps](https://github.com/MahApps/MahApps.Metro)
+  - Material Design [tutorial](http://dragablz.net/2015/02/09/how-to-use-the-material-design-theme-with-dragablz-tab-controlgithub/) | [theme](https://github.com/ButchersBoy/Dragablz/blob/master/Dragablz/Themes/MaterialDesign.xaml) |  [guidelines](http://www.google.co.uk/design/spec/style/color.html#color-ui-color-application)
 - Chrome style trapzoid tabs
 - Custom (and optional) Window which supports transparency, resizing, snapping, full Window content.
 - Miminal XAML required, but hooks provided for advanced control from client code
 - Single light weight assembly targeting .net 4.* frameworks, no additional dependencies
+- Demos in source (make sure you restore NuGet packages)
 
 ## In the pipeline:
 
