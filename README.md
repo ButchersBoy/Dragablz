@@ -7,6 +7,8 @@
 
 ![Alt text](http://dragablz.files.wordpress.com/2014/11/dragablztearout.gif "Demo shot")
 
+<sup>Illustrates basic theme, more themes at end of page</sup>
+
 - Docs 'n' help 'n' stuff: [dragablz.net](http://dragablz.net/)
 - NuGet details here: http://www.nuget.org/packages/Dragablz/
 - You can criticise the developer here: [@James_Willock](http://twitter.com/James_Willock) or here: [james@dragablz.net]
@@ -57,17 +59,17 @@ XAML as simple as this will give you a tab the tears out (using the basic theme)
 
 ## Some more examples:
 
-Docking:
-
 ![Alt text](http://dragablz.files.wordpress.com/2014/11/dockablzone1.gif "Docking demo")
-
-MDI:
+<sup>Docking demo</sup>
 
 ![Alt text](https://dragablz.files.wordpress.com/2015/01/mdidemo2.gif "MDI demo")
+<sup>MDI demo</sup>
 
-MahApps styles for Dragablz controls
+![Alt text](https://dragablz.files.wordpress.com/2015/02/mahappsstylez2.gif "MahApps style")
+<sup>MahApps theme</sup>
 
-![Alt text](https://dragablz.files.wordpress.com/2015/02/mahappsstylez2.gif "https://dragablz.files.wordpress.com/2015/02/mahappsstylez2.gif")
+![Alt text](https://dragablz.files.wordpress.com/2015/02/materialdesigndemo1.gif "Material Design style")
+<sup>Google Material Design theme</sup>
 
 ```
 ________                            ___.   .__          
