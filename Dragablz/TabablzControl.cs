@@ -62,6 +62,15 @@ namespace Dragablz
             "CustomHeaderItemStyle", typeof (Style), typeof (TabablzControl), new PropertyMetadata(default(Style)));
 
         /// <summary>
+        /// Helper method which returns all the currently loaded instances.
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<TabablzControl> GetLoadedInstances()
+        {
+            return LoadedInstances.ToList();
+        }
+
+            /// <summary>
         /// Style to apply to header items which are not their own item container (<see cref="TabItem"/>).  Typically items bound via the <see cref="ItemsSource"/> will use this style.
         /// </summary>
         [Obsolete]

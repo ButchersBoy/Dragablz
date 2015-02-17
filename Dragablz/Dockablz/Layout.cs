@@ -93,6 +93,15 @@ namespace Dragablz.Dockablz
         }
 
         /// <summary>
+        /// Helper method to get all the currently loaded layouts.
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<Layout> GetLoadedInstances()
+        {
+            return LoadedLayouts.ToList();
+        }
+
+        /// <summary>
         /// Use in conjuction with the <see cref="InterTabController.Partition"/> on a <see cref="TabablzControl"/>
         /// to isolate drag and drop spaces/control instances.
         /// </summary>
