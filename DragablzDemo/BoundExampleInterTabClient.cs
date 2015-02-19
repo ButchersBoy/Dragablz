@@ -16,7 +16,7 @@ namespace DragablzDemo
 
         public TabEmptiedResponse TabEmptiedHandler(TabablzControl tabControl, Window window)
         {
-            return TabEmptiedResponse.CloseWindow;
+            return TabEmptiedResponse.CloseWindowOrLayoutBranch;
         }
     }
 }

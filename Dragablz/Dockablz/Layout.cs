@@ -425,11 +425,11 @@ namespace Dragablz.Dockablz
             SetCurrentValue(ContentProperty, branchItem);            
         }
 
-        internal static void ConsolidateBranch(DependencyObject redundantNode)
+        internal static bool ConsolidateBranch(DependencyObject redundantNode)
         {
             bool isSecondLineageWhenOwnerIsBranch;
             var ownerBranch = FindLayoutOrBranchOwner(redundantNode, out isSecondLineageWhenOwnerIsBranch) as Branch;
-            if (ownerBranch == null) return;
+            if (ownerBranch == null) return false;
 
             var survivingItem = isSecondLineageWhenOwnerIsBranch ? ownerBranch.FirstItem : ownerBranch.SecondItem;
 
@@ -440,7 +440,7 @@ namespace Dragablz.Dockablz
             if (layout != null)
             {
                 layout.Content = survivingItem;
-                return;
+                return true;
             }
 
             var branch = (Branch) grandParent;
@@ -448,6 +448,8 @@ namespace Dragablz.Dockablz
                 branch.SecondItem = survivingItem;
             else
                 branch.FirstItem = survivingItem;
+
+            return true;
         }
 
         private static object FindLayoutOrBranchOwner(DependencyObject node, out bool isSecondLineageWhenOwnerIsBranch)

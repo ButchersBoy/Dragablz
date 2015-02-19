@@ -647,8 +647,10 @@ namespace Dragablz
             {
                 var window = Window.GetWindow(this);
                 if (window != null &&
-                    InterTabController.InterTabClient.TabEmptiedHandler(this, window) == TabEmptiedResponse.CloseWindow)
+                    InterTabController.InterTabClient.TabEmptiedHandler(this, window) == TabEmptiedResponse.CloseWindowOrLayoutBranch)
                 {
+                    if (Layout.ConsolidateBranch(this)) return item;
+
                     try
                     {
                         SetIsClosingAsPartOfDragOperation(window, true);
