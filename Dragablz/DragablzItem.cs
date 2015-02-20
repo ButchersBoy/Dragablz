@@ -340,8 +340,52 @@ namespace Dragablz
         {
             var args = new DragablzDragCompletedEventArgs(DragCompleted, this, e);
             RaiseEvent(args);
-        } 
-        
+
+            //OK, this is a cheeky bit.  A completed drag may have occured after a tab as been pushed
+            //intom a new window, which means we may have reverted to the template thumb.  So, let's
+            //refresh the thumb in case the user has a custom one
+            _customThumb = FindCustomThumb();
+            _templateSubscriptions = SelectAndSubscribeToThumb().Item2;
+        }
+
+        /// <summary>
+        /// <see cref="DragablzItem" /> templates contain a thumb, which is used to drag the item around.
+        /// For most scenarios this is fine, but by setting this flag to <value>true</value> you can define
+        /// a custom thumb in your content, without having to override the template.  This can be useful if you
+        /// have extra content; such as a custom button that you want the user to be able to interact with (as usually
+        /// the default thumb will handle mouse interaction).
+        /// </summary>
+        public static readonly DependencyProperty IsCustomThumbProperty = DependencyProperty.RegisterAttached(
+            "IsCustomThumb", typeof (bool), typeof (DragablzItem), new PropertyMetadata(default(bool), IsCustomThumbPropertyChangedCallback));
+
+        private static void IsCustomThumbPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            var thumb = dependencyObject as Thumb;
+            if (thumb == null) throw new ApplicationException("IsCustomThumb can only be applied to a thumb");
+
+            if (thumb.IsLoaded)
+                ApplyCustomThumbSetting(thumb);
+            else
+                thumb.Loaded += CustomThumbOnLoaded;
+        }        
+
+        /// <summary>
+        /// <see cref="DragablzItem" /> templates contain a thumb, which is used to drag the item around.
+        /// For most scenarios this is fine, but by setting this flag to <value>true</value> you can define
+        /// a custom thumb in your content, without having to override the template.  This can be useful if you
+        /// have extra content; such as a custom button that you want the user to be able to interact with (as usually
+        /// the default thumb will handle mouse interaction).
+        /// </summary>
+        public static void SetIsCustomThumb(Thumb element, bool value)
+        {
+            element.SetValue(IsCustomThumbProperty, value);
+        }
+
+        public static bool GetIsCustomThumb(Thumb element)
+        {
+            return (bool) element.GetValue(IsCustomThumbProperty);
+        }
+
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();            
@@ -351,34 +395,21 @@ namespace Dragablz
                 _templateSubscriptions.Dispose();
                 _templateSubscriptions = null;
             }
-
-            var thumb = GetTemplateChild(ThumbPartName) as Thumb;
-            if (thumb != null)
-            {
-                thumb.DragStarted += ThumbOnDragStarted;
-                thumb.DragDelta += ThumbOnDragDelta;
-                thumb.DragCompleted += ThumbOnDragCompleted;
-            }            
             
-            if (_seizeDragWithTemplate && thumb != null)
+            var thumbAndSubscription = SelectAndSubscribeToThumb();
+            _templateSubscriptions = thumbAndSubscription.Item2;
+            
+            if (_seizeDragWithTemplate && thumbAndSubscription.Item1 != null)
             {
                 if (_dragSeizedContinuation != null)
                     _dragSeizedContinuation(this);
                 _dragSeizedContinuation = null;
 
-                Dispatcher.BeginInvoke(new Action(() => thumb.RaiseEvent(new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice,
+                Dispatcher.BeginInvoke(new Action(() => thumbAndSubscription.Item1.RaiseEvent(new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice,
                     0,
                     MouseButton.Left) {RoutedEvent = MouseLeftButtonDownEvent})));
             }
             _seizeDragWithTemplate = false;
-
-            _templateSubscriptions = Disposable.Create(() =>
-            {
-                if (thumb == null) return;
-                thumb.DragStarted -= ThumbOnDragStarted;
-                thumb.DragDelta -= ThumbOnDragDelta;
-                thumb.DragCompleted -= ThumbOnDragCompleted;
-            });
         }        
 
         internal void InstigateDrag(Action<DragablzItem> continuation)
@@ -431,6 +462,54 @@ namespace Dragablz
         private void MouseDownHandler(object sender, RoutedEventArgs routedEventArgs)
         {
             OnMouseDownWithin(this);
+        }
+
+        private static void CustomThumbOnLoaded(object sender, RoutedEventArgs routedEventArgs)
+        {
+            var thumb = (Thumb)sender;
+            thumb.Loaded -= CustomThumbOnLoaded;
+            ApplyCustomThumbSetting(thumb);
+        }
+
+        private Thumb FindCustomThumb()
+        {
+            return this.VisualTreeDepthFirstTraversal().OfType<Thumb>().FirstOrDefault(GetIsCustomThumb);
+        }
+
+        private Thumb _customThumb;
+        private static void ApplyCustomThumbSetting(Thumb thumb)
+        {
+            var dragablzItem = thumb.VisualTreeAncestory().OfType<DragablzItem>().FirstOrDefault();
+            if (dragablzItem == null) throw new ApplicationException("Cannot find parent DragablzItem for custom thumb");
+
+            var enableCustomThumb = (bool)thumb.GetValue(IsCustomThumbProperty);
+            dragablzItem._customThumb = enableCustomThumb ? thumb : null;
+            dragablzItem._templateSubscriptions = dragablzItem.SelectAndSubscribeToThumb().Item2;
+        }
+
+        private Tuple<Thumb, IDisposable> SelectAndSubscribeToThumb()
+        {
+            var templateThumb = GetTemplateChild(ThumbPartName) as Thumb;
+            if (templateThumb != null)
+                templateThumb.IsHitTestVisible = _customThumb == null;
+
+            var thumb = _customThumb ?? templateThumb;
+            if (thumb != null)
+            {
+                thumb.DragStarted += ThumbOnDragStarted;
+                thumb.DragDelta += ThumbOnDragDelta;
+                thumb.DragCompleted += ThumbOnDragCompleted;                
+            }
+
+            var disposable = Disposable.Create(() =>
+            {
+                if (thumb == null) return;
+                thumb.DragStarted -= ThumbOnDragStarted;
+                thumb.DragDelta -= ThumbOnDragDelta;
+                thumb.DragCompleted -= ThumbOnDragCompleted;
+            });
+
+            return new Tuple<Thumb, IDisposable>(thumb, disposable);
         }
     }
 }

@@ -673,8 +673,7 @@
                                                               ContentTemplate="{TemplateBinding HeaderContentTemplate}" 
                                                               ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" 
                                                               ContentTemplateSelector="{TemplateBinding HeaderContentTemplateSelector}"                                                          
-                                                              SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
-                                                              IsHitTestVisible="False"
+                                                              SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"                                                              
                                                           />
                                         </DockPanel>                                                                                
                                     </Grid>
@@ -947,8 +946,7 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
-                                              x:Name="contentPresenter"                                          
-                                              IsHitTestVisible="False"/>
+                                                  x:Name="contentPresenter" />
                                 <Thumb Grid.Column="0" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" 
                                        x:Name="PART_Thumb"
                                        Style="{StaticResource InvisibleThumbStyle}" />
@@ -991,12 +989,11 @@
                         <Border x:Name="mainBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,1,1,0" Background="{TemplateBinding Background}" Margin="0 0 0 1">
                             <Border x:Name="innerBorder" BorderBrush="{StaticResource TabItem.Selected.Border}" BorderThickness="1,1,1,0" Background="{StaticResource TabItem.Selected.Background}" Margin="-1" Opacity="0"/>
                         </Border>
-                        <Thumb HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" x:Name="PART_Thumb"
-                               Style="{StaticResource InvisibleThumbStyle}"/>
                         <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
                                           x:Name="contentPresenter"
-                                          Margin="6,2,6,2"
-                                          IsHitTestVisible="False"/>
+                                          Margin="6,2,6,2" />                        
+                        <Thumb HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" x:Name="PART_Thumb"
+                               Style="{StaticResource InvisibleThumbStyle}"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="local:TabablzControl.IsWrappingTabItem" Value="True">

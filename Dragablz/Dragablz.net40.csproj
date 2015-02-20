@@ -86,6 +86,7 @@
     <Compile Include="DragablzItemsControl.cs" />
     <Compile Include="DragablzWindow.cs" />
     <Compile Include="HeaderedDragablzItem.cs" />
+    <Compile Include="HeaderedItemViewModel.cs" />
     <Compile Include="HorizontalOrganiser.cs" />
     <Compile Include="HorizontalPositionMonitor.cs" />
     <Compile Include="IInterLayoutClient.cs" />
