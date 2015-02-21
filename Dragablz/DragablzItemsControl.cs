@@ -164,8 +164,11 @@ namespace Dragablz
             var measure = ItemsOrganiser.Measure(new Size(ActualWidth, ActualHeight), dragablzItems);
             ItemsPresenterWidth = measure.Width;
             ItemsPresenterHeight = measure.Height;
-            
-            return new Size(measure.Width, measure.Height);
+
+            var width = double.IsInfinity(constraint.Width) ? measure.Width : constraint.Width;
+            var height = double.IsInfinity(constraint.Height) ? measure.Height : constraint.Height;
+
+            return new Size(width, height);
         }
 
         internal void InstigateDrag(object item, Action<DragablzItem> continuation)
