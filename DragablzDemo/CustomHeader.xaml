@@ -8,6 +8,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance dragablzDemo:CustomHeaderViewModel, IsDesignTimeCreatable=False}">
+    
+    <!--     
+        Illustrates how to add a custom header, without completely rewriting the DragablzItem header template.
+    
+        Note that rewriting the DragablzItem header template is a perfectly valid thing to do, but this allows
+        customisation of existing templates.    
+    -->
+    
     <UserControl.Resources>
         <Style TargetType="{x:Type Thumb}" x:Key="InvisibleThumbStyle">
             <Setter Property="Background" Value="Transparent" />
@@ -23,6 +31,7 @@
     <StackPanel Orientation="Horizontal">
         <Grid>                     
             <TextBlock Text="{Binding Header}" />
+            <!-- you should provide your own Thumb, which will be used to monitor dragging -->
             <Thumb Style="{DynamicResource InvisibleThumbStyle}"
                    dragablz:DragablzItem.IsCustomThumb="True" />
         </Grid>        
