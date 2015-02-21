@@ -386,6 +386,7 @@ namespace Dragablz
             return (bool) element.GetValue(IsCustomThumbProperty);
         }
 
+        private bool _isTemplateThumbWithMouseAfterSeize = false;
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();                        
@@ -395,6 +396,8 @@ namespace Dragablz
             
             if (_seizeDragWithTemplate && thumbAndSubscription.Item1 != null)
             {
+                _isTemplateThumbWithMouseAfterSeize = true;
+                Mouse.AddLostMouseCaptureHandler(this, LostMouseAfterSeizeHandler);
                 if (_dragSeizedContinuation != null)
                     _dragSeizedContinuation(this);
                 _dragSeizedContinuation = null;
@@ -404,7 +407,13 @@ namespace Dragablz
                     MouseButton.Left) {RoutedEvent = MouseLeftButtonDownEvent})));
             }
             _seizeDragWithTemplate = false;
-        }        
+        }
+
+        private void LostMouseAfterSeizeHandler(object sender, MouseEventArgs mouseEventArgs)
+        {
+            _isTemplateThumbWithMouseAfterSeize = false;
+            Mouse.RemoveLostMouseCaptureHandler(this, LostMouseAfterSeizeHandler);
+        }
 
         internal void InstigateDrag(Action<DragablzItem> continuation)
         {
@@ -425,7 +434,7 @@ namespace Dragablz
         internal bool IsDropTargetFound { get; set; }
 
         private void ThumbOnDragCompleted(object sender, DragCompletedEventArgs dragCompletedEventArgs)
-        {
+        {            
             OnDragCompleted(dragCompletedEventArgs);
             MouseAtDragStart = new Point();
         }        
@@ -472,13 +481,20 @@ namespace Dragablz
 
         private Thumb _customThumb;
         private static void ApplyCustomThumbSetting(Thumb thumb)
-        {
+        {            
             var dragablzItem = thumb.VisualTreeAncestory().OfType<DragablzItem>().FirstOrDefault();
             if (dragablzItem == null) throw new ApplicationException("Cannot find parent DragablzItem for custom thumb");
+
+            System.Diagnostics.Debug.WriteLine("ApplyCustomThumbSetting " + dragablzItem.IsDragging);
 
             var enableCustomThumb = (bool)thumb.GetValue(IsCustomThumbProperty);
             dragablzItem._customThumb = enableCustomThumb ? thumb : null;
             dragablzItem._templateSubscriptions.Disposable = dragablzItem.SelectAndSubscribeToThumb().Item2;
+
+            if (dragablzItem._customThumb != null && dragablzItem._isTemplateThumbWithMouseAfterSeize)
+                dragablzItem.Dispatcher.BeginInvoke(new Action(() => dragablzItem._customThumb.RaiseEvent(new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice,
+                        0,
+                        MouseButton.Left) { RoutedEvent = MouseLeftButtonDownEvent })));
         }
 
         private Tuple<Thumb, IDisposable> SelectAndSubscribeToThumb()
