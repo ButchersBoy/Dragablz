@@ -1,10 +1,11 @@
 ﻿using System;
+using Dragablz;
 
 namespace DragablzDemo
 {
     public static class BoundExampleNewItem
     {
-        public static Func<SimpleViewModel> Factory 
+        public static Func<HeaderedItemViewModel> Factory 
         {
             get
             {
@@ -13,10 +14,10 @@ namespace DragablzDemo
                     {
                         var dateTime = DateTime.Now;
 
-                        return new SimpleViewModel()
+                        return new HeaderedItemViewModel()
                         {
-                            Name = dateTime.ToLongTimeString(),
-                            SimpleContent = dateTime.ToString("R")
+                            Header = dateTime.ToLongTimeString(),
+                            Content = dateTime.ToString("R")
                         };
                     };
             }        

@@ -113,7 +113,7 @@ namespace Dragablz
 
             InvalidateMeasure();
             //extra kick
-            Dispatcher.BeginInvoke(new Action(InvalidateMeasure), DispatcherPriority.Render);
+            Dispatcher.BeginInvoke(new Action(InvalidateMeasure), DispatcherPriority.Loaded);
         }
 
         protected override bool IsItemItsOwnContainerOverride(object item)
@@ -164,11 +164,8 @@ namespace Dragablz
             var measure = ItemsOrganiser.Measure(new Size(ActualWidth, ActualHeight), dragablzItems);
             ItemsPresenterWidth = measure.Width;
             ItemsPresenterHeight = measure.Height;
-
-            var width = double.IsInfinity(constraint.Width) ? measure.Width : constraint.Width;
-            var height = double.IsInfinity(constraint.Height) ? measure.Height : constraint.Height;
-
-            return new Size(width, height);
+            
+            return new Size(measure.Width, measure.Height);
         }
 
         internal void InstigateDrag(object item, Action<DragablzItem> continuation)
@@ -202,6 +199,8 @@ namespace Dragablz
             }
 
             eventArgs.Handled = true;
+
+            Dispatcher.BeginInvoke(new Action(InvalidateMeasure), DispatcherPriority.Loaded);
         }
 
         private void ItemDragCompleted(object sender, DragablzDragCompletedEventArgs eventArgs)
@@ -225,10 +224,7 @@ namespace Dragablz
 
             eventArgs.Handled = true;
 
-            if (ItemsOrganiser == null) return;
-            var measure = ItemsOrganiser.Measure(new Size(ActualWidth, ActualHeight), dragablzItems);
-            ItemsPresenterWidth = measure.Width;
-            ItemsPresenterHeight = measure.Height;
+            Dispatcher.BeginInvoke(new Action(InvalidateMeasure), DispatcherPriority.Loaded);
         }
 
         private void ItemDragDelta(object sender, DragablzDragDeltaEventArgs eventArgs)

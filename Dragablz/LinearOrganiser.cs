@@ -184,7 +184,7 @@ namespace Dragablz
             double width = 0, height = 0;
             var isFirst = true;
             foreach (var dragablzItem in items)
-            {
+            {                
                 dragablzItem.Measure(size);
                 if (_orientation == Orientation.Horizontal)
                 {
@@ -204,7 +204,6 @@ namespace Dragablz
                 isFirst = false;
             }
 
-            //return new Size(1000, 30);
             return new Size(Math.Max(width, 0), Math.Max(height, 0));
         }
 
