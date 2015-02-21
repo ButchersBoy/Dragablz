@@ -14,21 +14,21 @@ namespace DragablzDemo
 {
     public class BoundExampleModel
     {
-        private readonly IInterTabClient _interTabClient = new BoundExampleInterTabClient();        
-        private readonly ObservableCollection<SimpleViewModel> _items;
-        private readonly ObservableCollection<SimpleViewModel> _toolItems = new ObservableCollection<SimpleViewModel>();
+        private readonly IInterTabClient _interTabClient = new BoundExampleInterTabClient();
+        private readonly ObservableCollection<HeaderedItemViewModel> _items;
+        private readonly ObservableCollection<HeaderedItemViewModel> _toolItems = new ObservableCollection<HeaderedItemViewModel>();
 
         public BoundExampleModel()
         {
-            _items = new ObservableCollection<SimpleViewModel>();
+            _items = new ObservableCollection<HeaderedItemViewModel>();
         }
 
-        public BoundExampleModel(params SimpleViewModel[] items)
+        public BoundExampleModel(params HeaderedItemViewModel[] items)
         {
-            _items = new ObservableCollection<SimpleViewModel>(items);
+            _items = new ObservableCollection<HeaderedItemViewModel>(items);
         }
 
-        public ObservableCollection<SimpleViewModel> Items
+        public ObservableCollection<HeaderedItemViewModel> Items
         {
             get { return _items; }
         }
@@ -43,7 +43,7 @@ namespace DragablzDemo
             get { return _interTabClient; }
         }
 
-        public ObservableCollection<SimpleViewModel> ToolItems
+        public ObservableCollection<HeaderedItemViewModel> ToolItems
         {
             get { return _toolItems; }
         }
@@ -61,8 +61,8 @@ namespace DragablzDemo
             //in here you can dispose stuff or cancel the close
 
             //here's your view model:
-            var simpleViewModel = args.DragablzItem.DataContext as SimpleViewModel;
-            Debug.Assert(simpleViewModel != null);
+            var viewModel = args.DragablzItem.DataContext as HeaderedItemViewModel;
+            Debug.Assert(viewModel != null);
 
             //here's how you can cancel stuff:
             //args.Cancel(); 

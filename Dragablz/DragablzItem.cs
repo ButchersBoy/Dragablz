@@ -29,7 +29,7 @@ namespace Dragablz
     {
         public const string ThumbPartName = "PART_Thumb";
 
-        private IDisposable _templateSubscriptions;
+        private readonly SerialDisposable _templateSubscriptions = new SerialDisposable();
 
         private bool _seizeDragWithTemplate;
         private Action<DragablzItem> _dragSeizedContinuation;
@@ -345,7 +345,7 @@ namespace Dragablz
             //intom a new window, which means we may have reverted to the template thumb.  So, let's
             //refresh the thumb in case the user has a custom one
             _customThumb = FindCustomThumb();
-            _templateSubscriptions = SelectAndSubscribeToThumb().Item2;
+            _templateSubscriptions.Disposable = SelectAndSubscribeToThumb().Item2;
         }
 
         /// <summary>
@@ -388,16 +388,10 @@ namespace Dragablz
 
         public override void OnApplyTemplate()
         {
-            base.OnApplyTemplate();            
-
-            if (_templateSubscriptions != null)
-            {
-                _templateSubscriptions.Dispose();
-                _templateSubscriptions = null;
-            }
+            base.OnApplyTemplate();                        
             
             var thumbAndSubscription = SelectAndSubscribeToThumb();
-            _templateSubscriptions = thumbAndSubscription.Item2;
+            _templateSubscriptions.Disposable = thumbAndSubscription.Item2;
             
             if (_seizeDragWithTemplate && thumbAndSubscription.Item1 != null)
             {
@@ -484,7 +478,7 @@ namespace Dragablz
 
             var enableCustomThumb = (bool)thumb.GetValue(IsCustomThumbProperty);
             dragablzItem._customThumb = enableCustomThumb ? thumb : null;
-            dragablzItem._templateSubscriptions = dragablzItem.SelectAndSubscribeToThumb().Item2;
+            dragablzItem._templateSubscriptions.Disposable = dragablzItem.SelectAndSubscribeToThumb().Item2;
         }
 
         private Tuple<Thumb, IDisposable> SelectAndSubscribeToThumb()
@@ -498,7 +492,7 @@ namespace Dragablz
             {
                 thumb.DragStarted += ThumbOnDragStarted;
                 thumb.DragDelta += ThumbOnDragDelta;
-                thumb.DragCompleted += ThumbOnDragCompleted;                
+                thumb.DragCompleted += ThumbOnDragCompleted;
             }
 
             var disposable = Disposable.Create(() =>

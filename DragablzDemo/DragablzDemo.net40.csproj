@@ -59,6 +59,10 @@
     </ApplicationDefinition>
     <Compile Include="BoundExampleInterTabClient.cs" />
     <Compile Include="BoundExampleNewItem.cs" />
+    <Compile Include="CustomHeader.xaml.cs">
+      <DependentUpon>CustomHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomHeaderViewModel.cs" />
     <Compile Include="HeaderAndContentModel.cs" />
     <Compile Include="LayoutManagementExample.xaml.cs">
       <DependentUpon>LayoutManagementExample.xaml</DependentUpon>
@@ -91,6 +95,10 @@
     <Page Include="BoundExampleWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomHeader.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="LayoutManagementExample.xaml">
       <Generator>MSBuild:Compile</Generator>

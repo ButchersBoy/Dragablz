@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="DragablzDemo.CustomHeader"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dragablzDemo="clr-namespace:DragablzDemo"
+             xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance dragablzDemo:CustomHeaderViewModel, IsDesignTimeCreatable=False}">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type Thumb}" x:Key="InvisibleThumbStyle">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid Background="{TemplateBinding Background}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <StackPanel Orientation="Horizontal">
+        <Grid>                     
+            <TextBlock Text="{Binding Header}" />
+            <Thumb Style="{DynamicResource InvisibleThumbStyle}"
+                   dragablz:DragablzItem.IsCustomThumb="True" />
+        </Grid>        
+        <CheckBox IsChecked="{Binding IsSelected}" ToolTip="Embed your own controls" />            
+        <Button ToolTip="Manually add a close button"
+                Command="dragablz:TabablzControl.CloseItemCommand"
+                >X</Button>
+    </StackPanel>
+</UserControl>

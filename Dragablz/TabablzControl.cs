@@ -925,7 +925,13 @@ namespace Dragablz
         private void CloseItemHandler(object sender, ExecutedRoutedEventArgs executedRoutedEventArgs)
         {
             var dragablzItem = executedRoutedEventArgs.Parameter as DragablzItem;
-            if (dragablzItem == null) throw new ApplicationException("Parameter must be a DragablzItem");
+            if (dragablzItem == null)
+            {
+                var dependencyObject = executedRoutedEventArgs.OriginalSource as DependencyObject;
+                dragablzItem = dependencyObject.VisualTreeAncestory().OfType<DragablzItem>().FirstOrDefault();
+            }
+
+            if (dragablzItem == null) throw new ApplicationException("Unable to ascertain DragablzItem to close.");
 
             var cancel = false;
             if (ClosingItemCallback != null)

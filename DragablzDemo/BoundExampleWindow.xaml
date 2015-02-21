@@ -7,15 +7,18 @@
         xmlns:dragablzDemo="clr-namespace:DragablzDemo"
         xmlns:dockablz="clr-namespace:Dragablz.Dockablz;assembly=Dragablz"
         mc:Ignorable="d"
-        Title="Simple form of bound tabs" Height="300" Width="500"        
+        Title="Simple form of bound tabs" Height="300" Width="600"        
         d:DataContext="{d:DesignInstance dragablzDemo:BoundExampleModel, IsDesignTimeCreatable=False}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
-                <ContentControl Content="{Binding SimpleContent}" Margin="4 4 4 4" FontSize="14" />
+            <DataTemplate DataType="{x:Type dragablz:HeaderedItemViewModel}">
+                <ContentControl Content="{Binding Content}" Margin="4 4 4 4" FontSize="14" />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type dragablzDemo:CustomHeaderViewModel}">
+                <dragablzDemo:CustomHeader />
             </DataTemplate>
             <dragablz:InterTabController x:Key="InterTabController" x:Shared="False" InterTabClient="{Binding InterTabClient}" Partition="2AE89D18-F236-4D20-9605-6C03319038E6" />
 
@@ -32,7 +35,7 @@
                 <Setter Property="ShowDefaultCloseButton" Value="True" />
                 <Setter Property="AdjacentHeaderItemOffset" Value="-10" />
                 <Setter Property="ItemContainerStyle" Value="{StaticResource TrapezoidDragableTabItemStyle}" />
-                <Setter Property="HeaderMemberPath" Value="Name" />                                
+                <Setter Property="HeaderMemberPath" Value="Header" />                                
                 <Setter Property="InterTabController" Value="{StaticResource InterTabController}" />
                 <Setter Property="HeaderPrefixContent" Value="{StaticResource WindowIcon}" />
                 <Setter Property="HeaderSuffixContent">
@@ -50,11 +53,6 @@
                      FloatingItemHeaderMemberPath="Name"
                      IsFloatDropZoneEnabled="True"
                      ClosingFloatingItemCallback="{Binding ClosingFloatingItemHandler}">
-        <dockablz:Layout.FloatingItemTemplate>
-            <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
-                <ContentControl Content="{Binding SimpleContent}" />
-            </DataTemplate>
-        </dockablz:Layout.FloatingItemTemplate>
         <!-- branch template lets dragablz create a new tab control after a window is split via docking -->
         <dockablz:Layout.BranchTemplate>
             <DataTemplate>
