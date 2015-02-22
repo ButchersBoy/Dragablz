@@ -98,8 +98,7 @@
     <Compile Include="INewTabHost.cs" />
     <Compile Include="InterTabController.cs" />
     <Compile Include="Core\InterTabTransfer.cs" />
-    <Compile Include="LinearOrganiser.cs" />
-    <Compile Include="LinearPositionMonitor.cs" />
+    <Compile Include="StackOrganiser.cs" />
     <Compile Include="LocationChangedEventArgs.cs" />
     <Compile Include="Core\Native.cs" />
     <Compile Include="NewTabHost.cs" />
@@ -111,6 +110,7 @@
     <Compile Include="Referenceless\Disposable.cs" />
     <Compile Include="Referenceless\ICancelable.cs" />
     <Compile Include="Referenceless\SerialDisposable.cs" />
+    <Compile Include="StackPositionMonitor.cs" />
     <Compile Include="StoryboardCompletionListener.cs" />
     <Compile Include="TabablzControl.cs" />
     <Compile Include="TabablzHeaderSizeConverter.cs" />

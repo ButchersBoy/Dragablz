@@ -10,7 +10,7 @@ using Dragablz.Core;
 
 namespace Dragablz
 {
-    public abstract class LinearOrganiser : IItemsOrganiser
+    public abstract class StackOrganiser : IItemsOrganiser
     {
         private readonly Orientation _orientation;
         private readonly double _itemOffset;
@@ -20,7 +20,7 @@ namespace Dragablz
         private readonly Action<DragablzItem, double> _setLocation;
         private readonly Dictionary<DragablzItem, double> _activeStoryboardTargetLocations = new Dictionary<DragablzItem, double>();
 
-        protected LinearOrganiser(Orientation orientation, double itemOffset = 0)
+        protected StackOrganiser(Orientation orientation, double itemOffset = 0)
         {
             _orientation = orientation;
             _itemOffset = itemOffset;

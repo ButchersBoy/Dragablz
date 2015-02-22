@@ -7,13 +7,13 @@ namespace Dragablz
 {
     /// <summary>
     /// A linear position monitor simplifies the montoring of the order of items, where they are laid out
-    /// horizontally or vertically (typically via a <see cref="LinearOrganiser"/>.
+    /// horizontally or vertically (typically via a <see cref="StackOrganiser"/>.
     /// </summary>
-    public abstract class LinearPositionMonitor : PositionMonitor
+    public abstract class StackPositionMonitor : PositionMonitor
     {
         private readonly Func<DragablzItem, double> _getLocation;
 
-        protected LinearPositionMonitor(Orientation orientation)
+        protected StackPositionMonitor(Orientation orientation)
         {
             switch (orientation)
             {

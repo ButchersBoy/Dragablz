@@ -50,7 +50,7 @@
 
     <dockablz:Layout Partition="2AE89D18-F236-4D20-9605-6C03319038E6" Name="RootLayout"
                      FloatingItemsSource="{Binding ToolItems}"
-                     FloatingItemHeaderMemberPath="Name"
+                     FloatingItemHeaderMemberPath="Header"
                      IsFloatDropZoneEnabled="True"
                      ClosingFloatingItemCallback="{Binding ClosingFloatingItemHandler}">
         <!-- branch template lets dragablz create a new tab control after a window is split via docking -->

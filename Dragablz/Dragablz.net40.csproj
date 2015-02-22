@@ -95,8 +95,8 @@
     <Compile Include="IManualInterTabClient.cs" />
     <Compile Include="INewTabHost.cs" />
     <Compile Include="InterTabController.cs" />
-    <Compile Include="LinearOrganiser.cs" />
-    <Compile Include="LinearPositionMonitor.cs" />
+    <Compile Include="StackOrganiser.cs" />
+    <Compile Include="StackPositionMonitor.cs" />
     <Compile Include="LocationChangedEventArgs.cs" />
     <Compile Include="NewTabHost.cs" />
     <Compile Include="OrderChangedEventArgs.cs" />

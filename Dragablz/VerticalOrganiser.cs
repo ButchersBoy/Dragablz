@@ -2,7 +2,7 @@
 
 namespace Dragablz
 {
-    public class VerticalOrganiser : LinearOrganiser
+    public class VerticalOrganiser : StackOrganiser
     {
         public VerticalOrganiser() : base(Orientation.Vertical)
         {

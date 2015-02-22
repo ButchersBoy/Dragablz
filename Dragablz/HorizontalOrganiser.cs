@@ -5,7 +5,7 @@ using System.Windows.Media.Animation;
 
 namespace Dragablz
 {
-    public class HorizontalOrganiser : LinearOrganiser
+    public class HorizontalOrganiser : StackOrganiser
     {
         public HorizontalOrganiser() : base(Orientation.Horizontal)
         { }

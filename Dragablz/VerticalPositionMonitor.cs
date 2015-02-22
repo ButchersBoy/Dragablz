@@ -2,7 +2,7 @@
 
 namespace Dragablz
 {
-    public class VerticalPositionMonitor : LinearPositionMonitor
+    public class VerticalPositionMonitor : StackPositionMonitor
     {
         public VerticalPositionMonitor() : base(Orientation.Vertical)
         {

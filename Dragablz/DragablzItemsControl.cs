@@ -277,7 +277,7 @@ namespace Dragablz
 
             PositionMonitor.OnLocationChanged(new LocationChangedEventArgs(dragablzItem.Content, new Point(dragablzItem.X, dragablzItem.Y)));
 
-            var linearPositionMonitor = PositionMonitor as LinearPositionMonitor;
+            var linearPositionMonitor = PositionMonitor as StackPositionMonitor;
             if (linearPositionMonitor == null) return;
 
             var sortedItems = linearPositionMonitor.Sort(this.Containers<DragablzItem>()).Select(di => di.Content).ToArray();
