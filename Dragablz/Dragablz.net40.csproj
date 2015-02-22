@@ -45,6 +45,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CanvasOrganiser.cs" />
     <Compile Include="ClosingItemCallbackArgs.cs" />
     <Compile Include="ContainerCustomisations.cs" />
     <Compile Include="Converters\BooleanAndToVisibilityConverter.cs" />
@@ -114,7 +115,6 @@
     <Compile Include="TabEmptiedResponse.cs" />
     <Compile Include="Themes\SystemCommandIcon.cs" />
     <Compile Include="Trapezoid.cs" />
-    <Compile Include="TwoDimensionalOrgansier.cs" />
     <Compile Include="VerticalOrganiser.cs" />
     <Compile Include="VerticalPositionMonitor.cs" />
   </ItemGroup>

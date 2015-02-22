@@ -6,7 +6,7 @@ using System.Windows.Controls;
 
 namespace Dragablz
 {
-    public class TwoDimensionalOrgansier : IItemsOrganiser
+    public class CanvasOrganiser : IItemsOrganiser
     {
         public void Organise(Size measureBounds, IEnumerable<DragablzItem> items)
         {

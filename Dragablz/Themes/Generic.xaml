@@ -1307,7 +1307,7 @@
         <Setter Property="VerticalAlignment" Value="Stretch" />        
         <Setter Property="ItemsOrganiser">
             <Setter.Value>
-                <local:TwoDimensionalOrgansier />
+                <local:CanvasOrganiser />
             </Setter.Value>
         </Setter>
         <Setter Property="ItemsPanel">
