@@ -410,16 +410,24 @@ namespace Dragablz
                         .Where(o => !(o is TabItem))
                         .Select(o => _dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(o))
                         .OfType<DragablzItem>();
-
             foreach (var addedItem in notTabItems(e.AddedItems))
             {
                 addedItem.IsSelected = true;
                 addedItem.BringIntoView();
             }
-
             foreach (var removedItem in notTabItems(e.RemovedItems))
             {
                 removedItem.IsSelected = false;
+            }
+
+            foreach (var tabItem in e.AddedItems.OfType<TabItem>().Select(t => _dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(t)).OfType<DragablzItem>())
+            {
+                tabItem.IsSelected = true;
+                tabItem.BringIntoView();
+            }
+            foreach (var tabItem in e.RemovedItems.OfType<TabItem>().Select(t => _dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(t)).OfType<DragablzItem>())
+            {
+                tabItem.IsSelected = false;                
             }
         }
 
