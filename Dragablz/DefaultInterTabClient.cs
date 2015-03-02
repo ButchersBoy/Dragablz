@@ -7,7 +7,7 @@ namespace Dragablz
 {
     public class DefaultInterTabClient : IInterTabClient
     {        
-        public INewTabHost<Window> GetNewHost(IInterTabClient interTabClient, object partition, TabablzControl source)
+        public virtual INewTabHost<Window> GetNewHost(IInterTabClient interTabClient, object partition, TabablzControl source)
         {
             if (source == null) throw new ArgumentNullException("source");
             var sourceWindow = Window.GetWindow(source);
@@ -22,7 +22,7 @@ namespace Dragablz
             return new NewTabHost<Window>(newWindow, newTabablzControl);            
         }
 
-        public TabEmptiedResponse TabEmptiedHandler(TabablzControl tabControl, Window window)
+        public virtual TabEmptiedResponse TabEmptiedHandler(TabablzControl tabControl, Window window)
         {
             return TabEmptiedResponse.CloseWindowOrLayoutBranch;
         }
