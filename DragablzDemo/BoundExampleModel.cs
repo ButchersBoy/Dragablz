@@ -48,7 +48,7 @@ namespace DragablzDemo
             get { return _toolItems; }
         }
 
-        public ClosingTabItemCallback ClosingTabItemHandler
+        public ItemActionCallback ClosingTabItemHandler
         {
             get { return ClosingTabItemHandlerImpl; }
         }
@@ -56,7 +56,7 @@ namespace DragablzDemo
         /// <summary>
         /// Callback to handle tab closing.
         /// </summary>        
-        private static void ClosingTabItemHandlerImpl(ClosingItemCallbackArgs<TabablzControl> args)
+        private static void ClosingTabItemHandlerImpl(ItemActionCallbackArgs<TabablzControl> args)
         {
             //in here you can dispose stuff or cancel the close
 
@@ -76,7 +76,7 @@ namespace DragablzDemo
         /// <summary>
         /// Callback to handle floating toolbar/MDI window closing.
         /// </summary>        
-        private static void ClosingFloatingItemHandlerImpl(ClosingItemCallbackArgs<Layout> args)
+        private static void ClosingFloatingItemHandlerImpl(ItemActionCallbackArgs<Layout> args)
         {
             //in here you can dispose stuff or cancel the close
 

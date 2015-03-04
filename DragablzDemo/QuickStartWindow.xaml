@@ -9,10 +9,7 @@
         <system:String x:Key="Partition">QuickStart</system:String>
     </Window.Resources>
     <dockablz:Layout Partition="{StaticResource Partition}">
-        <dockablz:Layout.FloatingItems>
-
-        </dockablz:Layout.FloatingItems>
-        <dragablz:TabablzControl Margin="8">
+        <dragablz:TabablzControl Margin="8" ConsolidateOrphanedItems="True">
             <dragablz:TabablzControl.InterTabController>
                 <dragablz:InterTabController Partition="{StaticResource Partition}" />
             </dragablz:TabablzControl.InterTabController>

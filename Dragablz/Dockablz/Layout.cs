@@ -13,7 +13,7 @@ using Dragablz.Core;
 
 namespace Dragablz.Dockablz
 {
-    public delegate void ClosingFloatingItemCallback(ClosingItemCallbackArgs<Layout> args);
+    public delegate void ClosingFloatingItemCallback(ItemActionCallbackArgs<Layout> args);
 
     [TemplatePart(Name = TopDropZonePartName, Type = typeof(DropZone))]
     [TemplatePart(Name = RightDropZonePartName, Type = typeof(DropZone))]
@@ -672,7 +672,7 @@ namespace Dragablz.Dockablz
             var cancel = false;
             if (ClosingFloatingItemCallback != null)
             {
-                var callbackArgs = new ClosingItemCallbackArgs<Layout>(Window.GetWindow(this), this, dragablzItem);
+                var callbackArgs = new ItemActionCallbackArgs<Layout>(Window.GetWindow(this), this, dragablzItem);
                 ClosingFloatingItemCallback(callbackArgs);
                 cancel = callbackArgs.IsCancelled;
             }

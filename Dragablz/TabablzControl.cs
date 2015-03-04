@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,9 +16,7 @@ using Dragablz.Referenceless;
 
 namespace Dragablz
 {
-    //original code specific to keeping visual tree "alive" sourced from http://stackoverflow.com/questions/12432062/binding-to-itemssource-of-tabcontrol-in-wpf
-
-    public delegate void ClosingTabItemCallback(ClosingItemCallbackArgs<TabablzControl> args);
+    //original code specific to keeping visual tree "alive" sourced from http://stackoverflow.com/questions/12432062/binding-to-itemssource-of-tabcontrol-in-wpf    
 
     /// <summary>
     /// Extended tab control which supports tab repositioning, and drag and drop.  Also 
@@ -40,6 +39,7 @@ namespace Dragablz
         private object _previousSelection;
         private DragablzItemsControl _dragablzItemsControl;
         private IDisposable _templateSubscription;
+        private readonly SerialDisposable _windowSubscription = new SerialDisposable();
 
         static TabablzControl()
         {
@@ -54,9 +54,10 @@ namespace Dragablz
             AddHandler(DragablzItem.DragCompleted, new DragablzDragCompletedEventHandler(ItemDragCompleted), true);
             CommandBindings.Add(new CommandBinding(CloseItemCommand, CloseItemHandler));
             CommandBindings.Add(new CommandBinding(AddItemCommand, AddItemHandler));            
-            Loaded += (sender, args) => LoadedInstances.Add(this);
-            Unloaded += (sender, args) => LoadedInstances.Remove(this);
-        }        
+
+            Loaded += OnLoaded;
+            Unloaded += OnUnloaded;            
+        }
 
         public static readonly DependencyProperty CustomHeaderItemStyleProperty = DependencyProperty.Register(
             "CustomHeaderItemStyle", typeof (Style), typeof (TabablzControl), new PropertyMetadata(default(Style)));
@@ -275,15 +276,43 @@ namespace Dragablz
         }
 
         public static readonly DependencyProperty ClosingItemCallbackProperty = DependencyProperty.Register(
-            "ClosingItemCallback", typeof(ClosingTabItemCallback), typeof(TabablzControl), new PropertyMetadata(default(ClosingTabItemCallback)));
+            "ClosingItemCallback", typeof(ItemActionCallback), typeof(TabablzControl), new PropertyMetadata(default(ItemActionCallback)));
 
         /// <summary>
         /// Optionally allows a close item hook to be bound in.  If this propety is provided, the func must return true for the close to continue.
         /// </summary>
-        public ClosingTabItemCallback ClosingItemCallback
+        public ItemActionCallback ClosingItemCallback
         {
-            get { return (ClosingTabItemCallback)GetValue(ClosingItemCallbackProperty); }
+            get { return (ItemActionCallback)GetValue(ClosingItemCallbackProperty); }
             set { SetValue(ClosingItemCallbackProperty, value); }
+        }
+
+        public static readonly DependencyProperty ConsolidateOrphanedItemsProperty = DependencyProperty.Register(
+            "ConsolidateOrphanedItems", typeof (bool), typeof (TabablzControl), new PropertyMetadata(default(bool)));
+
+        /// <summary>
+        /// Set to <c>true</c> to have tabs automatically be moved to another tab is a window is closed, so that they arent lost.
+        /// Can be useful for fixed/persistant tabs that may have been dragged into another Window.  You can further control
+        /// this behaviour on a per tab item basis by providing <see cref="ConsolidatingOrphanedItemCallback" />.
+        /// </summary>
+        public bool ConsolidateOrphanedItems
+        {
+            get { return (bool) GetValue(ConsolidateOrphanedItemsProperty); }
+            set { SetValue(ConsolidateOrphanedItemsProperty, value); }
+        }
+
+        public static readonly DependencyProperty ConsolidatingOrphanedItemCallbackProperty = DependencyProperty.Register(
+            "ConsolidatingOrphanedItemCallback", typeof (ItemActionCallback), typeof (TabablzControl), new PropertyMetadata(default(ItemActionCallback)));
+
+        /// <summary>
+        /// Assuming <see cref="ConsolidateOrphanedItems"/> is set to <c>true</c>, consolidation of individual
+        /// tab items can be cancelled by providing this call back and cancelling the <see cref="ItemActionCallbackArgs{TOwner}"/>
+        /// instance.
+        /// </summary>
+        public ItemActionCallback ConsolidatingOrphanedItemCallback
+        {
+            get { return (ItemActionCallback) GetValue(ConsolidatingOrphanedItemCallbackProperty); }
+            set { SetValue(ConsolidatingOrphanedItemCallbackProperty, value); }
         }
 
         private static readonly DependencyPropertyKey IsDraggingWindowPropertyKey =
@@ -484,6 +513,55 @@ namespace Dragablz
         internal static TabablzControl GetOwnerOfHeaderItems(DragablzItemsControl itemsControl)
         {
             return LoadedInstances.FirstOrDefault(t => Equals(t._dragablzItemsControl, itemsControl));
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
+        {
+            LoadedInstances.Add(this);
+            var window = Window.GetWindow(this);
+            if (window == null) return; 
+            window.Closing += WindowOnClosing;
+            _windowSubscription.Disposable = Disposable.Create(() => window.Closing -= WindowOnClosing);
+        }
+
+        private void WindowOnClosing(object sender, CancelEventArgs cancelEventArgs)
+        {
+            _windowSubscription.Disposable = Disposable.Empty;
+            if (!ConsolidateOrphanedItems || InterTabController == null) return;
+
+            var window = (Window)sender;
+
+            var orphanedItems = _dragablzItemsControl.DragablzItems();
+            if (ConsolidatingOrphanedItemCallback != null)
+            {
+                orphanedItems =
+                    orphanedItems.Where(
+                        di =>
+                        {
+                            var args = new ItemActionCallbackArgs<TabablzControl>(window, this, di);
+                            ConsolidatingOrphanedItemCallback(args);
+                            return !args.IsCancelled;
+                        }).ToList();
+            }
+
+            var target =
+                LoadedInstances.Except(this)
+                    .FirstOrDefault(
+                        other =>
+                            other.InterTabController != null &&
+                            other.InterTabController.Partition == InterTabController.Partition);
+            if (target == null) return;
+
+            foreach (var item in orphanedItems.Select(orphanedItem => _dragablzItemsControl.ItemContainerGenerator.ItemFromContainer(orphanedItem)))
+            {
+                RemoveFromSource(item);
+                target.AddToSource(item);
+            }
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs routedEventArgs)
+        {
+            LoadedInstances.Remove(this);
         }
 
         private void MarkWrappedTabItems()
@@ -944,7 +1022,7 @@ namespace Dragablz
             var cancel = false;
             if (ClosingItemCallback != null)
             {
-                var callbackArgs = new ClosingItemCallbackArgs<TabablzControl>(Window.GetWindow(this), this, dragablzItem);
+                var callbackArgs = new ItemActionCallbackArgs<TabablzControl>(Window.GetWindow(this), this, dragablzItem);
                 ClosingItemCallback(callbackArgs);
                 cancel = callbackArgs.IsCancelled;
             }

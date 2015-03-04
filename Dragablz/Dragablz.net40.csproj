@@ -46,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CanvasOrganiser.cs" />
-    <Compile Include="ClosingItemCallbackArgs.cs" />
     <Compile Include="ContainerCustomisations.cs" />
     <Compile Include="Converters\BooleanAndToVisibilityConverter.cs" />
     <Compile Include="Converters\EqualityToBooleanConverter.cs" />
@@ -96,6 +95,7 @@
     <Compile Include="IManualInterTabClient.cs" />
     <Compile Include="INewTabHost.cs" />
     <Compile Include="InterTabController.cs" />
+    <Compile Include="ItemActionCallbackArgs.cs" />
     <Compile Include="StackOrganiser.cs" />
     <Compile Include="StackPositionMonitor.cs" />
     <Compile Include="LocationChangedEventArgs.cs" />
