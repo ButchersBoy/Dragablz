@@ -156,14 +156,17 @@ namespace Dragablz
                 return LockedMeasure.Value;
             }
 
-            var dragablzItems = DragablzItems().ToList();
-
+            var dragablzItems = DragablzItems().ToList();            
             var maxConstraint = new Size(double.PositiveInfinity, double.PositiveInfinity);
 
             ItemsOrganiser.Organise(maxConstraint, dragablzItems);
             var measure = ItemsOrganiser.Measure(new Size(ActualWidth, ActualHeight), dragablzItems);
+
+            System.Diagnostics.Debug.WriteLine("Measuring item count " + dragablzItems.Count);
+            System.Diagnostics.Debug.WriteLine("{0} -> {1} ", ItemsPresenterWidth, measure.Width);
+
             ItemsPresenterWidth = measure.Width;
-            ItemsPresenterHeight = measure.Height;
+            ItemsPresenterHeight = measure.Height;                          
 
             var width = double.IsInfinity(constraint.Width) ? measure.Width : constraint.Width;
             var height = double.IsInfinity(constraint.Height) ? measure.Height : constraint.Height;
@@ -219,14 +222,16 @@ namespace Dragablz
 
             if (ItemsOrganiser != null)
             {
-                var bounds = new Size(ActualWidth, ActualHeight);
+                var bounds = new Size(ActualWidth, ActualHeight);                
                 ItemsOrganiser.OrganiseOnDragCompleted(bounds,
-                    dragablzItems.Except(new[] { eventArgs.DragablzItem }),
+                    dragablzItems.Except(eventArgs.DragablzItem),
                     eventArgs.DragablzItem);
             }
 
             eventArgs.Handled = true;
 
+            //wowsers
+            Dispatcher.BeginInvoke(new Action(InvalidateMeasure));
             Dispatcher.BeginInvoke(new Action(InvalidateMeasure), DispatcherPriority.Loaded);
         }
 

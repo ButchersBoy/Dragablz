@@ -1277,7 +1277,7 @@
                             <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                         </Trigger>
                         <Trigger Property="IsDraggingWindow" Value="True">
-                            <Setter TargetName="DefaultAddButton" Property="Visibility" Value="Hidden" />
+                            <Setter TargetName="DefaultAddButton" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
