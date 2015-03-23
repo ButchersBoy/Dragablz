@@ -48,6 +48,16 @@ XAML as simple as this will give you a tab the tears out (using the basic theme)
 - Single light weight assembly targeting .net 4.* frameworks, no additional dependencies
 - Demos in source (make sure you restore NuGet packages)
 
+## Getting Started:
+
+Here are some helpful blog posts to help you get started:
+ - [Getting Started](http://dragablz.net/2014/11/18/getting-started-with-dragablz-tabablzcontrol/)
+ - [MDI](http://dragablz.net/2015/01/26/mdi-in-wpf-via-dragablz/)
+ - [MahApps Styles](http://dragablz.net/2015/01/06/dragablz-meets-mahapps/)
+ - [Material Design 1](http://dragablz.net/2015/02/09/how-to-use-the-material-design-theme-with-dragablz-tab-controlgithub/)
+ - [Material Design 2](http://dragablz.net/2015/02/25/material-design-in-xaml-mash-up/)
+
+
 ## In the pipeline:
 
 - Layout persistance and restore
@@ -72,11 +82,3 @@ MahApps theme:
 ![Alt text](https://dragablz.files.wordpress.com/2015/02/mahappsstylez2.gif "MahApps style")
 
 
-```
-________                            ___.   .__          
-\______ \____________     _________ \_ |__ |  | ________
- |    |  \_  __ \__  \   / ___\__  \ | __ \|  | \___   /
- |    `   \  | \// __ \_/ /_/  > __ \| \_\ \  |__/    / 
-/_______  /__|  (____  /\___  (____  /___  /____/_____ \
-        \/           \//_____/     \/    \/           \/
-```
