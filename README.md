@@ -40,7 +40,7 @@ XAML as simple as this will give you a tab the tears out (using the basic theme)
 - IE style transparent Windows
 - Fully style-able, included styles:
   - Basic
-  - MahApps: [demo](https://github.com/ButchersBoy/DragablzMeetzMahApps]) | [theme](https://github.com/ButchersBoy/Dragablz/blob/master/Dragablz/Themes/MahApps.xaml) |  [MahApps](https://github.com/MahApps/MahApps.Metro)
+  - MahApps: [demo](https://github.com/ButchersBoy/DragablzMeetzMahApps) | [theme](https://github.com/ButchersBoy/Dragablz/blob/master/Dragablz/Themes/MahApps.xaml) |  [MahApps](https://github.com/MahApps/MahApps.Metro)
   - Material Design [tutorial](http://dragablz.net/2015/02/09/how-to-use-the-material-design-theme-with-dragablz-tab-controlgithub/) | [theme](https://github.com/ButchersBoy/Dragablz/blob/master/Dragablz/Themes/MaterialDesign.xaml) |  [guidelines](http://www.google.co.uk/design/spec/style/color.html#color-ui-color-application)
 - Chrome style trapzoid tabs
 - Custom (and optional) Window which supports transparency, resizing, snapping, full Window content.
