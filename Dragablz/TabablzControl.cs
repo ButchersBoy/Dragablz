@@ -105,7 +105,7 @@ namespace Dragablz
 
         private static void AdjacentHeaderItemOffsetPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            dependencyObject.SetValue(HeaderItemsOrganiserPropertyKey, new HorizontalOrganiser((double)dependencyPropertyChangedEventArgs.NewValue));
+            dependencyObject.SetValue(HeaderItemsOrganiserProperty, new HorizontalOrganiser((double)dependencyPropertyChangedEventArgs.NewValue));
         }
 
         public double AdjacentHeaderItemOffset
@@ -114,18 +114,13 @@ namespace Dragablz
             set { SetValue(AdjacentHeaderItemOffsetProperty, value); }
         }
 
-        private static readonly DependencyPropertyKey HeaderItemsOrganiserPropertyKey =
-            DependencyProperty.RegisterReadOnly(
-                "HeaderItemsOrganiser", typeof (IItemsOrganiser), typeof (TabablzControl),
-                new PropertyMetadata(new HorizontalOrganiser()));
-
-        public static readonly DependencyProperty HeaderItemsOrganiserProperty =
-            HeaderItemsOrganiserPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty HeaderItemsOrganiserProperty = DependencyProperty.Register(
+            "HeaderItemsOrganiser", typeof (IItemsOrganiser), typeof (TabablzControl), new PropertyMetadata(new HorizontalOrganiser()));
 
         public IItemsOrganiser HeaderItemsOrganiser
         {
             get { return (IItemsOrganiser) GetValue(HeaderItemsOrganiserProperty); }
-            private set { SetValue(HeaderItemsOrganiserPropertyKey, value); }
+            set { SetValue(HeaderItemsOrganiserProperty, value); }
         }
 
         public static readonly DependencyProperty HeaderMemberPathProperty = DependencyProperty.Register(
