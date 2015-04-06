@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Threading;
 using Dragablz.Core;
 
 namespace Dragablz
@@ -13,6 +14,8 @@ namespace Dragablz
             var sourceWindow = Window.GetWindow(source);
             if (sourceWindow == null) throw new ApplicationException("Unable to ascrtain source window.");
             var newWindow = (Window)Activator.CreateInstance(sourceWindow.GetType());
+
+            newWindow.Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.DataBind);
 
             var newTabablzControl = newWindow.LogicalTreeDepthFirstTraversal().OfType<TabablzControl>().FirstOrDefault();
             if (newTabablzControl == null) throw new ApplicationException("Unable to ascrtain tab control.");
