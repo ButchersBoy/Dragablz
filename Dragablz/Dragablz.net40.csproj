@@ -113,7 +113,9 @@
     <Compile Include="TabablzHeaderSizeConverter.cs" />
     <Compile Include="TabablzItemStyleSelector.cs" />
     <Compile Include="TabEmptiedResponse.cs" />
+    <Compile Include="Themes\BrushToRadialGradientBrushConverter.cs" />
     <Compile Include="Themes\SystemCommandIcon.cs" />
+    <Compile Include="Themes\VisualFeedbackContentControl.cs" />
     <Compile Include="Trapezoid.cs" />
     <Compile Include="VerticalOrganiser.cs" />
     <Compile Include="VerticalPositionMonitor.cs" />

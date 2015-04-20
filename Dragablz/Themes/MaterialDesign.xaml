@@ -2,18 +2,115 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:dragablz="clr-namespace:Dragablz"
                     xmlns:dockablz="clr-namespace:Dragablz.Dockablz"
-                    xmlns:converters="clr-namespace:Dragablz.Converters">
+                    xmlns:converters="clr-namespace:Dragablz.Converters"
+                    xmlns:local="clr-namespace:Dragablz.Themes">
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <converters:EqualityToVisibilityConverter x:Key="EqualityToVisibilityConverter" />
     <converters:BooleanAndToVisibilityConverter x:Key="BooleanAndToVisibilityConverter" />
     <converters:EqualityToBooleanConverter x:Key="EqualityToBooleanConverter" />
+    <local:BrushToRadialGradientBrushConverter x:Key="BrushToRadialGradientBrushConverter" />
 
     <Style x:Key="MaterialDesignFocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>
                 <ControlTemplate>
                     <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:VisualFeedbackContentControl}">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:VisualFeedbackContentControl}">
+                    <Grid ClipToBounds="True" Background="Transparent">
+                        <Canvas IsHitTestVisible="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Ellipse Opacity="0" Width="60" Height="60" Canvas.Left="{TemplateBinding MouseX}" Canvas.Top="{TemplateBinding MouseY}"                                     
+                                     x:Name="HoverEllipse" Fill="{TemplateBinding Foreground, Converter={StaticResource BrushToRadialGradientBrushConverter}}">
+                                <Ellipse.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform X="-30" Y="-30"/>
+                                    </TransformGroup>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                            <Ellipse x:Name="ClickEllipse" Fill="{TemplateBinding Foreground}" Opacity="0" Width="0" Height="0" Canvas.Left="{TemplateBinding MouseLeftButtonDownX}" Canvas.Top="{TemplateBinding MouseLeftButtonDownY}"
+                                     RenderTransformOrigin=".5,.5">
+                                <Ellipse.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform X="0" Y="0"/>
+                                    </TransformGroup>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                        </Canvas>
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Cursor="{TemplateBinding Cursor}"
+                                          Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard TargetName="HoverEllipse">
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Opacity)">
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value=".23"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard TargetName="HoverEllipse">
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Opacity)">
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value=".0"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <EventTrigger RoutedEvent="PreviewMouseLeftButtonDown">
+                            <BeginStoryboard>
+                                <Storyboard TargetName="ClickEllipse">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)">
+                                        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="120"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)">
+                                        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="120"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
+                                        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-60"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
+                                        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-60"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)">
+                                        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value=".26"/>
+                                        <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -171,32 +268,29 @@
                         <Border BorderBrush="{TemplateBinding BorderBrush}" 
                                 Background="{TemplateBinding Background}"                                          
                                 Margin="0 0 0 0">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
-                                                  x:Name="contentPresenter"                                                                                            
-                                                  Opacity=".87"/>
-                                <Thumb Grid.Column="0" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" 
-                                       x:Name="PART_Thumb"
-                                       Style="{StaticResource MaterialDesignInvisibleThumbStyle}" />
-                                <Button Grid.Column="1"
-                                        Style="{StaticResource MaterialDesignCloseItemCommandButtonStyle}"
-                                        Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dragablz:TabablzControl}, Path=ShowDefaultCloseButton, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                        Command="{x:Static dragablz:TabablzControl.CloseItemCommand}"
-                                        CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
-                            </Grid>
+                            <local:VisualFeedbackContentControl HorizontalContentAlignment="Stretch" VerticalAlignment="Stretch">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                                      x:Name="contentPresenter"                                                                                            
+                                                      Opacity=".87"/>
+                                    <Thumb Grid.Column="0" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" 
+                                           x:Name="PART_Thumb"
+                                           Style="{StaticResource MaterialDesignInvisibleThumbStyle}" />
+                                    <Button Grid.Column="1"
+                                            Style="{StaticResource MaterialDesignCloseItemCommandButtonStyle}"
+                                            Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dragablz:TabablzControl}, Path=ShowDefaultCloseButton, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            Command="{x:Static dragablz:TabablzControl.CloseItemCommand}"
+                                            CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
+                                </Grid>
+                            </local:VisualFeedbackContentControl>
                         </Border>
                         <Border x:Name="SelectionHighlightBorder" Background="{DynamicResource SecondaryAccentBrush}" Height="2"
                                 Grid.Row="1"
                                 Visibility="Hidden"/>
-                        <Ellipse x:Name="ClickAnimationEllipse" Fill="{DynamicResource PrimaryHueDarkBrush}"
-                                 Grid.Row="0" Grid.RowSpan="2"
-                                 IsHitTestVisible="False"
-                                 MaxWidth="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualWidth}"
-                                 HorizontalAlignment="Center" Height="0" VerticalAlignment="Center" Width="0" Opacity="0" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="dragablz:TabablzControl.IsWrappingTabItem" Value="True">
@@ -205,26 +299,7 @@
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="contentPresenter" Property="Opacity" Value="1"/>
                             <Setter TargetName="SelectionHighlightBorder" Property="Visibility" Value="Visible" />
-                        </Trigger>
-                        <EventTrigger RoutedEvent="PreviewMouseLeftButtonDown">
-                            <BeginStoryboard>
-                                <Storyboard TargetName="ClickAnimationEllipse">
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)">
-                                        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="150"/>
-                                    </DoubleAnimationUsingKeyFrames>
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)">
-                                        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="150"/>
-                                    </DoubleAnimationUsingKeyFrames>
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)">
-                                        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
-                                    </DoubleAnimationUsingKeyFrames>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
+                        </Trigger>                        
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -253,35 +328,28 @@
                         <Border BorderBrush="{TemplateBinding BorderBrush}" 
                                 Background="{TemplateBinding Background}"                                          
                                 Margin="0 0 0 0">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
-                                                  x:Name="contentPresenter"                                                                                            
-                                                  Opacity=".87"/>
-                                <Thumb Grid.Row="0" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" 
+                            <local:VisualFeedbackContentControl HorizontalContentAlignment="Stretch" VerticalAlignment="Stretch">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                                  x:Name="contentPresenter"/>
+                                    <Thumb Grid.Row="0" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" 
                                        x:Name="PART_Thumb"
                                        Style="{StaticResource MaterialDesignInvisibleThumbStyle}" />
-                                <Button Grid.Row="1"
+                                    <Button Grid.Row="1"
                                         Style="{StaticResource MaterialDesignCloseItemCommandButtonStyle}"
                                         Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dragablz:TabablzControl}, Path=ShowDefaultCloseButton, Converter={StaticResource BooleanToVisibilityConverter}}"
                                         Command="{x:Static dragablz:TabablzControl.CloseItemCommand}"
                                         CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
-                            </Grid>
+                                </Grid>
+                            </local:VisualFeedbackContentControl>
                         </Border>
                         <Border x:Name="SelectionHighlightBorder" Background="{DynamicResource SecondaryAccentBrush}" Width="2"
                                 Grid.Column="1"
                                 Visibility="Hidden"/>
-                        <!--
-                        <Ellipse x:Name="ClickAnimationEllipse" Fill="{DynamicResource PrimaryHueDarkBrush}"
-                                 Grid.Column="0" Grid.ColumnSpan="2"
-                                 IsHitTestVisible="False"
-                                 MaxHeight="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualHeight}"
-                                 MaxWidth ="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualWidth}"
-                                 HorizontalAlignment="Center" Height="0" VerticalAlignment="Center" Width="0" Opacity="0" />
-                        -->
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="dragablz:TabablzControl.IsWrappingTabItem" Value="True">
@@ -291,27 +359,6 @@
                             <Setter TargetName="contentPresenter" Property="Opacity" Value="1"/>
                             <Setter TargetName="SelectionHighlightBorder" Property="Visibility" Value="Visible" />
                         </Trigger>
-                        <EventTrigger RoutedEvent="PreviewMouseLeftButtonDown">
-                            <!--
-                            <BeginStoryboard>                                
-                                <Storyboard TargetName="ClickAnimationEllipse">
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)">
-                                        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="150"/>
-                                    </DoubleAnimationUsingKeyFrames>
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)">
-                                        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="150"/>
-                                    </DoubleAnimationUsingKeyFrames>
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)">
-                                        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
-                                        <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
-                                    </DoubleAnimationUsingKeyFrames>
-                                </Storyboard>
-                            </BeginStoryboard>
-                            -->
-                        </EventTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -753,18 +800,16 @@
                                         </dragablz:DragablzItemsControl.MaxHeight>
                                     </dragablz:DragablzItemsControl>
                                     <Button Style="{StaticResource AddItemCommandButtonStyle}"
-                                                        x:Name="DefaultAddButton"
-                                                        Grid.Row="2"
-                                                        Command="{x:Static dragablz:TabablzControl.AddItemCommand}"
-                                                        Visibility="{TemplateBinding ShowDefaultAddButton, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                        />
+                                            x:Name="DefaultAddButton"
+                                            Grid.Row="2"
+                                            Command="{x:Static dragablz:TabablzControl.AddItemCommand}"
+                                            Visibility="{TemplateBinding ShowDefaultAddButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                     <ContentControl Grid.Row="3" x:Name="SuffixContentControl" 
                                                                 Content="{TemplateBinding HeaderSuffixContent}"
                                                                 ContentStringFormat="{TemplateBinding HeaderSuffixContentStringFormat}"
                                                                 ContentTemplate="{TemplateBinding HeaderSuffixContentStringFormat}"
                                                                 ContentTemplateSelector="{TemplateBinding HeaderSuffixContentTemplateSelector}"
-                                                                VerticalAlignment="Top"
-                                            />
+                                                                VerticalAlignment="Top" />
                                 </Grid>
                             </Grid>
                             <ControlTemplate.Triggers>
@@ -780,9 +825,8 @@
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
-                </Setter>                
+                </Setter>
             </Trigger>
         </Style.Triggers>
     </Style>
-
 </ResourceDictionary>
