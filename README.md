@@ -67,7 +67,7 @@ Here are some helpful blog posts to help you get started:
 
 Material Design theme (see [Material Design in XML Toolkit](https://github.com/ButchersBoy/MaterialDesignInXamlToolkit)):
 
-![Alt text](https://dragablz.files.wordpress.com/2015/02/materialdesigndemo1.gif "Material Design style")
+![Alt text](https://github.com/ButchersBoy/MaterialDesignInXamlToolkit/blob/master/web/MashUp.gif "Material Design style")
 
 Docking:
 
