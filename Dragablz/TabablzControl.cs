@@ -1036,6 +1036,8 @@ namespace Dragablz
 
             AddToSource(newItem);
             SelectedItem = newItem;
+
+            Dispatcher.BeginInvoke(new Action(_dragablzItemsControl.InvalidateMeasure), DispatcherPriority.Loaded);
         }
 
         private void PrepareChildContainerForItemOverride(DependencyObject dependencyObject, object o)
