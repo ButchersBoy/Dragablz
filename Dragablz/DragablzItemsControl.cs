@@ -36,17 +36,13 @@ namespace Dragablz
             AddHandler(DragablzItem.MouseDownWithinEvent, new DragablzItemEventHandler(ItemMouseDownWithinHandlerTarget));
         }
 
-        public static readonly DependencyProperty FixedItemCountProperty = DependencyProperty.RegisterAttached(
-            "FixedItemCount", typeof (int), typeof (DragablzItemsControl), new FrameworkPropertyMetadata(default(int), FrameworkPropertyMetadataOptions.Inherits));
+        public static readonly DependencyProperty FixedItemCountProperty = DependencyProperty.Register(
+            "FixedItemCount", typeof (int), typeof (DragablzItemsControl), new PropertyMetadata(default(int)));
 
-        public static void SetFixedItemCount(DependencyObject element, int value)
+        public int FixedItemCount
         {
-            element.SetValue(FixedItemCountProperty, value);
-        }
-
-        public static int GetFixedItemCount(DependencyObject element)
-        {
-            return (int) element.GetValue(FixedItemCountProperty);
+            get { return (int) GetValue(FixedItemCountProperty); }
+            set { SetValue(FixedItemCountProperty, value); }
         }
 
         private void ItemContainerGeneratorOnItemsChanged(object sender, ItemsChangedEventArgs itemsChangedEventArgs)
@@ -257,9 +253,8 @@ namespace Dragablz
                 );
             if (ItemsOrganiser != null)
             {
-                var fixedItemCount = GetFixedItemCount(this);
-                if (fixedItemCount > 0 &&
-                    ItemsOrganiser.Sort(DragablzItems()).Take(fixedItemCount).Contains(eventArgs.DragablzItem))
+                if (FixedItemCount > 0 &&
+                    ItemsOrganiser.Sort(DragablzItems()).Take(FixedItemCount).Contains(eventArgs.DragablzItem))
                     return;                    
 
                 desiredLocation = ItemsOrganiser.ConstrainLocation(this, bounds,

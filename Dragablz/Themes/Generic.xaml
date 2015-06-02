@@ -1215,6 +1215,7 @@
                                                         ItemsOrganiser="{TemplateBinding HeaderItemsOrganiser}"
                                                         KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"
                                                         ItemTemplate="{TemplateBinding CustomHeaderItemTemplate}"
+                                                        FixedItemCount="{TemplateBinding FixedHeaderCount}"
                                                         Style="{StaticResource TabablzDragablzItemsControlStyle}">
                                 <local:DragablzItemsControl.MaxWidth>
                                     <MultiBinding>

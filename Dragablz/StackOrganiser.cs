@@ -175,7 +175,7 @@ namespace Dragablz
         public Point ConstrainLocation(DragablzItemsControl requestor, Size measureBounds, Point itemCurrentLocation,
             Size itemCurrentSize, Point itemDesiredLocation, Size itemDesiredSize)
         {
-            var fixedItems = DragablzItemsControl.GetFixedItemCount(requestor);
+            var fixedItems = requestor.FixedItemCount;
             var lowerBound = fixedItems == 0
                 ? -1d
                 : GetLocationInfo(requestor.DragablzItems()
