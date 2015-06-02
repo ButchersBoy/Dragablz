@@ -9,7 +9,8 @@
     <converters:EqualityToVisibilityConverter x:Key="EqualityToVisibilityConverter" />
     <converters:BooleanAndToVisibilityConverter x:Key="BooleanAndToVisibilityConverter" />
     <converters:EqualityToBooleanConverter x:Key="EqualityToBooleanConverter" />
-    <local:BrushToRadialGradientBrushConverter x:Key="BrushToRadialGradientBrushConverter" />
+    <converters:ShowDefaultCloseButtonConverter x:Key="ShowDefaultCloseButtonConverter" />
+    <local:BrushToRadialGradientBrushConverter x:Key="BrushToRadialGradientBrushConverter" />    
 
     <Style x:Key="MaterialDesignFocusVisual">
         <Setter Property="Control.Template">
@@ -281,10 +282,17 @@
                                            x:Name="PART_Thumb"
                                            Style="{StaticResource MaterialDesignInvisibleThumbStyle}" />
                                     <Button Grid.Column="1"
-                                            Style="{StaticResource MaterialDesignCloseItemCommandButtonStyle}"
-                                            Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dragablz:TabablzControl}, Path=ShowDefaultCloseButton, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            Style="{StaticResource MaterialDesignCloseItemCommandButtonStyle}"                                            
                                             Command="{x:Static dragablz:TabablzControl.CloseItemCommand}"
-                                            CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
+                                            CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                                        <Button.Visibility>
+                                            <MultiBinding Converter="{StaticResource ShowDefaultCloseButtonConverter}">
+                                                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type dragablz:TabablzControl}}" Path="ShowDefaultCloseButton" />
+                                                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type dragablz:TabablzControl}}" Path="FixedHeaderCount" />
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="LogicalIndex" />
+                                            </MultiBinding>
+                                        </Button.Visibility>
+                                    </Button>
                                 </Grid>
                             </local:VisualFeedbackContentControl>
                         </Border>

@@ -10,6 +10,7 @@
     <converters:EqualityToVisibilityConverter x:Key="EqualityToVisibilityConverter" />
     <converters:BooleanAndToVisibilityConverter x:Key="BooleanAndToVisibilityConverter" />
     <converters:EqualityToBooleanConverter x:Key="EqualityToBooleanConverter" />
+    <converters:ShowDefaultCloseButtonConverter x:Key="ShowDefaultCloseButtonConverter" />
 
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">
@@ -953,10 +954,17 @@
                                        x:Name="PART_Thumb"
                                        Style="{StaticResource InvisibleThumbStyle}" />
                                 <Button Grid.Column="1"
-                                        Style="{StaticResource CloseItemCommandButtonStyle}"
-                                        Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:TabablzControl}, Path=ShowDefaultCloseButton, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Style="{StaticResource CloseItemCommandButtonStyle}"                                        
                                         Command="{x:Static local:TabablzControl.CloseItemCommand}"
-                                        CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
+                                        CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                                    <Button.Visibility>
+                                        <MultiBinding Converter="{StaticResource ShowDefaultCloseButtonConverter}">                                            
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:TabablzControl}}" Path="ShowDefaultCloseButton" />
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:TabablzControl}}" Path="FixedHeaderCount" />
+                                            <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="LogicalIndex" />
+                                        </MultiBinding>
+                                    </Button.Visibility>
+                                </Button>
                             </Grid>
                         </local:Trapezoid>                        
                     </Grid>                    

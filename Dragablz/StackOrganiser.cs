@@ -95,6 +95,7 @@ namespace Dragablz
 
             var currentCoord = 0.0;
             var z = int.MaxValue;
+            var logicalIndex = 0;
             foreach (
                 var newItem in
                     items.Select((di, idx) => new Tuple<int, DragablzItem>(idx, di))
@@ -105,6 +106,7 @@ namespace Dragablz
             {
                 Panel.SetZIndex(newItem, newItem.IsSelected ? int.MaxValue : --z);
                 SetLocation(newItem, currentCoord);
+                newItem.LogicalIndex = logicalIndex++;
                 newItem.Measure(measureBounds);
                 currentCoord += _getDesiredSize(newItem) + _itemOffset;
             }
@@ -147,7 +149,7 @@ namespace Dragablz
                     SendToLocation(location.Item, currentCoord);
                     Panel.SetZIndex(location.Item, --zIndex);
                 }
-                currentCoord += _getDesiredSize(location.Item) + _itemOffset;
+                currentCoord += _getDesiredSize(location.Item) + _itemOffset;                
             }
             Panel.SetZIndex(dragItem, int.MaxValue);
         }
@@ -163,11 +165,13 @@ namespace Dragablz
 
             var currentCoord = 0.0;
             var z = int.MaxValue;
+            var logicalIndex = 0;
             foreach (var location in currentLocations)
             {
                 SetLocation(location.Item, currentCoord);
                 currentCoord += _getDesiredSize(location.Item) + _itemOffset;
                 Panel.SetZIndex(location.Item, --z);
+                location.Item.LogicalIndex = logicalIndex++;
             }
             Panel.SetZIndex(dragItem, int.MaxValue);
         }

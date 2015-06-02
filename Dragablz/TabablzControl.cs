@@ -771,6 +771,12 @@ namespace Dragablz
         {
             if (!IsMyItem(e.DragablzItem)) return;
 
+            if (FixedHeaderCount > 0 &&
+                _dragablzItemsControl.ItemsOrganiser.Sort(_dragablzItemsControl.DragablzItems())
+                    .Take(FixedHeaderCount)
+                    .Contains(e.DragablzItem))
+                return;
+
             if (_tabHeaderDragStartInformation != null &&
                 Equals(_tabHeaderDragStartInformation.DragItem, e.DragablzItem) && 
                 InterTabController != null)

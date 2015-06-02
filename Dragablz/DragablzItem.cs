@@ -114,6 +114,46 @@ namespace Dragablz
             instance.RaiseEvent(args);
         }
 
+        private static readonly DependencyPropertyKey LogicalIndexPropertyKey =
+            DependencyProperty.RegisterReadOnly(
+                "LogicalIndex", typeof (int), typeof (DragablzItem),
+                new PropertyMetadata(default(int), OnLogicalIndexChanged));
+
+        public static readonly DependencyProperty LogicalIndexProperty =
+            LogicalIndexPropertyKey.DependencyProperty;
+
+        public int LogicalIndex
+        {
+            get { return (int) GetValue(LogicalIndexProperty); }
+            internal set { SetValue(LogicalIndexPropertyKey, value); }
+        }
+
+        public static readonly RoutedEvent LogicalIndexChangedEvent =
+            EventManager.RegisterRoutedEvent(
+                "LogicalIndexChanged",
+                RoutingStrategy.Bubble,
+                typeof (RoutedPropertyChangedEventHandler<int>),
+                typeof (DragablzItem));
+
+        public event RoutedPropertyChangedEventHandler<int> LogicalIndexChanged
+        {
+            add { AddHandler(LogicalIndexChangedEvent, value); }
+            remove { RemoveHandler(LogicalIndexChangedEvent, value); }
+        }
+
+        private static void OnLogicalIndexChanged(
+            DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var instance = (DragablzItem) d;
+            var args = new RoutedPropertyChangedEventArgs<int>(
+                (int) e.OldValue,
+                (int) e.NewValue)
+            {
+                RoutedEvent = DragablzItem.LogicalIndexChangedEvent
+            };
+            instance.RaiseEvent(args);
+        } 
+
         public static readonly DependencyProperty SizeGripProperty = DependencyProperty.RegisterAttached(
             "SizeGrip", typeof (SizeGrip), typeof (DragablzItem), new PropertyMetadata(default(SizeGrip), SizeGripPropertyChangedCallback));
 

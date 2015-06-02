@@ -255,8 +255,11 @@ namespace Dragablz
             {
                 if (FixedItemCount > 0 &&
                     ItemsOrganiser.Sort(DragablzItems()).Take(FixedItemCount).Contains(eventArgs.DragablzItem))
-                    return;                    
-
+                {
+                    eventArgs.Handled = true;
+                    return;
+                }                
+            
                 desiredLocation = ItemsOrganiser.ConstrainLocation(this, bounds,
                     new Point(eventArgs.DragablzItem.X, eventArgs.DragablzItem.Y),
                     new Size(eventArgs.DragablzItem.ActualWidth, eventArgs.DragablzItem.ActualHeight),
