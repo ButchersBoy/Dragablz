@@ -238,7 +238,7 @@ namespace Dragablz
         {
             get { return (bool) GetValue(ShowDefaultAddButtonProperty); }
             set { SetValue(ShowDefaultAddButtonProperty, value); }
-        }
+        }        
 
         public static readonly DependencyProperty InterTabControllerProperty = DependencyProperty.Register(
             "InterTabController", typeof (InterTabController), typeof (TabablzControl), new PropertyMetadata(null, InterTabControllerPropertyChangedCallback));

@@ -25,7 +25,7 @@ namespace DragablzDemo
             }.Show();                                      
                 
             var boundExampleModel = new BoundExampleModel(
-                new HeaderedItemViewModel { Header = "Mon", Content = "Monday's child is fair of face" },
+                new HeaderedItemViewModel { Header = "Fixed", Content = "There is a dragablz:DragablzItemsControl.FixedItemCount of 1, so this header is fixed!" },
                 new HeaderedItemViewModel { Header = "MDI Demo", Content = new MdiExample() },
                 new HeaderedItemViewModel { Header = "Layout Info", Content = new LayoutManagementExample { DataContext = new LayoutManagementExampleViewModel()} },
                 new HeaderedItemViewModel { Header = new CustomHeaderViewModel { Header = "Header"}, Content = "This tab illustrates how an individual header can be customised, without having to change the DragablzItem tab header template." },                

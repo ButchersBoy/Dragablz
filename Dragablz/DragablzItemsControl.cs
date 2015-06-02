@@ -34,7 +34,20 @@ namespace Dragablz
             AddHandler(DragablzItem.DragCompleted, new DragablzDragCompletedEventHandler(ItemDragCompleted));
             AddHandler(DragablzItem.DragStarted, new DragablzDragStartedEventHandler(ItemDragStarted));
             AddHandler(DragablzItem.MouseDownWithinEvent, new DragablzItemEventHandler(ItemMouseDownWithinHandlerTarget));
-        }        
+        }
+
+        public static readonly DependencyProperty FixedItemCountProperty = DependencyProperty.RegisterAttached(
+            "FixedItemCount", typeof (int), typeof (DragablzItemsControl), new FrameworkPropertyMetadata(default(int), FrameworkPropertyMetadataOptions.Inherits));
+
+        public static void SetFixedItemCount(DependencyObject element, int value)
+        {
+            element.SetValue(FixedItemCountProperty, value);
+        }
+
+        public static int GetFixedItemCount(DependencyObject element)
+        {
+            return (int) element.GetValue(FixedItemCountProperty);
+        }
 
         private void ItemContainerGeneratorOnItemsChanged(object sender, ItemsChangedEventArgs itemsChangedEventArgs)
         {
@@ -52,8 +65,8 @@ namespace Dragablz
             {
                 var dragablzItems = DragablzItems().ToList();
                 if (ItemsOrganiser == null) return;
-                ItemsOrganiser.Organise(new Size(ItemsPresenterWidth, ItemsPresenterHeight), dragablzItems);
-                var measure = ItemsOrganiser.Measure(new Size(ActualWidth, ActualHeight), dragablzItems);
+                ItemsOrganiser.Organise(this, new Size(ItemsPresenterWidth, ItemsPresenterHeight), dragablzItems);
+                var measure = ItemsOrganiser.Measure(this, new Size(ActualWidth, ActualHeight), dragablzItems);
                 ItemsPresenterWidth = measure.Width;
                 ItemsPresenterHeight = measure.Height;
             }), DispatcherPriority.Input);            
@@ -159,8 +172,8 @@ namespace Dragablz
             var dragablzItems = DragablzItems().ToList();            
             var maxConstraint = new Size(double.PositiveInfinity, double.PositiveInfinity);
 
-            ItemsOrganiser.Organise(maxConstraint, dragablzItems);
-            var measure = ItemsOrganiser.Measure(new Size(ActualWidth, ActualHeight), dragablzItems);
+            ItemsOrganiser.Organise(this, maxConstraint, dragablzItems);
+            var measure = ItemsOrganiser.Measure(this, new Size(ActualWidth, ActualHeight), dragablzItems);
 
             System.Diagnostics.Debug.WriteLine("Measuring item count " + dragablzItems.Count);
             System.Diagnostics.Debug.WriteLine("{0} -> {1} ", ItemsPresenterWidth, measure.Width);
@@ -199,7 +212,7 @@ namespace Dragablz
             if (ItemsOrganiser != null)
             {
                 var bounds = new Size(ActualWidth, ActualHeight);
-                ItemsOrganiser.OrganiseOnDragStarted(bounds,
+                ItemsOrganiser.OrganiseOnDragStarted(this, bounds,
                     DragablzItems().Except(new[] { eventArgs.DragablzItem }).ToList(),
                     eventArgs.DragablzItem);
             }
@@ -222,8 +235,8 @@ namespace Dragablz
 
             if (ItemsOrganiser != null)
             {
-                var bounds = new Size(ActualWidth, ActualHeight);                
-                ItemsOrganiser.OrganiseOnDragCompleted(bounds,
+                var bounds = new Size(ActualWidth, ActualHeight);
+                ItemsOrganiser.OrganiseOnDragCompleted(this, bounds,
                     dragablzItems.Except(eventArgs.DragablzItem),
                     eventArgs.DragablzItem);
             }
@@ -243,19 +256,26 @@ namespace Dragablz
                 eventArgs.DragablzItem.Y + eventArgs.DragDeltaEventArgs.VerticalChange
                 );
             if (ItemsOrganiser != null)
-                desiredLocation = ItemsOrganiser.ConstrainLocation(bounds,
-                    new Point(eventArgs.DragablzItem.X, eventArgs.DragablzItem.Y), 
-                    new Size(eventArgs.DragablzItem.ActualWidth, eventArgs.DragablzItem.ActualHeight), 
+            {
+                var fixedItemCount = GetFixedItemCount(this);
+                if (fixedItemCount > 0 &&
+                    ItemsOrganiser.Sort(DragablzItems()).Take(fixedItemCount).Contains(eventArgs.DragablzItem))
+                    return;                    
+
+                desiredLocation = ItemsOrganiser.ConstrainLocation(this, bounds,
+                    new Point(eventArgs.DragablzItem.X, eventArgs.DragablzItem.Y),
+                    new Size(eventArgs.DragablzItem.ActualWidth, eventArgs.DragablzItem.ActualHeight),
                     desiredLocation, eventArgs.DragablzItem.DesiredSize);
+            }
 
             eventArgs.DragablzItem.X = desiredLocation.X;
             eventArgs.DragablzItem.Y = desiredLocation.Y;
 
             if (ItemsOrganiser != null)
                 ItemsOrganiser.OrganiseOnDrag(
+                    this,
                     bounds,
-                    DragablzItems().Except(new[] {eventArgs.DragablzItem}),
-                    eventArgs.DragablzItem);
+                    DragablzItems().Except(new[] {eventArgs.DragablzItem}), eventArgs.DragablzItem);
             
             eventArgs.DragablzItem.BringIntoView();
 
@@ -297,7 +317,7 @@ namespace Dragablz
             if (ItemsOrganiser == null) return;
 
             var bounds = new Size(ActualWidth, ActualHeight);
-            ItemsOrganiser.OrganiseOnMouseDownWithing(bounds,
+            ItemsOrganiser.OrganiseOnMouseDownWithing(this, bounds,
                 DragablzItems().Except(e.DragablzItem).ToList(),
                 e.DragablzItem);
         }

@@ -61,7 +61,8 @@
         </dockablz:Layout.BranchTemplate>
         <!-- a root, named tab control is needed, so when a tab is torn and a new window is created, the new target tab control can be identified -->
         <dragablz:TabablzControl x:Name="InitialTabablzControl"
-                            Style="{StaticResource TabablzControlStyle}" />
+                                 dragablz:DragablzItemsControl.FixedItemCount="1"
+                                 Style="{StaticResource TabablzControlStyle}" />
     </dockablz:Layout>
 
 </dragablz:DragablzWindow>
