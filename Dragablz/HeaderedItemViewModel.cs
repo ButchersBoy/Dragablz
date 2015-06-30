@@ -17,6 +17,17 @@ namespace Dragablz
         private object _header;
         private object _content;
 
+        public HeaderedItemViewModel()
+        {
+        }
+
+        public HeaderedItemViewModel(object header, object content, bool isSelected = false)
+        {
+            _header = header;
+            _content = content;
+            _isSelected = isSelected;
+        }
+
         public object Header
         {
             get { return _header; }
