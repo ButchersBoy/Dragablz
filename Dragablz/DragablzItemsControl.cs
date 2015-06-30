@@ -171,9 +171,6 @@ namespace Dragablz
             ItemsOrganiser.Organise(this, maxConstraint, dragablzItems);
             var measure = ItemsOrganiser.Measure(this, new Size(ActualWidth, ActualHeight), dragablzItems);
 
-            System.Diagnostics.Debug.WriteLine("Measuring item count " + dragablzItems.Count);
-            System.Diagnostics.Debug.WriteLine("{0} -> {1} ", ItemsPresenterWidth, measure.Width);
-
             ItemsPresenterWidth = measure.Width;
             ItemsPresenterHeight = measure.Height;                          
 
