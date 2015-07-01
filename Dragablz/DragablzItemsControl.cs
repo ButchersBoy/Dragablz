@@ -16,7 +16,6 @@ namespace Dragablz
     /// </summary>
     public class DragablzItemsControl : ItemsControl
     {        
-        private readonly IList<DragablzItem> _itemsPendingInitialArrangement = new List<DragablzItem>();
         private object[] _previousSortQueryResult;
 
         static DragablzItemsControl()
@@ -129,9 +128,7 @@ namespace Dragablz
         {            
             var dragablzItem = item as DragablzItem;
             if (dragablzItem == null) return false;
-
-            _itemsPendingInitialArrangement.Add(dragablzItem);
-
+            
             return true;
         }
 
@@ -140,8 +137,6 @@ namespace Dragablz
             var result = ContainerCustomisations != null && ContainerCustomisations.GetContainerForItemOverride != null
                 ? ContainerCustomisations.GetContainerForItemOverride()
                 : new DragablzItem();
-
-            _itemsPendingInitialArrangement.Add(result);
 
             return result;
         }
@@ -185,6 +180,51 @@ namespace Dragablz
             var dragablzItem = (DragablzItem)ItemContainerGenerator.ContainerFromItem(item);            
             dragablzItem.InstigateDrag(continuation);            
         }
+
+        internal void MoveItem(MoveItemRequest moveItemRequest)
+        {
+            if (moveItemRequest == null) throw new ArgumentNullException("moveItemRequest");
+
+            if (ItemsOrganiser == null) return;
+
+            var dragablzItem = moveItemRequest.Item as DragablzItem ??
+                               ItemContainerGenerator.ContainerFromItem(
+                                   moveItemRequest.Item) as DragablzItem;
+            var contextDragablzItem = moveItemRequest.Context as DragablzItem ??
+                               ItemContainerGenerator.ContainerFromItem(
+                                   moveItemRequest.Context) as DragablzItem;
+
+            if (dragablzItem == null) return;
+
+            var sortedItems = DragablzItems().OrderBy(di => di.LogicalIndex).ToList();
+            sortedItems.Remove(dragablzItem);
+                
+            switch (moveItemRequest.AddLocationHint)
+            {
+                case AddLocationHint.First:
+                    sortedItems.Insert(0, dragablzItem);                        
+                    break;
+                case AddLocationHint.Last:
+                    sortedItems.Add(dragablzItem);
+                    break;
+                case AddLocationHint.Prior:
+                case AddLocationHint.After:
+                    if (contextDragablzItem == null)
+                        return;
+
+                    var contextIndex = sortedItems.IndexOf(contextDragablzItem);
+                    sortedItems.Insert(moveItemRequest.AddLocationHint == AddLocationHint.Prior ? contextIndex : contextIndex + 1, dragablzItem);
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            //TODO might not be too great for perf on larger lists
+            var orderedEnumerable = sortedItems.OrderBy(di => sortedItems.IndexOf(di));
+
+            ItemsOrganiser.Organise(this, new Size(ItemsPresenterWidth, ItemsPresenterHeight), orderedEnumerable);
+        }        
 
         internal IEnumerable<DragablzItem> DragablzItems()
         {
@@ -312,7 +352,7 @@ namespace Dragablz
             if (ItemsOrganiser == null) return;
 
             var bounds = new Size(ActualWidth, ActualHeight);
-            ItemsOrganiser.OrganiseOnMouseDownWithing(this, bounds,
+            ItemsOrganiser.OrganiseOnMouseDownWithin(this, bounds,
                 DragablzItems().Except(e.DragablzItem).ToList(),
                 e.DragablzItem);
         }

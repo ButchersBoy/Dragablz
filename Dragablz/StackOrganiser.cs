@@ -93,16 +93,33 @@ namespace Dragablz
         {
             if (items == null) throw new ArgumentNullException("items");
 
-            var currentCoord = 0.0;
-            var z = int.MaxValue;
-            var logicalIndex = 0;
-            foreach (
-                var newItem in
-                    items.Select((di, idx) => new Tuple<int, DragablzItem>(idx, di))
+            OrganiseInternal(
+                requestor, 
+                measureBounds,
+                items.Select((di, idx) => new Tuple<int, DragablzItem>(idx, di))
                         .OrderBy(tuple => tuple,
                             MultiComparer<Tuple<int, DragablzItem>>.Ascending(tuple => _getLocation(tuple.Item2))
                                 .ThenAscending(tuple => tuple.Item1))
-                        .Select(tuple => tuple.Item2))
+                        .Select(tuple => tuple.Item2));            
+        }
+
+        public void Organise(DragablzItemsControl requestor, Size measureBounds, IOrderedEnumerable<DragablzItem> items)
+        {
+            if (items == null) throw new ArgumentNullException("items");
+
+            OrganiseInternal(
+                requestor,
+                measureBounds,
+                items);
+        }
+
+        private void OrganiseInternal(DragablzItemsControl requestor, Size measureBounds,
+            IEnumerable<DragablzItem> items)
+        {
+            var currentCoord = 0.0;
+            var z = int.MaxValue;
+            var logicalIndex = 0;
+            foreach (var newItem in items)
             {
                 Panel.SetZIndex(newItem, newItem.IsSelected ? int.MaxValue : --z);
                 SetLocation(newItem, currentCoord);
@@ -112,7 +129,8 @@ namespace Dragablz
             }
         }
 
-        public void OrganiseOnMouseDownWithing(DragablzItemsControl requestor, Size measureBounds,
+
+        public void OrganiseOnMouseDownWithin(DragablzItemsControl requestor, Size measureBounds,
             List<DragablzItem> siblingItems, DragablzItem dragablzItem)
         {
 

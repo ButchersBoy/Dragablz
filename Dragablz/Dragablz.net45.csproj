@@ -99,6 +99,8 @@
     <Compile Include="INewTabHost.cs" />
     <Compile Include="InterTabController.cs" />
     <Compile Include="Core\InterTabTransfer.cs" />
+    <Compile Include="LocationHint.cs" />
+    <Compile Include="MoveItemRequest.cs" />
     <Compile Include="StackOrganiser.cs" />
     <Compile Include="LocationChangedEventArgs.cs" />
     <Compile Include="Core\Native.cs" />

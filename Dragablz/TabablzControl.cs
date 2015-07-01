@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -36,7 +37,7 @@ namespace Dragablz
 
         private Panel _itemsHolder;
         private TabHeaderDragStartInformation _tabHeaderDragStartInformation;
-        private object _previousSelection;
+        private object _previousSelection;        
         private DragablzItemsControl _dragablzItemsControl;
         private IDisposable _templateSubscription;
         private readonly SerialDisposable _windowSubscription = new SerialDisposable();
@@ -71,7 +72,51 @@ namespace Dragablz
             return LoadedInstances.ToList();
         }
 
-            /// <summary>
+        /// <summary>
+        /// Helper method to add an item next to an existing item.
+        /// </summary>
+        /// <remarks>
+        /// Due to the organisable nature of the control, the order of items may not reflect the order in the source collection.  This method
+        /// will add items to the source collection, managing their initial appearance on screen at the same time. 
+        /// If you are using a <see cref="InterTabController.InterTabClient"/> this will be used to add the item into the source collection.
+        /// </remarks>
+        /// <param name="item">New item to add.</param>
+        /// <param name="nearItem">Existing object/tab item content which defines which tab control should be used to add the object.</param>
+        /// <param name="addLocationHint">Location, relative to the <paramref name="nearItem"/> object</param>
+        public static void AddItem(object item, object nearItem, AddLocationHint addLocationHint)
+        {
+            if (nearItem == null) throw new ArgumentNullException("nearItem");
+
+            var existingLocation = GetLoadedInstances().SelectMany(tabControl =>
+                (tabControl.ItemsSource ?? tabControl.Items).OfType<object>()
+                    .Select(existingObject => new {tabControl, existingObject}))
+                .SingleOrDefault(a => nearItem.Equals(a.existingObject));
+
+            if (existingLocation == null)
+                throw new ArgumentException("Did not find precisely one instance of adjacentTo", "nearItem");            
+            
+            existingLocation.tabControl.AddToSource(item);
+            if (existingLocation.tabControl._dragablzItemsControl != null)
+                existingLocation.tabControl._dragablzItemsControl.MoveItem(new MoveItemRequest(item, nearItem, addLocationHint));
+        }
+
+        /// <summary>
+        /// Finds and selects an item.
+        /// </summary>
+        /// <param name="item"></param>
+        public static void SelectItem(object item)
+        {
+            var existingLocation = GetLoadedInstances().SelectMany(tabControl =>
+                (tabControl.ItemsSource ?? tabControl.Items).OfType<object>()
+                    .Select(existingObject => new {tabControl, existingObject}))
+                    .FirstOrDefault(a => item.Equals(a.existingObject));
+
+            if (existingLocation == null) return;
+
+            existingLocation.tabControl.SelectedItem = item;
+        }        
+
+        /// <summary>
         /// Style to apply to header items which are not their own item container (<see cref="TabItem"/>).  Typically items bound via the <see cref="ItemsSource"/> will use this style.
         /// </summary>
         [Obsolete]
@@ -238,6 +283,22 @@ namespace Dragablz
         {
             get { return (bool) GetValue(ShowDefaultAddButtonProperty); }
             set { SetValue(ShowDefaultAddButtonProperty, value); }
+        }
+
+        public static readonly DependencyProperty AddLocationHintProperty = DependencyProperty.Register(
+            "AddLocationHint", typeof (AddLocationHint), typeof (TabablzControl), new PropertyMetadata(AddLocationHint.Last));
+
+        /// <summary>
+        /// Gets or sets the location to add new tab items in the header.
+        /// </summary>
+        /// <remarks>
+        /// The logical order of the header items might not add match the content of the source items,
+        /// so this property allows control of where new items should appear.
+        /// </remarks>
+        public AddLocationHint AddLocationHint
+        {
+            get { return (AddLocationHint) GetValue(AddLocationHintProperty); }
+            set { SetValue(AddLocationHintProperty, value); }
         }
 
         public static readonly DependencyProperty FixedHeaderCountProperty = DependencyProperty.Register(
@@ -445,11 +506,11 @@ namespace Dragablz
                     l.Cast<object>()
                         .Where(o => !(o is TabItem))
                         .Select(o => _dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(o))
-                        .OfType<DragablzItem>();
+                        .OfType<DragablzItem>();            
             foreach (var addedItem in notTabItems(e.AddedItems))
             {
                 addedItem.IsSelected = true;
-                addedItem.BringIntoView();
+                addedItem.BringIntoView();    
             }
             foreach (var removedItem in notTabItems(e.RemovedItems))
             {
@@ -457,14 +518,14 @@ namespace Dragablz
             }
 
             foreach (var tabItem in e.AddedItems.OfType<TabItem>().Select(t => _dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(t)).OfType<DragablzItem>())
-            {
+            {                
                 tabItem.IsSelected = true;
                 tabItem.BringIntoView();
-            }
+            }            
             foreach (var tabItem in e.RemovedItems.OfType<TabItem>().Select(t => _dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(t)).OfType<DragablzItem>())
             {
                 tabItem.IsSelected = false;                
-            }
+            }                           
         }
 
         /// <summary>
@@ -495,13 +556,12 @@ namespace Dragablz
 
                 case NotifyCollectionChangedAction.Add:
                     UpdateSelectedItem();
+                    if (e.NewItems.Count == 1 && Items.Count > 1 && _dragablzItemsControl != null && _interTabTransfer == null)
+                        _dragablzItemsControl.MoveItem(new MoveItemRequest(e.NewItems[0], SelectedItem, AddLocationHint));
+
                     break;
 
-                case NotifyCollectionChangedAction.Remove:
-                    
-                    if (e.OldItems.Contains(SelectedItem))
-                        System.Diagnostics.Debugger.Break();
-
+                case NotifyCollectionChangedAction.Remove:                    
                     foreach (var item in e.OldItems)
                     {                        
                         var cp = FindChildContentPresenter(item);
@@ -915,7 +975,7 @@ namespace Dragablz
 
         internal void AddToSource(object item)
         {                    
-            var manualInterTabClient = InterTabController.InterTabClient as IManualInterTabClient;
+            var manualInterTabClient = InterTabController == null ? null : InterTabController.InterTabClient as IManualInterTabClient;
             if (manualInterTabClient != null)
             {
                 manualInterTabClient.Add(item);

@@ -13,7 +13,12 @@ namespace Dragablz
             
         }
 
-        public void OrganiseOnMouseDownWithing(DragablzItemsControl requestor, Size measureBounds, List<DragablzItem> siblingItems, DragablzItem dragablzItem)
+        public void Organise(DragablzItemsControl requestor, Size measureBounds, IOrderedEnumerable<DragablzItem> items)
+        {
+
+        }
+
+        public void OrganiseOnMouseDownWithin(DragablzItemsControl requestor, Size measureBounds, List<DragablzItem> siblingItems, DragablzItem dragablzItem)
         {
             var zIndex = int.MaxValue;
             foreach (var source in siblingItems.OrderByDescending(Panel.GetZIndex))

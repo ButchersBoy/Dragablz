@@ -45,6 +45,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LocationHint.cs" />
     <Compile Include="CanvasOrganiser.cs" />
     <Compile Include="ContainerCustomisations.cs" />
     <Compile Include="Converters\BooleanAndToVisibilityConverter.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="INewTabHost.cs" />
     <Compile Include="InterTabController.cs" />
     <Compile Include="ItemActionCallbackArgs.cs" />
+    <Compile Include="MoveItemRequest.cs" />
     <Compile Include="StackOrganiser.cs" />
     <Compile Include="StackPositionMonitor.cs" />
     <Compile Include="LocationChangedEventArgs.cs" />
