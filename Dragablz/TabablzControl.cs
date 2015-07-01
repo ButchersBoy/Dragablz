@@ -745,12 +745,15 @@ namespace Dragablz
         private bool MonitorReentry(DragablzDragDeltaEventArgs e)
         {
             var screenMousePosition = _dragablzItemsControl.PointToScreen(Mouse.GetPosition(_dragablzItemsControl));
+
+            if (e.DragablzItem.LogicalIndex < ((TabablzControl) e.Source).FixedHeaderCount)
+                return false;
             
             var otherTabablzControls = LoadedInstances
                 .Where(
                     tc =>
-                        tc != this && tc.InterTabController != null &&
-                        Equals(tc.InterTabController.Partition, InterTabController.Partition))
+                        tc != this && tc.InterTabController != null                         
+                        && Equals(tc.InterTabController.Partition, InterTabController.Partition))
                 .Select(tc =>
                 {
                     var topLeft = tc._dragablzItemsControl.PointToScreen(new Point());
