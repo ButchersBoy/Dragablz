@@ -218,7 +218,7 @@ namespace Dragablz
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
-            }
+            }            
 
             //TODO might not be too great for perf on larger lists
             var orderedEnumerable = sortedItems.OrderBy(di => sortedItems.IndexOf(di));
@@ -289,7 +289,7 @@ namespace Dragablz
                 eventArgs.DragablzItem.Y + eventArgs.DragDeltaEventArgs.VerticalChange
                 );
             if (ItemsOrganiser != null)
-            {
+            {                
                 if (FixedItemCount > 0 &&
                     ItemsOrganiser.Sort(DragablzItems()).Take(FixedItemCount).Contains(eventArgs.DragablzItem))
                 {

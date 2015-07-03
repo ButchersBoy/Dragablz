@@ -189,24 +189,21 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="Background">
-            <Setter.Value>
-                <SolidColorBrush Color="{x:Static SystemColors.ActiveBorderColor}" />
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
         <Setter Property="Width" Value="12" />
         <Setter Property="Height" Value="12" />
         <Setter Property="Margin" Value="4 0 2 0" />
         <Setter Property="Opacity" Value=".75" />
-        <Setter Property="Foreground" Value="{x:Static SystemColors.HighlightTextBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="true">
-                <Setter Property="Opacity" Value="1"/>
+                <Setter Property="Background" Value="{DynamicResource PrimaryHueLightBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueLightForegroundBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="{x:Type Button}" x:Key="AddItemCommandButtonStyle" BasedOn="{StaticResource MaterialDesignMenuCommandButtonStyle}">
+    <Style TargetType="{x:Type Button}" x:Key="MaterialDesignAddItemCommandButtonStyle" BasedOn="{StaticResource MaterialDesignMenuCommandButtonStyle}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
@@ -227,22 +224,15 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="Background">
-            <Setter.Value>
-                <SolidColorBrush Color="{x:Static SystemColors.ActiveBorderColor}" />
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
         <Setter Property="Width" Value="12" />
         <Setter Property="Height" Value="12" />
         <Setter Property="Margin" Value="4 0 2 0" />
-        <Setter Property="Foreground" Value="{x:Static SystemColors.HighlightTextBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="true">
-                <Setter Property="Background" Value="{x:Static dragablz:DragablzColors.WindowGlassBrush}"/>
-                <Setter Property="Foreground" Value="{x:Static SystemColors.HighlightTextBrush}" />
-            </Trigger>
-            <Trigger Property="IsPressed" Value="true">
-                <Setter Property="Opacity" Value="1"/>
+                <Setter Property="Background" Value="{DynamicResource PrimaryHueLightBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueLightForegroundBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -697,13 +687,14 @@
                                             ContentTemplate="{TemplateBinding HeaderPrefixContentStringFormat}"
                                             ContentTemplateSelector="{TemplateBinding HeaderPrefixContentTemplateSelector}"/>
                             <dragablz:DragablzItemsControl x:Name="PART_HeaderItemsControl"                                                         
-                                                        Grid.Column="1"
-                                                        ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Items}"                                                                                                            
-                                                        ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
-                                                        ItemsOrganiser="{TemplateBinding HeaderItemsOrganiser}"
-                                                        KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"
-                                                        ItemTemplate="{TemplateBinding CustomHeaderItemTemplate}"
-                                                        Style="{StaticResource TabablzDragablzItemsControlStyle}">
+                                                           Grid.Column="1"
+                                                           FixedItemCount="{TemplateBinding FixedHeaderCount}"
+                                                           ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Items}"                                                                                                            
+                                                           ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
+                                                           ItemsOrganiser="{TemplateBinding HeaderItemsOrganiser}"
+                                                           KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"
+                                                           ItemTemplate="{TemplateBinding CustomHeaderItemTemplate}"
+                                                           Style="{StaticResource TabablzDragablzItemsControlStyle}">
                                 <dragablz:DragablzItemsControl.MaxWidth>
                                     <MultiBinding>
                                         <MultiBinding.Converter>
@@ -716,7 +707,7 @@
                                     </MultiBinding>
                                 </dragablz:DragablzItemsControl.MaxWidth>
                             </dragablz:DragablzItemsControl>
-                            <Button Style="{StaticResource AddItemCommandButtonStyle}"
+                            <Button Style="{StaticResource MaterialDesignAddItemCommandButtonStyle}"
                                     x:Name="DefaultAddButton"
                                     Grid.Column="2"
                                     Command="{x:Static dragablz:TabablzControl.AddItemCommand}"
@@ -807,7 +798,7 @@
                                             </MultiBinding>
                                         </dragablz:DragablzItemsControl.MaxHeight>
                                     </dragablz:DragablzItemsControl>
-                                    <Button Style="{StaticResource AddItemCommandButtonStyle}"
+                                    <Button Style="{StaticResource MaterialDesignAddItemCommandButtonStyle}"
                                             x:Name="DefaultAddButton"
                                             Grid.Row="2"
                                             Command="{x:Static dragablz:TabablzControl.AddItemCommand}"

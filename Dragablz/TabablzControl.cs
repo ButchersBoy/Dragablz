@@ -832,12 +832,12 @@ namespace Dragablz
 
         private void ItemDragDelta(object sender, DragablzDragDeltaEventArgs e)
         {
-            if (!IsMyItem(e.DragablzItem)) return;
+            if (!IsMyItem(e.DragablzItem)) return;                        
 
             if (FixedHeaderCount > 0 &&
                 _dragablzItemsControl.ItemsOrganiser.Sort(_dragablzItemsControl.DragablzItems())
                     .Take(FixedHeaderCount)
-                    .Contains(e.DragablzItem))
+                    .Contains(e.DragablzItem))                
                 return;
 
             if (_tabHeaderDragStartInformation != null &&
