@@ -759,6 +759,13 @@ namespace Dragablz
                 .Select(tc =>
                 {
                     var topLeft = tc._dragablzItemsControl.PointToScreen(new Point());
+                    var lastFixedItem = tc._dragablzItemsControl.DragablzItems()
+                        .OrderBy(di=> di.LogicalIndex)
+                        .Take(tc._dragablzItemsControl.FixedItemCount)
+                        .LastOrDefault();                    
+                    //TODO work this for vert tabs
+                    if (lastFixedItem != null)
+                        topLeft.Offset(lastFixedItem.X + lastFixedItem.ActualWidth, 0);
                     var bottomRight =
                         tc._dragablzItemsControl.PointToScreen(new Point(tc._dragablzItemsControl.ActualWidth,
                             tc._dragablzItemsControl.ActualHeight));
@@ -951,16 +958,19 @@ namespace Dragablz
                     interTabTransfer.ItemPositionWithinHeader.Y + interTabTransfer.ItemSize.Height);
             }
 
+            var lastFixedItem = _dragablzItemsControl.DragablzItems()
+                .OrderBy(i => i.LogicalIndex)
+                .Take(_dragablzItemsControl.FixedItemCount)
+                .LastOrDefault();
+
             AddToSource(interTabTransfer.Item);
             SelectedItem = interTabTransfer.Item;
             
             Dispatcher.BeginInvoke(new Action(() => Layout.RestoreFloatingItemSnapShots(this, interTabTransfer.FloatingItemSnapShots)), DispatcherPriority.Loaded);
-
             _dragablzItemsControl.InstigateDrag(interTabTransfer.Item, newContainer =>
             {
                 newContainer.PartitionAtDragStart = interTabTransfer.OriginatorContainer.PartitionAtDragStart;
-                newContainer.IsDropTargetFound = true;
-
+                newContainer.IsDropTargetFound = true;                
                 if (interTabTransfer.TransferReason == InterTabTransferReason.Breach)
                 {                    
                     if (interTabTransfer.BreachOrientation == Orientation.Horizontal)
@@ -969,9 +979,15 @@ namespace Dragablz
                         newContainer.X = interTabTransfer.OriginatorContainer.X;
                 }
                 else
-                {                    
-                    var mouseXOnItemsControl = Native.GetCursorPos().X - _dragablzItemsControl.PointToScreen(new Point()).X;
-                    newContainer.X = mouseXOnItemsControl - interTabTransfer.DragStartItemOffset.X;                    
+                {
+                    //TODO sort for vert tabs
+                    var mouseXOnItemsControl = Native.GetCursorPos().X - _dragablzItemsControl.PointToScreen(new Point()).X;                                        
+                    var newX = mouseXOnItemsControl - interTabTransfer.DragStartItemOffset.X;
+                    if (lastFixedItem != null)
+                    {                     
+                        newX = Math.Max(newX, lastFixedItem.X + lastFixedItem.ActualWidth);
+                    }
+                    newContainer.X = newX;                    
                     newContainer.Y = 0;                    
                 }
                 newContainer.MouseAtDragStart = interTabTransfer.DragStartItemOffset;
