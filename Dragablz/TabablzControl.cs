@@ -567,8 +567,10 @@ namespace Dragablz
                         var cp = FindChildContentPresenter(item);
                         if (cp != null)
                             _itemsHolder.Children.Remove(cp);
-                    }                    
+                    }
 
+                    if (SelectedItem == null)
+                        SelectedItem = Items.OfType<object>().FirstOrDefault();
                     UpdateSelectedItem();
                     break;
 
@@ -752,7 +754,7 @@ namespace Dragablz
             var otherTabablzControls = LoadedInstances
                 .Where(
                     tc =>
-                        tc != this && tc.InterTabController != null                         
+                        tc != this && tc.InterTabController != null && InterTabController != null
                         && Equals(tc.InterTabController.Partition, InterTabController.Partition))
                 .Select(tc =>
                 {
