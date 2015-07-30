@@ -32,7 +32,7 @@ namespace Dragablz
             AddHandler(DragablzItem.DragDelta, new DragablzDragDeltaEventHandler(ItemDragDelta));
             AddHandler(DragablzItem.DragCompleted, new DragablzDragCompletedEventHandler(ItemDragCompleted));
             AddHandler(DragablzItem.DragStarted, new DragablzDragStartedEventHandler(ItemDragStarted));
-            AddHandler(DragablzItem.MouseDownWithinEvent, new DragablzItemEventHandler(ItemMouseDownWithinHandlerTarget));
+            AddHandler(DragablzItem.MouseDownWithinEvent, new DragablzItemEventHandler(ItemMouseDownWithinHandlerTarget));                        
         }
 
         public static readonly DependencyProperty FixedItemCountProperty = DependencyProperty.Register(
@@ -55,6 +55,8 @@ namespace Dragablz
                 ContainerCustomisations.ClearingContainerForItemOverride(element, item);            
 
             base.ClearContainerForItemOverride(element, item);
+
+            ((DragablzItem)element).SizeChanged -= ItemSizeChangedEventHandler;
 
             Dispatcher.BeginInvoke(new Action(() =>
             {
@@ -137,6 +139,8 @@ namespace Dragablz
             var result = ContainerCustomisations != null && ContainerCustomisations.GetContainerForItemOverride != null
                 ? ContainerCustomisations.GetContainerForItemOverride()
                 : new DragablzItem();
+
+            result.SizeChanged += ItemSizeChangedEventHandler;
 
             return result;
         }
@@ -355,6 +359,13 @@ namespace Dragablz
             ItemsOrganiser.OrganiseOnMouseDownWithin(this, bounds,
                 DragablzItems().Except(e.DragablzItem).ToList(),
                 e.DragablzItem);
+        }
+
+        private void ItemSizeChangedEventHandler(object sender, SizeChangedEventArgs e)
+        {
+            InvalidateMeasure();
+            //extra kick
+            Dispatcher.BeginInvoke(new Action(InvalidateMeasure), DispatcherPriority.Loaded);
         }
     }
 }
