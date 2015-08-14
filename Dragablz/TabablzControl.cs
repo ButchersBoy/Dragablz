@@ -688,8 +688,7 @@ namespace Dragablz
                 var tabItem = item as TabItem;
                 if (tabItem != null)
                     tabItem.IsSelected = true;
-                else
-                    SelectedItem = item;
+                SelectedItem = item;
 
                 if (ShouldDragWindow(sourceOfDragItemsControl))
                     IsDraggingWindow = true;
@@ -1085,7 +1084,7 @@ namespace Dragablz
         private ContentPresenter FindChildContentPresenter(object data)
         {
             if (data is TabItem)
-                data = (data as TabItem).Content;
+                data = ((TabItem) data).Content;
 
             if (data == null)
                 return null;
