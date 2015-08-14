@@ -321,9 +321,10 @@
                         <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
                             <AdornerDecorator>
                                 <Grid>
+                                    <Grid x:Name="PART_WindowSurface" Background="Transparent" />
                                     <Thumb Style="{StaticResource InvisibleThumbStyle}"
                                            IsHitTestVisible="False"
-                                           x:Name="PART_WindowRestoreThumb"/>                                    
+                                           x:Name="PART_WindowRestoreThumb"/>                                              
                                     <ContentPresenter Margin="4"/>
                                     <StackPanel x:Name="SystemCommandsPanel" 
                                                 HorizontalAlignment="Right"

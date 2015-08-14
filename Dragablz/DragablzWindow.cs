@@ -18,10 +18,12 @@ namespace Dragablz
     /// What this Window does is allow a quick way to remove the Window border, and support transparency whilst
     /// dragging.  
     /// </summary>
+    [TemplatePart(Name = WindowSurfaceGridPartName, Type = typeof(Grid))]
     [TemplatePart(Name = WindowRestoreThumbPartName, Type = typeof(Thumb))]
     [TemplatePart(Name = WindowResizeThumbPartName, Type = typeof(Thumb))]
     public class DragablzWindow : Window
     {
+        public const string WindowSurfaceGridPartName = "PART_WindowSurface";
         public const string WindowRestoreThumbPartName = "PART_WindowRestoreThumb";
         public const string WindowResizeThumbPartName = "PART_WindowResizeThumb";
         private readonly SerialDisposable _templateSubscription = new SerialDisposable();
@@ -49,8 +51,8 @@ namespace Dragablz
             CommandBindings.Add(new CommandBinding(CloseWindowCommand, CloseWindowExecuted));
             CommandBindings.Add(new CommandBinding(MaximizeWindowCommand, MaximizeWindowExecuted));
             CommandBindings.Add(new CommandBinding(MinimizeWindowCommand, MinimizeWindowExecuted));
-            CommandBindings.Add(new CommandBinding(RestoreWindowCommand, RestoreWindowExecuted));            
-        }                
+            CommandBindings.Add(new CommandBinding(RestoreWindowCommand, RestoreWindowExecuted));                        
+        }
 
         private static readonly DependencyPropertyKey IsWindowBeingDraggedByTabPropertyKey =
             DependencyProperty.RegisterReadOnly(
@@ -89,13 +91,22 @@ namespace Dragablz
 
         public override void OnApplyTemplate()
         {
+            var windowSurfaceGrid = GetTemplateChild(WindowSurfaceGridPartName) as Grid;
             var windowRestoreThumb = GetTemplateChild(WindowRestoreThumbPartName) as Thumb;
             var windowResizeThumb = GetTemplateChild(WindowResizeThumbPartName) as Thumb;
 
             _templateSubscription.Disposable = Disposable.Create(() =>
             {
+                if (windowSurfaceGrid != null)
+                {
+                    windowSurfaceGrid.MouseLeftButtonDown -= WindowSurfaceGridOnMouseLeftButtonDown;
+                }
+
                 if (windowRestoreThumb != null)
+                {
                     windowRestoreThumb.DragDelta -= WindowMoveThumbOnDragDelta;
+                    windowRestoreThumb.MouseDoubleClick += WindowRestoreThumbOnMouseDoubleClick;
+                }
 
                 if (windowResizeThumb == null) return;
 
@@ -107,19 +118,24 @@ namespace Dragablz
 
             base.OnApplyTemplate();
 
-            if (windowRestoreThumb != null)
-                windowRestoreThumb.DragDelta += WindowMoveThumbOnDragDelta;
-
-            if (windowResizeThumb != null)
+            if (windowSurfaceGrid != null)
             {
-                windowResizeThumb.MouseMove += WindowResizeThumbOnMouseMove;
-                windowResizeThumb.DragStarted += WindowResizeThumbOnDragStarted;
-                windowResizeThumb.DragDelta += WindowResizeThumbOnDragDelta;
-                windowResizeThumb.DragCompleted += WindowResizeThumbOnDragCompleted;                
+                windowSurfaceGrid.MouseLeftButtonDown += WindowSurfaceGridOnMouseLeftButtonDown;
             }
-            
-            MouseLeftButtonDown += (s, e) => DragMove();
-        }        
+
+            if (windowRestoreThumb != null)
+            {
+                windowRestoreThumb.DragDelta += WindowMoveThumbOnDragDelta;
+                windowRestoreThumb.MouseDoubleClick += WindowRestoreThumbOnMouseDoubleClick;
+            }
+
+            if (windowResizeThumb == null) return;
+
+            windowResizeThumb.MouseMove += WindowResizeThumbOnMouseMove;                
+            windowResizeThumb.DragStarted += WindowResizeThumbOnDragStarted;
+            windowResizeThumb.DragDelta += WindowResizeThumbOnDragDelta;
+            windowResizeThumb.DragCompleted += WindowResizeThumbOnDragCompleted;
+        }
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
@@ -146,11 +162,25 @@ namespace Dragablz
             }
         }
 
+        private void WindowSurfaceGridOnMouseLeftButtonDown(object sender, MouseButtonEventArgs mouseButtonEventArgs)
+        {
+            if (mouseButtonEventArgs.ChangedButton != MouseButton.Left) return;
+            if (mouseButtonEventArgs.ClickCount == 1)
+                DragMove();
+            if (mouseButtonEventArgs.ClickCount == 2)
+                WindowState = WindowState.Maximized;
+        }
+
         private static void WindowResizeThumbOnMouseMove(object sender, MouseEventArgs mouseEventArgs)
         {
             var thumb = (Thumb)sender;
             var mousePositionInThumb = Mouse.GetPosition(thumb);
             thumb.Cursor = SelectCursor(SelectSizingMode(mousePositionInThumb, thumb.RenderSize));
+        }
+
+        private void WindowRestoreThumbOnMouseDoubleClick(object sender, MouseButtonEventArgs mouseButtonEventArgs)
+        {            
+            WindowState = WindowState.Normal;            
         }
 
         private void WindowResizeThumbOnDragCompleted(object sender, DragCompletedEventArgs dragCompletedEventArgs)
