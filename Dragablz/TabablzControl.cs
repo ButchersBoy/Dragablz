@@ -810,8 +810,9 @@ namespace Dragablz
             if (Items.Count == 0)
             {
                 var window = Window.GetWindow(this);
-                if (window != null &&
-                    InterTabController.InterTabClient.TabEmptiedHandler(this, window) == TabEmptiedResponse.CloseWindowOrLayoutBranch)
+                if (window != null 
+                    && InterTabController != null                
+                    && InterTabController.InterTabClient.TabEmptiedHandler(this, window) == TabEmptiedResponse.CloseWindowOrLayoutBranch)
                 {
                     if (Layout.ConsolidateBranch(this)) return item;
 
