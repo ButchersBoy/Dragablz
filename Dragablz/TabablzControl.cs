@@ -1012,7 +1012,7 @@ namespace Dragablz
 
         private void RemoveFromSource(object item)
         {
-            var manualInterTabClient = InterTabController.InterTabClient as IManualInterTabClient;
+            var manualInterTabClient = InterTabController == null ? null : InterTabController.InterTabClient as IManualInterTabClient;
             if (manualInterTabClient != null)
             {
                 manualInterTabClient.Remove(item);
