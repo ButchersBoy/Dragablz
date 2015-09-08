@@ -804,6 +804,11 @@ namespace Dragablz
         internal object RemoveItem(DragablzItem dragablzItem)
         {
             var item = _dragablzItemsControl.ItemContainerGenerator.ItemFromContainer(dragablzItem);
+
+            var minSize = new Size(_dragablzItemsControl.ActualWidth, _dragablzItemsControl.ActualHeight);                
+            _dragablzItemsControl.MinHeight = 0;
+            _dragablzItemsControl.MinWidth = 0;
+
             var contentPresenter = FindChildContentPresenter(item);
             RemoveFromSource(item);
             _itemsHolder.Children.Remove(contentPresenter);
@@ -825,6 +830,11 @@ namespace Dragablz
                     {
                         SetIsClosingAsPartOfDragOperation(window, false);
                     }                    
+                }
+                else
+                {
+                    _dragablzItemsControl.MinHeight = minSize.Height;
+                    _dragablzItemsControl.MinWidth = minSize.Width;
                 }
             }
             return item;

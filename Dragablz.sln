@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragablz.net45", "Dragablz\Dragablz.net45.csproj", "{7B11011C-7FD7-4AB0-A1AD-04E940B026DE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B127C87D-C212-40D1-895E-3B6341E81C21} = {B127C87D-C212-40D1-895E-3B6341E81C21}
