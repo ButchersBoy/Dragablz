@@ -51,15 +51,22 @@
         <!-- branch template lets dragablz create a new tab control after a window is split via docking -->
         <dockablz:Layout.BranchTemplate>
             <DataTemplate>
-                <dragablz:TabablzControl Style="{StaticResource TabablzControlStyle}" />
+                <dragablz:TabablzControl Style="{StaticResource TabablzControlStyle}">
+                    <dragablz:TabablzControl.InterTabController>
+                        <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" Partition="2AE89D18-F236-4D20-9605-6C03319038E6" />
+                    </dragablz:TabablzControl.InterTabController>
+                </dragablz:TabablzControl>
             </DataTemplate>
         </dockablz:Layout.BranchTemplate>
         <!-- a root, named tab control is needed, so when a tab is torn and a new window is created, the new target tab control can be identified -->
         <dragablz:TabablzControl x:Name="InitialTabablzControl"
                                  FixedHeaderCount="1"
                                  Style="{StaticResource TabablzControlStyle}"
-                                 AddLocationHint="After"
-                                 />
+                                 AddLocationHint="After">
+            <dragablz:TabablzControl.InterTabController>
+                <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" Partition="2AE89D18-F236-4D20-9605-6C03319038E6" />
+            </dragablz:TabablzControl.InterTabController>
+        </dragablz:TabablzControl>
     </dockablz:Layout>
 
 </dragablz:DragablzWindow>
