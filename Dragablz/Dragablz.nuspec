@@ -6,6 +6,7 @@
     <title>Dragablz - Dragable and tearable tab control for WPF</title>
     <authors>James Willock</authors>
     <owners>James Willock</owners>
+    <iconUrl>https://raw.githubusercontent.com/ButchersBoy/Dragablz/master/Resources/D32.png</iconUrl>
     <licenseUrl>http://opensource.org/licenses/MS-PL</licenseUrl>
     <projectUrl>http://dragablz.net</projectUrl>    
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -17,7 +18,11 @@
   <files>
     <file src="..\bin\Release_net45\Dragablz.dll" target="lib\net45" />
     <file src="..\bin\Release_net45\Dragablz.pdb" target="lib\net45" />
+    <file src="..\bin\Release_net45\Dragablz.xml" target="lib\net45" />
     <file src="..\bin\Release_net40\Dragablz.dll" target="lib\net40" />
-    <file src="..\bin\Release_net40\Dragablz.pdb" target="lib\net40" />	
+    <file src="..\bin\Release_net45\Dragablz.pdb" target="lib\net40" />
+    <file src="..\bin\Release_net40\Dragablz.xml" target="lib\net40" />	
+    <file src="..\Dragablz\**\*.cs" target="src\net45" />
+    <file src="..\Dragablz\**\*.cs" target="src\net40" />
   </files>  
 </package>
