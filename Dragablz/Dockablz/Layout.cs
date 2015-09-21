@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -99,6 +100,74 @@ namespace Dragablz.Dockablz
         public static IEnumerable<Layout> GetLoadedInstances()
         {
             return LoadedLayouts.ToList();
+        }        
+
+        /// <summary>
+        /// Finds the location of a tab control withing a layout.
+        /// </summary>
+        /// <param name="tabablzControl"></param>
+        /// <returns></returns>
+        public static LocationReport Find(TabablzControl tabablzControl)
+        {
+            if (tabablzControl == null) throw new ArgumentNullException("tabablzControl");
+
+            return Finder.Find(tabablzControl);            
+        }
+
+        /// <summary>
+        /// Creates a split in a layout, at the location of a specified <see cref="TabablzControl"/>.
+        /// </summary>
+        /// <para></para>
+        /// <param name="tabablzControl">Tab control to be split.</param>
+        /// <param name="orientation">Direction of split.</param>
+        /// <param name="makeSecond">Set to <c>true</c> to make the current tab control push into the right hand or bottom of the split.</param>
+        /// <remarks>The tab control to be split must be hosted in a layout control.</remarks>
+        public static BranchResult Branch(TabablzControl tabablzControl, Orientation orientation, bool makeSecond)
+        {
+            return Branch(tabablzControl, orientation, makeSecond, .5);
+        }
+
+        /// <summary>
+        /// Creates a split in a layout, at the location of a specified <see cref="TabablzControl"/>.
+        /// </summary>
+        /// <para></para>
+        /// <param name="tabablzControl">Tab control to be split.</param>
+        /// <param name="orientation">Direction of split.</param>
+        /// <param name="makeSecond">Set to <c>true</c> to make the current tab control push into the right hand or bottom of the split.</param>
+        /// <param name="ratio">Sets the size ratio between the first and second tab controls, with 0.5 being 50% of available space each.</param>
+        /// <remarks>The tab control to be split must be hosted in a layout control.</remarks>
+        public static BranchResult Branch(TabablzControl tabablzControl, Orientation orientation, bool makeSecond, double ratio)
+        {
+            if (ratio < 0.0 || ratio > 1.0) throw new ArgumentOutOfRangeException("ratio", "Must be >= 0.0 and <= 1.0");
+
+            var locationReport = Find(tabablzControl);
+            
+            Action<Branch> applier;
+            object existingContent;
+            if (!locationReport.IsLeaf)
+            {
+                existingContent = locationReport.RootLayout.Content;
+                applier = branch => locationReport.RootLayout.Content = branch;
+            }
+            else if (!locationReport.IsSecondLeaf)
+            {
+                existingContent = locationReport.ParentBranch.FirstItem;
+                applier = branch => locationReport.ParentBranch.FirstItem = branch;
+            }
+            else
+            {
+                existingContent = locationReport.ParentBranch.SecondItem;
+                applier = branch => locationReport.ParentBranch.SecondItem = branch;
+            }            
+
+            var selectedItem = tabablzControl.SelectedItem;
+            var branchResult = Branch(orientation, makeSecond, locationReport.RootLayout.BranchTemplate, existingContent, applier);
+            tabablzControl.SelectedItem = selectedItem;
+            tabablzControl.Dispatcher.BeginInvoke(new Action(() =>
+                tabablzControl.SetCurrentValue(Selector.SelectedItemProperty, selectedItem)),
+                DispatcherPriority.Loaded);
+
+            return branchResult;
         }
 
         /// <summary>
@@ -260,7 +329,7 @@ namespace Dragablz.Dockablz
         public static bool GetIsFloatingInLayout(DependencyObject element)
         {
             return (bool)element.GetValue(KeyIsFloatingInLayoutPropertyKey.DependencyProperty);
-        }
+        }                
 
         public override void OnApplyTemplate()
         {            
@@ -473,6 +542,44 @@ namespace Dragablz.Dockablz
             } while (node != null);            
 
             return null;
+        }
+
+        private static BranchResult Branch(
+            Orientation orientation, bool makeSecond, DataTemplate branchTemplate, 
+            object existingContent,
+            Action<Branch> applier)
+        {
+            var branchItem = new Branch
+            {
+                Orientation = orientation
+            };         
+            
+            var newContent = new ContentControl
+            {
+                Content = new object(),
+                ContentTemplate = branchTemplate,
+            };            
+
+            if (!makeSecond)
+            {
+                branchItem.FirstItem = existingContent;
+                branchItem.SecondItem = newContent;
+            }
+            else
+            {
+                branchItem.FirstItem = newContent;
+                branchItem.SecondItem = existingContent;
+            }
+
+            applier(branchItem);
+
+            newContent.Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.Loaded);
+            var newTabablzControl = newContent.VisualTreeDepthFirstTraversal().OfType<TabablzControl>().FirstOrDefault();
+
+            if (newTabablzControl == null)
+                throw new ApplicationException("New TabablzControl was not generated inside branch.");
+
+            return new BranchResult(branchItem, newTabablzControl);
         }
 
         private static void ItemDragCompleted(object sender, DragablzDragCompletedEventArgs e)
@@ -722,7 +829,7 @@ namespace Dragablz.Dockablz
             canExecuteRoutedEventArgs.CanExecute = IsHostingTab();
             canExecuteRoutedEventArgs.ContinueRouting = false;
             canExecuteRoutedEventArgs.Handled = true;
-        }
+        }        
 
         private void UnfloatExecuted(object sender, ExecutedRoutedEventArgs executedRoutedEventArgs)
         {

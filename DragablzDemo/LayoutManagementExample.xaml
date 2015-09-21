@@ -4,16 +4,32 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dragablzDemo="clr-namespace:DragablzDemo"
+             xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance dragablzDemo:LayoutManagementExampleViewModel, IsDesignTimeCreatable=False}">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type dragablzDemo:TabablzControlProxy}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>TabablzControl. Operations:</TextBlock>
+                <Button Command="{Binding SplitHorizontallyCommand}">Split Horizontally</Button>
+                <Button Command="{Binding SplitVerticallyCommand}">Split Vertically</Button>                
+            </StackPanel>            
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Button Command="{Binding QueryLayoutsCommand}">Query Layouts</Button>            
-        <TreeView Grid.Row="1" ItemsSource="{Binding RootNodes}">
+        <TreeView Grid.Row="1" ItemsSource="{Binding RootNodes}" x:Name="TreeView">
+            <TreeView.Resources>
+                <DataTemplate DataType="{x:Type dragablzDemo:TabablzControlProxy}">
+                    <TextBlock>TabablzControl</TextBlock>
+                </DataTemplate>
+            </TreeView.Resources>
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded" Value="True" />
@@ -24,8 +40,8 @@
                                           ItemsSource="{Binding Children}">
                     <ContentControl Content="{Binding Content}" />
                 </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-            
+            </TreeView.ItemTemplate>            
         </TreeView>
+        <ContentControl Grid.Row="2" Content="{Binding ElementName=TreeView, Path=SelectedItem.Content}" />
     </Grid>
 </UserControl>

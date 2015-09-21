@@ -47,6 +47,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dockablz\BranchResult.cs" />
+    <Compile Include="Dockablz\Finder.cs" />
+    <Compile Include="Dockablz\LocationReport.cs" />
+    <Compile Include="Dockablz\LocationReportBuilder.cs" />
+    <Compile Include="Dockablz\LocationReportException.cs" />
     <Compile Include="LocationHint.cs" />
     <Compile Include="CanvasOrganiser.cs" />
     <Compile Include="ContainerCustomisations.cs" />

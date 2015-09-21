@@ -7,6 +7,7 @@ using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Dragablz;
 using Dragablz.Dockablz;
@@ -74,7 +75,7 @@ namespace DragablzDemo
 
         private static void TabablzControlVisitor(TreeNode treeNode, TabablzControl tabablzControl)
         {
-            treeNode.Children.Add(new TreeNode { Content = tabablzControl.ToString() });            
+            treeNode.Children.Add(new TreeNode { Content = new TabablzControlProxy(tabablzControl) });            
         }
 
         private static void BranchAccessorVisitor(TreeNode treeNode, BranchAccessor branchAccessor)
@@ -90,6 +91,45 @@ namespace DragablzDemo
             branchAccessor
                 .Visit(firstBranchNode, BranchItem.First, BranchAccessorVisitor, TabablzControlVisitor)
                 .Visit(secondBranchNode, BranchItem.Second, BranchAccessorVisitor, TabablzControlVisitor);
+        }
+    }
+
+    public class TabablzControlProxy
+    {
+        private readonly TabablzControl _tabablzControl;
+        private readonly ICommand _splitHorizontallyCommand;
+        private readonly ICommand _splitVerticallyCommand;
+
+        public TabablzControlProxy(TabablzControl tabablzControl)
+        {
+            _tabablzControl = tabablzControl;
+
+            _splitHorizontallyCommand = new AnotherCommandImplementation(_ => Branch(Orientation.Horizontal));
+            _splitVerticallyCommand = new AnotherCommandImplementation(_ => Branch(Orientation.Vertical));
+        }
+
+        public ICommand SplitHorizontallyCommand
+        {
+            get { return _splitHorizontallyCommand; }
+        }
+
+        public ICommand SplitVerticallyCommand
+        {
+            get { return _splitVerticallyCommand; }
+        }
+
+        private void Branch(Orientation orientation)
+        {
+            var branchResult = Layout.Branch(_tabablzControl, orientation, false, .5);
+
+            var newItem = new HeaderedItemViewModel
+            {
+                Header = "Code-Wise",
+                Content = "This item was added in via code, using Layout.Branch, and TabablzControl.AddToSource"
+            };
+
+            branchResult.TabablzControl.AddToSource(newItem);
+            branchResult.TabablzControl.SelectedItem = newItem;
         }
     }
 

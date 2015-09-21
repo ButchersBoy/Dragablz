@@ -55,6 +55,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\ShowDefaultCloseButtonConverter.cs" />
+    <Compile Include="Dockablz\BranchResult.cs" />
+    <Compile Include="Dockablz\Finder.cs" />
+    <Compile Include="Dockablz\LocationReport.cs" />
+    <Compile Include="Dockablz\LocationReportBuilder.cs" />
+    <Compile Include="Dockablz\LocationReportException.cs" />
     <Compile Include="ItemActionCallbackArgs.cs" />
     <Compile Include="ContainerCustomisations.cs" />
     <Compile Include="Converters\BooleanAndToVisibilityConverter.cs" />

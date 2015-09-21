@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Dragablz.Dockablz
 {
+    /// <summary>
+    /// Provides information about the <see cref="Layout"/> instance.
+    /// </summary>
     public class LayoutAccessor
     {
         private readonly Layout _layout;
@@ -32,11 +35,17 @@ namespace Dragablz.Dockablz
             get { return _layout.FloatingDragablzItems(); }
         }
 
+        /// <summary>
+        /// <see cref="BranchAccessor"/> and <see cref="TabablzControl"/> are mutually exclusive, according to whether the layout has been split, or just contains a tab control.
+        /// </summary>
         public BranchAccessor BranchAccessor
         {
             get { return _branchAccessor; }
         }
 
+        /// <summary>
+        /// <see cref="BranchAccessor"/> and <see cref="TabablzControl"/> are mutually exclusive, according to whether the layout has been split, or just contains a tab control.
+        /// </summary>
         public TabablzControl TabablzControl
         {
             get { return _tabablzControl; }

@@ -1,9 +1,15 @@
 using System;
+using System.Runtime.Serialization;
 
 namespace Dragablz.Dockablz
 {
     public static class Extensions
     {
+        /// <summary>
+        /// Begin a query of layout content, returning an accessor for examining the children.
+        /// </summary>
+        /// <param name="layout"></param>
+        /// <returns></returns>
         public static LayoutAccessor Query(this Layout layout)
         {
             if (layout == null) throw new ArgumentNullException("layout");

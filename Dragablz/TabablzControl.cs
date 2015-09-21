@@ -448,9 +448,57 @@ namespace Dragablz
             element.SetValue(IsWrappingTabItemProperty, value);
         }
 
-        public static bool GetIsWrappingTabItem(DependencyObject element)
+        internal static bool GetIsWrappingTabItem(DependencyObject element)
         {
             return (bool) element.GetValue(IsWrappingTabItemProperty);
+        }
+
+        /// <summary>
+        /// Adds an item to the source collection.  If the InterTabController.InterTabClient is set that instance will be deferred to.
+        /// Otherwise an attempt will be made to add to the <see cref="ItemsSource" /> property, and lastly <see cref="Items"/>.
+        /// </summary>
+        /// <param name="item"></param>
+        public void AddToSource(object item)
+        {
+            if (item == null) throw new ArgumentNullException("item");
+
+            var manualInterTabClient = InterTabController == null ? null : InterTabController.InterTabClient as IManualInterTabClient;
+            if (manualInterTabClient != null)
+            {
+                manualInterTabClient.Add(item);
+            }
+            else
+            {
+                CollectionTeaser collectionTeaser;
+                if (CollectionTeaser.TryCreate(ItemsSource, out collectionTeaser))
+                    collectionTeaser.Add(item);
+                else
+                    Items.Add(item);
+            }
+        }
+
+        /// <summary>
+        /// Removes an item from the source collection.  If the InterTabController.InterTabClient is set that instance will be deferred to.
+        /// Otherwise an attempt will be made to remove from the <see cref="ItemsSource" /> property, and lastly <see cref="Items"/>.
+        /// </summary>
+        /// <param name="item"></param>
+        public void RemoveFromSource(object item)
+        {
+            if (item == null) throw new ArgumentNullException("item");
+
+            var manualInterTabClient = InterTabController == null ? null : InterTabController.InterTabClient as IManualInterTabClient;
+            if (manualInterTabClient != null)
+            {
+                manualInterTabClient.Remove(item);
+            }
+            else
+            {
+                CollectionTeaser collectionTeaser;
+                if (CollectionTeaser.TryCreate(ItemsSource, out collectionTeaser))
+                    collectionTeaser.Remove(item);
+                else
+                    Items.Remove(item);
+            }
         }
 
         public override void OnApplyTemplate()
@@ -747,9 +795,12 @@ namespace Dragablz
         {
             var screenMousePosition = _dragablzItemsControl.PointToScreen(Mouse.GetPosition(_dragablzItemsControl));
 
-            if (e.DragablzItem.LogicalIndex < ((TabablzControl) e.Source).FixedHeaderCount)
+            var sourceTabablzControl = (TabablzControl) e.Source;
+            if (sourceTabablzControl.Items.Count > 1 && e.DragablzItem.LogicalIndex < sourceTabablzControl.FixedHeaderCount)
+            {                
                 return false;
-            
+            }
+
             var otherTabablzControls = LoadedInstances
                 .Where(
                     tc =>
@@ -1002,41 +1053,7 @@ namespace Dragablz
                 }
                 newContainer.MouseAtDragStart = interTabTransfer.DragStartItemOffset;
             });
-        }        
-
-        internal void AddToSource(object item)
-        {                    
-            var manualInterTabClient = InterTabController == null ? null : InterTabController.InterTabClient as IManualInterTabClient;
-            if (manualInterTabClient != null)
-            {
-                manualInterTabClient.Add(item);
-            }
-            else
-            {
-                CollectionTeaser collectionTeaser;
-                if (CollectionTeaser.TryCreate(ItemsSource, out collectionTeaser))
-                    collectionTeaser.Add(item);
-                else
-                    Items.Add(item);
-            }            
-        }        
-
-        private void RemoveFromSource(object item)
-        {
-            var manualInterTabClient = InterTabController == null ? null : InterTabController.InterTabClient as IManualInterTabClient;
-            if (manualInterTabClient != null)
-            {
-                manualInterTabClient.Remove(item);
-            }
-            else
-            {
-                CollectionTeaser collectionTeaser;
-                if (CollectionTeaser.TryCreate(ItemsSource, out collectionTeaser))
-                    collectionTeaser.Remove(item);
-                else
-                    Items.Remove(item);
-            }
-        }
+        }                
 
         /// <summary>
         /// generate a ContentPresenter for the selected item
