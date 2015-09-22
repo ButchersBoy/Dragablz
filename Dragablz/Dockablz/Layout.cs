@@ -68,7 +68,7 @@ namespace Dragablz.Dockablz
             CommandBindings.Add(new CommandBinding(TileFloatingItemsCommand, TileFloatingItemsExecuted));
             CommandBindings.Add(new CommandBinding(TileFloatingItemsCommand, TileFloatingItemsExecuted));
             CommandBindings.Add(new CommandBinding(TileFloatingItemsVerticallyCommand, TileFloatingItemsVerticallyExecuted));
-            CommandBindings.Add(new CommandBinding(TileFloatingItemsHorizontallyCommand, TileFloatingItemsHorizontallyExecuted));            
+            CommandBindings.Add(new CommandBinding(TileFloatingItemsHorizontallyCommand, TileFloatingItemsHorizontallyExecuted));                        
 
             //TODO bad bad behaviour.  Pick up this from the template.
             _floatingItems = new DragablzItemsControl

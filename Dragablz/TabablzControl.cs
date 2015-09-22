@@ -32,6 +32,8 @@ namespace Dragablz
 
         public static RoutedCommand CloseItemCommand = new RoutedCommand();
         public static RoutedCommand AddItemCommand = new RoutedCommand();
+        //public static RoutedCommand AddItemCommand = new RoutedCommand();
+        //public static RoutedCommand AddItemCommand = new RoutedCommand();
 
         private static readonly HashSet<TabablzControl> LoadedInstances = new HashSet<TabablzControl>();        
 
@@ -625,6 +627,58 @@ namespace Dragablz
                 case NotifyCollectionChangedAction.Replace:
                     throw new NotImplementedException("Replace not implemented yet");
             }
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            TabItem nextTabItem = null;
+
+            // Handle [Ctrl][Shift]Tab, Home and End cases 
+            // We have special handling here because if focus is inside the TabItem content we cannot 
+            // cycle through TabItem because the content is not part of the TabItem visual tree
+            
+
+            var sortedDragablzItems = _dragablzItemsControl.ItemsOrganiser.Sort(_dragablzItemsControl.DragablzItems()).ToList();
+            DragablzItem selectDragablzItem = null;
+            switch (e.Key)
+            {
+                case Key.Tab:
+                    if (SelectedItem == null)
+                    {
+                        selectDragablzItem = sortedDragablzItems.FirstOrDefault();
+                        break;
+                    }
+
+                    if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                    {
+                        var selectedDragablzItem = (DragablzItem)_dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(SelectedItem);
+                        var selectedDragablzItemIndex = sortedDragablzItems.IndexOf(selectedDragablzItem);                        
+                        var direction = ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+                            ? -1 : 1;
+                        var newIndex = selectedDragablzItemIndex + direction;
+                        if (newIndex < 0) newIndex = sortedDragablzItems.Count - 1;
+                        else if (newIndex == sortedDragablzItems.Count) newIndex = 0;
+
+                        selectDragablzItem = sortedDragablzItems[newIndex];
+                    }
+                    break;
+                case Key.Home:
+                    selectDragablzItem = sortedDragablzItems.FirstOrDefault();
+                    break;
+                case Key.End:
+                    selectDragablzItem = sortedDragablzItems.LastOrDefault();
+                    break;
+            }
+
+            if (selectDragablzItem != null)
+            {
+                var item = _dragablzItemsControl.ItemContainerGenerator.ItemFromContainer(selectDragablzItem);
+                SetCurrentValue(SelectedItemProperty, item);
+                e.Handled = true;
+            }
+
+            if (!e.Handled)
+                base.OnKeyDown(e); 
         }
 
         internal static TabablzControl GetOwnerOfHeaderItems(DragablzItemsControl itemsControl)
