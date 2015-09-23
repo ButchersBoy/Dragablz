@@ -631,13 +631,6 @@ namespace Dragablz
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            TabItem nextTabItem = null;
-
-            // Handle [Ctrl][Shift]Tab, Home and End cases 
-            // We have special handling here because if focus is inside the TabItem content we cannot 
-            // cycle through TabItem because the content is not part of the TabItem visual tree
-            
-
             var sortedDragablzItems = _dragablzItemsControl.ItemsOrganiser.Sort(_dragablzItemsControl.DragablzItems()).ToList();
             DragablzItem selectDragablzItem = null;
             switch (e.Key)
