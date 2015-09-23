@@ -718,7 +718,7 @@
                                             ContentStringFormat="{TemplateBinding HeaderSuffixContentStringFormat}"
                                             ContentTemplate="{TemplateBinding HeaderSuffixContentStringFormat}"
                                             ContentTemplateSelector="{TemplateBinding HeaderSuffixContentTemplateSelector}"
-                                            HorizontalAlignment="Left"
+                                            HorizontalAlignment="Stretch"
                                             />
                         </Grid>
                     </Grid>
