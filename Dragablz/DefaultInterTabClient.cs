@@ -20,7 +20,8 @@ namespace Dragablz
             var newTabablzControl = newWindow.LogicalTreeDepthFirstTraversal().OfType<TabablzControl>().FirstOrDefault();
             if (newTabablzControl == null) throw new ApplicationException("Unable to ascrtain tab control.");
 
-            newTabablzControl.Items.Clear();
+            if (newTabablzControl.ItemsSource == null)
+                newTabablzControl.Items.Clear();
 
             return new NewTabHost<Window>(newWindow, newTabablzControl);            
         }
