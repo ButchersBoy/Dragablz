@@ -40,6 +40,27 @@ namespace Dragablz.Core
             return lpPoint;
         }
 
+        [DllImport("User32.dll")]
+        private static extern IntPtr GetDC(IntPtr hwnd);
+
+        [DllImport("gdi32.dll")]
+        private static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+
+        [DllImport("user32.dll")]
+        private static extern bool ReleaseDC(IntPtr hWnd, IntPtr hDC);
+
+        public static Point ToWpf(this Point pixelPoint)
+        {
+            var desktop = GetDC(IntPtr.Zero); 
+            var dpi = GetDeviceCaps(desktop, 88);
+            ReleaseDC(IntPtr.Zero, desktop);
+
+            var physicalUnitSize = 96d / dpi ;
+            var wpfPoint = new Point(physicalUnitSize * pixelPoint.X, physicalUnitSize * pixelPoint.Y);
+
+            return wpfPoint;
+        }
+
         public static IEnumerable<Window> SortWindowsTopToBottom(IEnumerable<Window> windows)
         {
             var windowsByHandle = windows.Select(window =>

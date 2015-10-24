@@ -812,12 +812,15 @@ namespace Dragablz
 
             if (_interTabTransfer != null)
             {
-                var cursorPos = Native.GetCursorPos();
+                var cursorPos = Native.GetCursorPos().ToWpf();
                 if (_interTabTransfer.BreachOrientation == Orientation.Vertical)
                 {
                     var vector = cursorPos - _interTabTransfer.DragStartWindowOffset;
                     myWindow.Left = vector.X;
-                    myWindow.Top = vector.Y;                
+                    myWindow.Top = vector.Y;
+
+                    var point = Native.GetCursorPos();
+                    Console.WriteLine("{0}  ---  {1}  ---  {2}  --LEFT: {3}", point, point.ToWpf(), _interTabTransfer.DragStartWindowOffset,  myWindow.Left);
                 }
                 else
                 {
