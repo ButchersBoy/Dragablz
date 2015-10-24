@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -32,8 +31,6 @@ namespace Dragablz
 
         public static RoutedCommand CloseItemCommand = new RoutedCommand();
         public static RoutedCommand AddItemCommand = new RoutedCommand();
-        //public static RoutedCommand AddItemCommand = new RoutedCommand();
-        //public static RoutedCommand AddItemCommand = new RoutedCommand();
 
         private static readonly HashSet<TabablzControl> LoadedInstances = new HashSet<TabablzControl>();        
 
@@ -44,11 +41,13 @@ namespace Dragablz
         private IDisposable _templateSubscription;
         private readonly SerialDisposable _windowSubscription = new SerialDisposable();
 
+        private InterTabTransfer _interTabTransfer;
+
         static TabablzControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(TabablzControl), new FrameworkPropertyMetadata(typeof(TabablzControl)));            
         }
-
+        
         public TabablzControl()
         {            
             AddHandler(DragablzItem.DragStarted, new DragablzDragStartedEventHandler(ItemDragStarted), true);
@@ -996,15 +995,7 @@ namespace Dragablz
 
             var myWindow = Window.GetWindow(this);
             if (myWindow == null) throw new ApplicationException("Unable to find owning window.");
-            newTabHost.Container.Width = myWindow.RestoreBounds.Width;
-            newTabHost.Container.Height = myWindow.RestoreBounds.Height;
-
-            var dragStartWindowOffset = e.DragablzItem.TranslatePoint(new Point(), myWindow);
-            dragStartWindowOffset.Offset(e.DragablzItem.MouseAtDragStart.X, e.DragablzItem.MouseAtDragStart.Y);
-            var borderVector = myWindow.WindowState == WindowState.Maximized
-                ? myWindow.PointToScreen(new Point()) - new Point()
-                : myWindow.PointToScreen(new Point()) - new Point(myWindow.Left, myWindow.Top);            
-            dragStartWindowOffset.Offset(borderVector.X, borderVector.Y);
+            var dragStartWindowOffset = ConfigureNewHostSizeAndGetDragStartWindowOffset(myWindow, newTabHost, e.DragablzItem);            
             
             var dragableItemHeaderPoint = e.DragablzItem.TranslatePoint(new Point(), _dragablzItemsControl);
             var dragableItemSize = new Size(e.DragablzItem.ActualWidth, e.DragablzItem.ActualHeight);
@@ -1049,7 +1040,32 @@ namespace Dragablz
             e.Cancel = true;
         }
 
-        private InterTabTransfer _interTabTransfer;
+        private Point ConfigureNewHostSizeAndGetDragStartWindowOffset(Window currentWindow, INewTabHost<Window> newTabHost, DragablzItem dragablzItem)
+        {
+            var layout = this.VisualTreeAncestory().OfType<Layout>().FirstOrDefault();
+            Point dragStartWindowOffset;
+            if (layout != null)
+            {
+                newTabHost.Container.Width = ActualWidth + (currentWindow.RestoreBounds.Width - layout.ActualWidth);
+                newTabHost.Container.Height = ActualHeight + (currentWindow.RestoreBounds.Height - layout.ActualHeight);
+                dragStartWindowOffset = dragablzItem.TranslatePoint(new Point(), this);
+                dragStartWindowOffset.Offset(currentWindow.RestoreBounds.Width - layout.ActualWidth, currentWindow.RestoreBounds.Height - layout.ActualHeight);
+            }
+            else
+            {
+                newTabHost.Container.Width = currentWindow.RestoreBounds.Width;
+                newTabHost.Container.Height = currentWindow.RestoreBounds.Height;
+                dragStartWindowOffset = dragablzItem.TranslatePoint(new Point(), currentWindow);
+            }
+            
+            dragStartWindowOffset.Offset(dragablzItem.MouseAtDragStart.X, dragablzItem.MouseAtDragStart.Y);
+            var borderVector = currentWindow.WindowState == WindowState.Maximized
+                ? currentWindow.PointToScreen(new Point()) - new Point()
+                : currentWindow.PointToScreen(new Point()) - new Point(currentWindow.Left, currentWindow.Top);
+            dragStartWindowOffset.Offset(borderVector.X, borderVector.Y);
+
+            return dragStartWindowOffset;
+        }
 
         internal void ReceiveDrag(InterTabTransfer interTabTransfer)
         {

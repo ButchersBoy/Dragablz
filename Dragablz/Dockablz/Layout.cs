@@ -836,14 +836,14 @@ namespace Dragablz.Dockablz
             var dragablzItem = executedRoutedEventArgs.Parameter as DragablzItem;
             if (dragablzItem == null) return;
             
-            var exemplarTab = this.VisualTreeDepthFirstTraversal().OfType<TabablzControl>()
+            var exemplarTabControl = this.VisualTreeDepthFirstTraversal().OfType<TabablzControl>()
                 .FirstOrDefault(t => t.InterTabController != null && t.InterTabController.Partition == Partition);                
 
-            if (exemplarTab == null) return;
+            if (exemplarTabControl == null) return;
 
             //TODO passing the exemplar tab in here isnt ideal, as strictly speaking there isnt one.
-            var newTabHost = exemplarTab.InterTabController.InterTabClient.GetNewHost(exemplarTab.InterTabController.InterTabClient,
-                exemplarTab.InterTabController.Partition, exemplarTab);
+            var newTabHost = exemplarTabControl.InterTabController.InterTabClient.GetNewHost(exemplarTabControl.InterTabController.InterTabClient,
+                exemplarTabControl.InterTabController.Partition, exemplarTabControl);
             if (newTabHost == null || newTabHost.TabablzControl == null || newTabHost.Container == null)
                 throw new ApplicationException("New tab host was not correctly provided");
 
