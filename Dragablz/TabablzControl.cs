@@ -818,14 +818,11 @@ namespace Dragablz
                     var vector = cursorPos - _interTabTransfer.DragStartWindowOffset;
                     myWindow.Left = vector.X;
                     myWindow.Top = vector.Y;
-
-                    var point = Native.GetCursorPos();
-                    Console.WriteLine("{0}  ---  {1}  ---  {2}  --LEFT: {3}", point, point.ToWpf(), _interTabTransfer.DragStartWindowOffset,  myWindow.Left);
                 }
                 else
                 {
                     var offset = e.DragablzItem.TranslatePoint(_interTabTransfer.OriginatorContainer.MouseAtDragStart, myWindow);
-                    var borderVector = myWindow.PointToScreen(new Point()) - new Point(myWindow.Left, myWindow.Top);
+                    var borderVector = myWindow.PointToScreen(new Point()).ToWpf() - new Point(myWindow.Left, myWindow.Top);
                     offset.Offset(borderVector.X, borderVector.Y);
                     myWindow.Left = cursorPos.X - offset.X;                    
                     myWindow.Top = cursorPos.Y - offset.Y;
@@ -998,8 +995,8 @@ namespace Dragablz
 
             var myWindow = Window.GetWindow(this);
             if (myWindow == null) throw new ApplicationException("Unable to find owning window.");
-            var dragStartWindowOffset = ConfigureNewHostSizeAndGetDragStartWindowOffset(myWindow, newTabHost, e.DragablzItem);            
-            
+            var dragStartWindowOffset = ConfigureNewHostSizeAndGetDragStartWindowOffset(myWindow, newTabHost, e.DragablzItem);
+
             var dragableItemHeaderPoint = e.DragablzItem.TranslatePoint(new Point(), _dragablzItemsControl);
             var dragableItemSize = new Size(e.DragablzItem.ActualWidth, e.DragablzItem.ActualHeight);
             var floatingItemSnapShots = this.VisualTreeDepthFirstTraversal()
@@ -1011,7 +1008,7 @@ namespace Dragablz
 
             if (myWindow.WindowState == WindowState.Maximized)
             {
-                var desktopMousePosition = Native.GetCursorPos();
+                var desktopMousePosition = Native.GetCursorPos().ToWpf();
                 newTabHost.Container.Left = desktopMousePosition.X - dragStartWindowOffset.X;
                 newTabHost.Container.Top = desktopMousePosition.Y - dragStartWindowOffset.Y;
             }
@@ -1049,10 +1046,10 @@ namespace Dragablz
             Point dragStartWindowOffset;
             if (layout != null)
             {
-                newTabHost.Container.Width = ActualWidth + (currentWindow.RestoreBounds.Width - layout.ActualWidth);
-                newTabHost.Container.Height = ActualHeight + (currentWindow.RestoreBounds.Height - layout.ActualHeight);
+                newTabHost.Container.Width = ActualWidth + Math.Max(0, currentWindow.RestoreBounds.Width - layout.ActualWidth);
+                newTabHost.Container.Height = ActualHeight + Math.Max(0, currentWindow.RestoreBounds.Height - layout.ActualHeight);
                 dragStartWindowOffset = dragablzItem.TranslatePoint(new Point(), this);
-                dragStartWindowOffset.Offset(currentWindow.RestoreBounds.Width - layout.ActualWidth, currentWindow.RestoreBounds.Height - layout.ActualHeight);
+                //dragStartWindowOffset.Offset(currentWindow.RestoreBounds.Width - layout.ActualWidth, currentWindow.RestoreBounds.Height - layout.ActualHeight);
             }
             else
             {
@@ -1063,10 +1060,9 @@ namespace Dragablz
             
             dragStartWindowOffset.Offset(dragablzItem.MouseAtDragStart.X, dragablzItem.MouseAtDragStart.Y);
             var borderVector = currentWindow.WindowState == WindowState.Maximized
-                ? currentWindow.PointToScreen(new Point()) - new Point()
-                : currentWindow.PointToScreen(new Point()) - new Point(currentWindow.Left, currentWindow.Top);
+                ? currentWindow.PointToScreen(new Point()).ToWpf() - new Point()
+                : currentWindow.PointToScreen(new Point()).ToWpf() - new Point(currentWindow.Left, currentWindow.Top);
             dragStartWindowOffset.Offset(borderVector.X, borderVector.Y);
-
             return dragStartWindowOffset;
         }
 
