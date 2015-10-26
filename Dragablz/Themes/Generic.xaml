@@ -324,8 +324,7 @@
                                     <Grid x:Name="PART_WindowSurface" Background="Transparent" />
                                     <Thumb Style="{StaticResource InvisibleThumbStyle}"
                                            IsHitTestVisible="False"
-                                           x:Name="PART_WindowRestoreThumb"/>                                              
-                                    <ContentPresenter Margin="4"/>
+                                           x:Name="PART_WindowRestoreThumb"/>                                                                                  
                                     <StackPanel x:Name="SystemCommandsPanel" 
                                                 HorizontalAlignment="Right"
                                                 VerticalAlignment="Top"
@@ -350,7 +349,8 @@
                                                 >
                                             <themes:SystemCommandIcon SystemCommandType="CloseWindow" />
                                         </Button>
-                                    </StackPanel>                                
+                                    </StackPanel>              
+                                    <ContentPresenter Margin="4"/>
                                 </Grid>
                             </AdornerDecorator>
                         </Border>
@@ -1365,7 +1365,7 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" />
-                            <ContentPresenter x:Name="PART_FloatContentPresenter" />
+                            <ContentPresenter x:Name="PART_FloatContentPresenter" Margin="{TemplateBinding FloatingItemsContainerMargin}" />
                             <dockablz:DropZone x:Name="PART_TopDropZone" 
                                                VerticalAlignment="Top" HorizontalAlignment="Center"                                               
                                                Location="Top"                                               

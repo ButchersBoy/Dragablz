@@ -228,6 +228,24 @@ namespace Dragablz.Dockablz
             set { SetValue(IsFloatDropZoneEnabledProperty, value); }
         }
 
+        /// <summary>
+        /// Defines a margin for the container which hosts all floating items.
+        /// </summary>
+        public static readonly DependencyProperty FloatingItemsContainerMarginProperty = DependencyProperty.Register(
+            "FloatingItemsContainerMargin", typeof (Thickness), typeof (Layout), new PropertyMetadata(default(Thickness)));
+
+        /// <summary>
+        /// Defines a margin for the container which hosts all floating items.
+        /// </summary>
+        public Thickness FloatingItemsContainerMargin
+        {
+            get { return (Thickness) GetValue(FloatingItemsContainerMarginProperty); }
+            set { SetValue(FloatingItemsContainerMarginProperty, value); }
+        }
+
+        /// <summary>
+        /// Floating items, such as tool/MDI windows, which will sit above the <see cref="Content"/>.
+        /// </summary>
         public ItemCollection FloatingItems
         {
             get { return _floatingItems.Items; }
@@ -236,6 +254,9 @@ namespace Dragablz.Dockablz
         public static readonly DependencyProperty FloatingItemsSourceProperty = DependencyProperty.Register(
             "FloatingItemsSource", typeof (IEnumerable), typeof (Layout), new PropertyMetadata(default(IEnumerable)));
 
+        /// <summary>
+        /// Floating items, such as tool/MDI windows, which will sit above the <see cref="Content"/>.
+        /// </summary>
         public IEnumerable FloatingItemsSource
         {
             get { return (IEnumerable) GetValue(FloatingItemsSourceProperty); }

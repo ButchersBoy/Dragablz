@@ -47,7 +47,8 @@
                      FloatingItemsSource="{Binding ToolItems}"
                      FloatingItemHeaderMemberPath="Header"
                      IsFloatDropZoneEnabled="True"
-                     ClosingFloatingItemCallback="{Binding ClosingFloatingItemHandler}">
+                     ClosingFloatingItemCallback="{Binding ClosingFloatingItemHandler}"
+                     FloatingItemsContainerMargin="0 2 0 0">
         <!-- branch template lets dragablz create a new tab control after a window is split via docking -->
         <dockablz:Layout.BranchTemplate>
             <DataTemplate>
