@@ -1187,11 +1187,6 @@
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource StandardDragablzTabItemStyle}"/>        
-        <Setter Property="HeaderSuffixContent">
-            <Setter.Value>
-                <Grid Width="74" />
-            </Setter.Value>
-        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:TabablzControl}">
@@ -1240,6 +1235,7 @@
                                         <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="ActualWidth" />
                                         <Binding RelativeSource="{RelativeSource Self}" Path="ItemsPresenterWidth" />
                                         <Binding ElementName="PrefixContentControl" Path="ActualWidth" />
+                                        <Binding ElementName="DefaultAddButton" Path="DesiredSize.Width" />
                                         <Binding ElementName="SuffixContentControl" Path="DesiredSize.Width" />
                                     </MultiBinding>
                                 </local:DragablzItemsControl.MaxWidth>

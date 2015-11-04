@@ -703,6 +703,7 @@
                                         <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="ActualWidth" />
                                         <Binding RelativeSource="{RelativeSource Self}" Path="ItemsPresenterWidth" />
                                         <Binding ElementName="PrefixContentControl" Path="ActualWidth" />
+                                        <Binding ElementName="DefaultAddButton" Path="DesiredSize.Width" />
                                         <Binding ElementName="SuffixContentControl" Path="DesiredSize.Width" />
                                     </MultiBinding>
                                 </dragablz:DragablzItemsControl.MaxWidth>
@@ -794,6 +795,7 @@
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="ActualHeight" />
                                                 <Binding RelativeSource="{RelativeSource Self}" Path="ItemsPresenterHeight" />
                                                 <Binding ElementName="PrefixContentControl" Path="ActualHeight" />
+                                                <Binding ElementName="DefaultAddButton" Path="DesiredSize.Height" />
                                                 <Binding ElementName="SuffixContentControl" Path="DesiredSize.Height" />
                                             </MultiBinding>
                                         </dragablz:DragablzItemsControl.MaxHeight>
