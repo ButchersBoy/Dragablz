@@ -79,6 +79,8 @@
       <DependentUpon>QuickStartWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SimpleViewModel.cs" />
+    <Compile Include="TabablzControlProxy.cs" />
+    <Compile Include="TreeNode.cs" />
     <Page Include="BasicExampleMainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -1408,10 +1408,9 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <!-- had a problem in past using 1 where the splitter would cease working -->
-                                <ColumnDefinition Width="0.99999*" />
+                                <ColumnDefinition Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=FirstItemLength, Mode=TwoWay}" />
                                 <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="1.00001*" />
+                                <ColumnDefinition Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SecondItemLength, Mode=TwoWay}" />
                             </Grid.ColumnDefinitions>
                             <ContentPresenter x:Name="PART_FirstContentPresenter" Content="{TemplateBinding FirstItem}" />
                             <GridSplitter Grid.Column="1" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" 
@@ -1432,10 +1431,9 @@
                                     BorderThickness="{TemplateBinding BorderThickness}">
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <!-- had a problem in past using 1 where the splitter would cease working -->
-                                        <RowDefinition Height="0.99999*" />
+                                        <RowDefinition Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=FirstItemLength, Mode=TwoWay}" />
                                         <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="1.00001*" />
+                                        <RowDefinition Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SecondItemLength, Mode=TwoWay}" />
                                     </Grid.RowDefinitions>
                                     <ContentPresenter x:Name="PART_FirstContentPresenter" Content="{TemplateBinding FirstItem}" />
                                     <GridSplitter Grid.Row="1" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext" Height="5" HorizontalAlignment="Stretch" />

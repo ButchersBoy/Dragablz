@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Dragablz;
 using Dragablz.Dockablz;
@@ -83,65 +81,14 @@ namespace DragablzDemo
             var branchNode = new TreeNode {Content = "Branch " + branchAccessor.Branch.Orientation};
             treeNode.Children.Add(branchNode);
 
-            var firstBranchNode = new TreeNode { Content = "Branch Item 1" };
+            var firstBranchNode = new TreeNode { Content = "Branch Item 1. Ratio=" + branchAccessor.Branch.GetFirstProportion() };
             branchNode.Children.Add(firstBranchNode);
-            var secondBranchNode = new TreeNode { Content = "Branch Item 2" };
+            var secondBranchNode = new TreeNode { Content = "Branch Item 2. Ratio=" + (1 - branchAccessor.Branch.GetFirstProportion()) };
             branchNode.Children.Add(secondBranchNode);
 
             branchAccessor
                 .Visit(firstBranchNode, BranchItem.First, BranchAccessorVisitor, TabablzControlVisitor)
                 .Visit(secondBranchNode, BranchItem.Second, BranchAccessorVisitor, TabablzControlVisitor);
-        }
-    }
-
-    public class TabablzControlProxy
-    {
-        private readonly TabablzControl _tabablzControl;
-        private readonly ICommand _splitHorizontallyCommand;
-        private readonly ICommand _splitVerticallyCommand;
-
-        public TabablzControlProxy(TabablzControl tabablzControl)
-        {
-            _tabablzControl = tabablzControl;
-
-            _splitHorizontallyCommand = new AnotherCommandImplementation(_ => Branch(Orientation.Horizontal));
-            _splitVerticallyCommand = new AnotherCommandImplementation(_ => Branch(Orientation.Vertical));
-        }
-
-        public ICommand SplitHorizontallyCommand
-        {
-            get { return _splitHorizontallyCommand; }
-        }
-
-        public ICommand SplitVerticallyCommand
-        {
-            get { return _splitVerticallyCommand; }
-        }
-
-        private void Branch(Orientation orientation)
-        {
-            var branchResult = Layout.Branch(_tabablzControl, orientation, false, .5);
-
-            var newItem = new HeaderedItemViewModel
-            {
-                Header = "Code-Wise",
-                Content = "This item was added in via code, using Layout.Branch, and TabablzControl.AddToSource"
-            };
-
-            branchResult.TabablzControl.AddToSource(newItem);
-            branchResult.TabablzControl.SelectedItem = newItem;
-        }
-    }
-
-    public class TreeNode
-    {
-        private readonly ObservableCollection<TreeNode> _children = new ObservableCollection<TreeNode>();
-
-        public object Content { get; set; }
-
-        public ObservableCollection<TreeNode> Children
-        {
-            get { return _children; }
         }
     }
 }

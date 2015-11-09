@@ -134,11 +134,11 @@ namespace Dragablz.Dockablz
         /// <param name="tabablzControl">Tab control to be split.</param>
         /// <param name="orientation">Direction of split.</param>
         /// <param name="makeSecond">Set to <c>true</c> to make the current tab control push into the right hand or bottom of the split.</param>
-        /// <param name="ratio">Sets the size ratio between the first and second tab controls, with 0.5 being 50% of available space each.</param>
+        /// <param name="firstItemProportion">Sets the proportion of the first tab control, with 0.5 being 50% of available space.</param>
         /// <remarks>The tab control to be split must be hosted in a layout control.</remarks>
-        public static BranchResult Branch(TabablzControl tabablzControl, Orientation orientation, bool makeSecond, double ratio)
+        public static BranchResult Branch(TabablzControl tabablzControl, Orientation orientation, bool makeSecond, double firstItemProportion)
         {
-            if (ratio < 0.0 || ratio > 1.0) throw new ArgumentOutOfRangeException("ratio", "Must be >= 0.0 and <= 1.0");
+            if (firstItemProportion < 0.0 || firstItemProportion > 1.0) throw new ArgumentOutOfRangeException("firstItemProportion", "Must be >= 0.0 and <= 1.0");
 
             var locationReport = Find(tabablzControl);
             
@@ -161,7 +161,7 @@ namespace Dragablz.Dockablz
             }            
 
             var selectedItem = tabablzControl.SelectedItem;
-            var branchResult = Branch(orientation, makeSecond, locationReport.RootLayout.BranchTemplate, existingContent, applier);
+            var branchResult = Branch(orientation, firstItemProportion, makeSecond, locationReport.RootLayout.BranchTemplate, existingContent, applier);
             tabablzControl.SelectedItem = selectedItem;
             tabablzControl.Dispatcher.BeginInvoke(new Action(() =>
                 tabablzControl.SetCurrentValue(Selector.SelectedItemProperty, selectedItem)),
@@ -565,10 +565,7 @@ namespace Dragablz.Dockablz
             return null;
         }
 
-        private static BranchResult Branch(
-            Orientation orientation, bool makeSecond, DataTemplate branchTemplate, 
-            object existingContent,
-            Action<Branch> applier)
+        private static BranchResult Branch(Orientation orientation, double proportion, bool makeSecond, DataTemplate branchTemplate, object existingContent, Action<Branch> applier)
         {
             var branchItem = new Branch
             {
@@ -591,6 +588,9 @@ namespace Dragablz.Dockablz
                 branchItem.FirstItem = newContent;
                 branchItem.SecondItem = existingContent;
             }
+
+            branchItem.SetCurrentValue(Dockablz.Branch.FirstItemLengthProperty, new GridLength(proportion, GridUnitType.Star));
+            branchItem.SetCurrentValue(Dockablz.Branch.SecondItemLengthProperty, new GridLength(1-proportion, GridUnitType.Star));
 
             applier(branchItem);
 

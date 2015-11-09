@@ -14,6 +14,8 @@
                 <TextBlock>TabablzControl. Operations:</TextBlock>
                 <Button Command="{Binding SplitHorizontallyCommand}">Split Horizontally</Button>
                 <Button Command="{Binding SplitVerticallyCommand}">Split Vertically</Button>                
+                <TextBlock>Ratio:</TextBlock>
+                <Slider Value="{Binding SplitRatio}" Width="160" />
             </StackPanel>            
         </DataTemplate>
     </UserControl.Resources>
