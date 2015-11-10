@@ -1053,9 +1053,20 @@ namespace Dragablz
             }
             else
             {
-                newTabHost.Container.Width = currentWindow.RestoreBounds.Width;
-                newTabHost.Container.Height = currentWindow.RestoreBounds.Height;
-                dragStartWindowOffset = dragablzItem.TranslatePoint(new Point(), currentWindow);
+                if (newTabHost.Container.GetType() == currentWindow.GetType())
+                {
+                    newTabHost.Container.Width = currentWindow.RestoreBounds.Width;
+                    newTabHost.Container.Height = currentWindow.RestoreBounds.Height;
+                    dragStartWindowOffset = dragablzItem.TranslatePoint(new Point(), currentWindow);
+                }
+                else
+                {
+                    newTabHost.Container.Width = ActualWidth;
+                    newTabHost.Container.Height = ActualHeight;
+                    dragStartWindowOffset = dragablzItem.TranslatePoint(new Point(), this);
+                    dragStartWindowOffset.Offset(dragablzItem.MouseAtDragStart.X, dragablzItem.MouseAtDragStart.Y);
+                    return dragStartWindowOffset;
+                }                
             }
             
             dragStartWindowOffset.Offset(dragablzItem.MouseAtDragStart.X, dragablzItem.MouseAtDragStart.Y);
