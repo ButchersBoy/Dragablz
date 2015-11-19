@@ -36,7 +36,7 @@ namespace Dragablz
 
         private Panel _itemsHolder;
         private TabHeaderDragStartInformation _tabHeaderDragStartInformation;
-        private object _previousSelection;        
+        private WeakReference _previousSelection;        
         private DragablzItemsControl _dragablzItemsControl;
         private IDisposable _templateSubscription;
         private readonly SerialDisposable _windowSubscription = new SerialDisposable();
@@ -539,9 +539,9 @@ namespace Dragablz
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             if (e.RemovedItems.Count > 0)
-                _previousSelection = e.RemovedItems[0];
+                _previousSelection = new WeakReference(e.RemovedItems[0]);
             else if (e.AddedItems.Count > 0)
-                _previousSelection = e.AddedItems[0];
+                _previousSelection = new WeakReference(e.AddedItems[0]);
             else
                 _previousSelection = null;
 
@@ -1024,8 +1024,9 @@ namespace Dragablz
             if (Items.Count == 0)
                 Layout.ConsolidateBranch(this);
 
-            if (_previousSelection != null && Items.Contains(_previousSelection))
-                SelectedItem = _previousSelection;
+            var previousSelection = _previousSelection?.Target;
+            if (previousSelection != null && Items.Contains(previousSelection))
+                SelectedItem = previousSelection;
             else
                 SelectedItem = Items.OfType<object>().FirstOrDefault();
 
