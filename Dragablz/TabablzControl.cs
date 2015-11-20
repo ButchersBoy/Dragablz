@@ -538,12 +538,8 @@ namespace Dragablz
         /// <param name="e"></param>
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
-            if (e.RemovedItems.Count > 0)
+            if (e.RemovedItems.Count > 0 && e.AddedItems.Count > 0)
                 _previousSelection = new WeakReference(e.RemovedItems[0]);
-            else if (e.AddedItems.Count > 0)
-                _previousSelection = new WeakReference(e.AddedItems[0]);
-            else
-                _previousSelection = null;
 
             base.OnSelectionChanged(e);
             UpdateSelectedItem();
@@ -619,7 +615,7 @@ namespace Dragablz
                     }
 
                     if (SelectedItem == null)
-                        SelectedItem = Items.OfType<object>().FirstOrDefault();
+                        RestorePreviousSelection();
                     UpdateSelectedItem();
                     break;
 
@@ -1024,11 +1020,7 @@ namespace Dragablz
             if (Items.Count == 0)
                 Layout.ConsolidateBranch(this);
 
-            var previousSelection = _previousSelection?.Target;
-            if (previousSelection != null && Items.Contains(previousSelection))
-                SelectedItem = previousSelection;
-            else
-                SelectedItem = Items.OfType<object>().FirstOrDefault();
+            RestorePreviousSelection();
 
             foreach (var dragablzItem in _dragablzItemsControl.DragablzItems())
             {
@@ -1039,6 +1031,15 @@ namespace Dragablz
             newTabHost.TabablzControl.ReceiveDrag(interTabTransfer);
             interTabTransfer.OriginatorContainer.IsDropTargetFound = true;
             e.Cancel = true;
+        }
+
+        private void RestorePreviousSelection()
+        {
+            var previousSelection = _previousSelection?.Target;
+            if (previousSelection != null && Items.Contains(previousSelection))
+                SelectedItem = previousSelection;
+            else
+                SelectedItem = Items.OfType<object>().FirstOrDefault();
         }
 
         private Point ConfigureNewHostSizeAndGetDragStartWindowOffset(Window currentWindow, INewTabHost<Window> newTabHost, DragablzItem dragablzItem)
