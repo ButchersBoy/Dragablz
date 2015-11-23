@@ -105,7 +105,7 @@ namespace Dragablz
                 if (windowRestoreThumb != null)
                 {
                     windowRestoreThumb.DragDelta -= WindowMoveThumbOnDragDelta;
-                    windowRestoreThumb.MouseDoubleClick += WindowRestoreThumbOnMouseDoubleClick;
+                    windowRestoreThumb.MouseDoubleClick -= WindowRestoreThumbOnMouseDoubleClick;
                 }
 
                 if (windowResizeThumb == null) return;
