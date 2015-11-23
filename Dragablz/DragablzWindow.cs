@@ -303,11 +303,12 @@ namespace Dragablz
                 (!(Math.Abs(dragDeltaEventArgs.HorizontalChange) > 2) &&
                  !(Math.Abs(dragDeltaEventArgs.VerticalChange) > 2))) return;
 
-            var cursorPos = Native.GetCursorPos();
+            var cursorPos = Native.GetRawCursorPos();
             Top = 2;
             Left = Math.Max(cursorPos.X - RestoreBounds.Width /2, 0);
             WindowState = WindowState.Normal;
-            Native.SendMessage(CriticalHandle, WindowMessage.WM_LBUTTONUP, IntPtr.Zero, IntPtr.Zero);    
+            var lParam = (int)(uint)cursorPos.X | (cursorPos.Y << 16);
+            Native.SendMessage(CriticalHandle, WindowMessage.WM_LBUTTONUP, (IntPtr)HitTest.HT_CAPTION, (IntPtr)lParam);
             Native.SendMessage(CriticalHandle, WindowMessage.WM_SYSCOMMAND, (IntPtr)SystemCommand.SC_MOUSEMOVE, IntPtr.Zero);
         }
 
