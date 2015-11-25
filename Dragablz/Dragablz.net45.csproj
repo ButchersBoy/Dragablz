@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\ShowDefaultCloseButtonConverter.cs" />
+    <Compile Include="Core\HitTest.cs" />
     <Compile Include="Dockablz\BranchResult.cs" />
     <Compile Include="Dockablz\Finder.cs" />
     <Compile Include="Dockablz\LocationReport.cs" />
