@@ -304,7 +304,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="MaterialDesignDragableTabItemVerticalStyle"  TargetType="{x:Type dragablz:DragablzItem}">
+    <Style x:Key="MaterialDesignDragableTabItemVerticalStyle" TargetType="{x:Type dragablz:DragablzItem}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource MaterialDesignFocusVisual}"/>
         <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
@@ -333,7 +333,12 @@
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
-                                                  x:Name="contentPresenter"/>
+                                                      x:Name="contentPresenter"
+                                                      RenderTransformOrigin=".5, .5">
+                                        <ContentPresenter.RenderTransform>
+                                            <RotateTransform Angle="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(dragablz:DragablzItem.ContentRotateTransformAngle)}" />
+                                        </ContentPresenter.RenderTransform>
+                                    </ContentPresenter>
                                     <Thumb Grid.Row="0" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" 
                                        x:Name="PART_Thumb"
                                        Style="{StaticResource MaterialDesignInvisibleThumbStyle}" />

@@ -232,6 +232,32 @@ namespace Dragablz
             return (SizeGrip) element.GetValue(SizeGripProperty);
         }
 
+        /// <summary>
+        /// Allows item content to be rotated (in suppported templates), typically for use in a vertical/side tab.
+        /// </summary>
+        public static readonly DependencyProperty ContentRotateTransformAngleProperty = DependencyProperty.RegisterAttached(
+            "ContentRotateTransformAngle", typeof (double), typeof (DragablzItem), new FrameworkPropertyMetadata(default(double), FrameworkPropertyMetadataOptions.Inherits));
+
+        /// <summary>
+        /// Allows item content to be rotated (in suppported templates), typically for use in a vertical/side tab.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="value"></param>
+        public static void SetContentRotateTransformAngle(DependencyObject element, double value)
+        {
+            element.SetValue(ContentRotateTransformAngleProperty, value);
+        }
+
+        /// <summary>
+        /// Allows item content to be rotated (in suppported templates), typically for use in a vertical/side tab.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public static double GetContentRotateTransformAngle(DependencyObject element)
+        {
+            return (double) element.GetValue(ContentRotateTransformAngleProperty);
+        }
+
         public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register(
             "IsSelected", typeof(bool), typeof(DragablzItem), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault | FrameworkPropertyMetadataOptions.AffectsParentMeasure));
 
