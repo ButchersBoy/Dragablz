@@ -988,19 +988,20 @@ namespace Dragablz
                 throw new ApplicationException("New tab host was not correctly provided");
 
             var item = _dragablzItemsControl.ItemContainerGenerator.ItemFromContainer(e.DragablzItem);
+            var isTransposing = IsTransposing(newTabHost.TabablzControl);
 
             var myWindow = Window.GetWindow(this);
             if (myWindow == null) throw new ApplicationException("Unable to find owning window.");
-            var dragStartWindowOffset = ConfigureNewHostSizeAndGetDragStartWindowOffset(myWindow, newTabHost, e.DragablzItem);
+            var dragStartWindowOffset = ConfigureNewHostSizeAndGetDragStartWindowOffset(myWindow, newTabHost, e.DragablzItem, isTransposing);
 
             var dragableItemHeaderPoint = e.DragablzItem.TranslatePoint(new Point(), _dragablzItemsControl);
             var dragableItemSize = new Size(e.DragablzItem.ActualWidth, e.DragablzItem.ActualHeight);
             var floatingItemSnapShots = this.VisualTreeDepthFirstTraversal()
                 .OfType<Layout>()
                 .SelectMany(l => l.FloatingDragablzItems().Select(FloatingItemSnapShot.Take))
-                .ToList();
+                .ToList();            
 
-            var interTabTransfer = new InterTabTransfer(item, e.DragablzItem, breachOrientation.Value, dragStartWindowOffset, e.DragablzItem.MouseAtDragStart, dragableItemHeaderPoint, dragableItemSize, floatingItemSnapShots);
+            var interTabTransfer = new InterTabTransfer(item, e.DragablzItem, breachOrientation.Value, dragStartWindowOffset, e.DragablzItem.MouseAtDragStart, dragableItemHeaderPoint, dragableItemSize, floatingItemSnapShots, isTransposing);
 
             if (myWindow.WindowState == WindowState.Maximized)
             {
@@ -1033,6 +1034,17 @@ namespace Dragablz
             e.Cancel = true;
         }
 
+        private bool IsTransposing(TabablzControl target)
+        {
+            return IsVertical(this) != IsVertical(target);
+        }
+
+        private static bool IsVertical(TabablzControl tabablzControl)
+        {
+            return tabablzControl.TabStripPlacement == Dock.Left
+                   || tabablzControl.TabStripPlacement == Dock.Right;
+        }
+
         private void RestorePreviousSelection()
         {
             var previousSelection = _previousSelection?.Target;
@@ -1042,7 +1054,7 @@ namespace Dragablz
                 SelectedItem = Items.OfType<object>().FirstOrDefault();
         }
 
-        private Point ConfigureNewHostSizeAndGetDragStartWindowOffset(Window currentWindow, INewTabHost<Window> newTabHost, DragablzItem dragablzItem)
+        private Point ConfigureNewHostSizeAndGetDragStartWindowOffset(Window currentWindow, INewTabHost<Window> newTabHost, DragablzItem dragablzItem, bool isTransposing)
         {
             var layout = this.VisualTreeAncestory().OfType<Layout>().FirstOrDefault();
             Point dragStartWindowOffset;
@@ -1059,17 +1071,17 @@ namespace Dragablz
                 {
                     newTabHost.Container.Width = currentWindow.RestoreBounds.Width;
                     newTabHost.Container.Height = currentWindow.RestoreBounds.Height;
-                    dragStartWindowOffset = dragablzItem.TranslatePoint(new Point(), currentWindow);
+                    dragStartWindowOffset = isTransposing ? new Point(dragablzItem.MouseAtDragStart.X, dragablzItem.MouseAtDragStart.Y) : dragablzItem.TranslatePoint(new Point(), currentWindow);
                 }
                 else
                 {
                     newTabHost.Container.Width = ActualWidth;
                     newTabHost.Container.Height = ActualHeight;
-                    dragStartWindowOffset = dragablzItem.TranslatePoint(new Point(), this);
+                    dragStartWindowOffset = isTransposing ? new Point() : dragablzItem.TranslatePoint(new Point(), this);
                     dragStartWindowOffset.Offset(dragablzItem.MouseAtDragStart.X, dragablzItem.MouseAtDragStart.Y);
                     return dragStartWindowOffset;
                 }                
-            }
+            }            
             
             dragStartWindowOffset.Offset(dragablzItem.MouseAtDragStart.X, dragablzItem.MouseAtDragStart.Y);
             var borderVector = currentWindow.WindowState == WindowState.Maximized
@@ -1089,9 +1101,14 @@ namespace Dragablz
 
             if (Items.Count == 0)
             {
-                _dragablzItemsControl.LockedMeasure = new Size(
-                    interTabTransfer.ItemPositionWithinHeader.X + interTabTransfer.ItemSize.Width,
-                    interTabTransfer.ItemPositionWithinHeader.Y + interTabTransfer.ItemSize.Height);
+                if (interTabTransfer.IsTransposing)
+                    _dragablzItemsControl.LockedMeasure = new Size(
+                        interTabTransfer.ItemSize.Width,
+                        interTabTransfer.ItemSize.Height);
+                else
+                    _dragablzItemsControl.LockedMeasure = new Size(
+                        interTabTransfer.ItemPositionWithinHeader.X + interTabTransfer.ItemSize.Width,
+                        interTabTransfer.ItemPositionWithinHeader.Y + interTabTransfer.ItemSize.Height);
             }
 
             var lastFixedItem = _dragablzItemsControl.DragablzItems()
@@ -1106,25 +1123,51 @@ namespace Dragablz
             _dragablzItemsControl.InstigateDrag(interTabTransfer.Item, newContainer =>
             {
                 newContainer.PartitionAtDragStart = interTabTransfer.OriginatorContainer.PartitionAtDragStart;
-                newContainer.IsDropTargetFound = true;                
+                newContainer.IsDropTargetFound = true;
+
+                System.Diagnostics.Debug.WriteLine("ReceiveDrag (instigated) {0}", interTabTransfer.TransferReason);
+
                 if (interTabTransfer.TransferReason == InterTabTransferReason.Breach)
-                {                    
-                    if (interTabTransfer.BreachOrientation == Orientation.Horizontal)
-                        newContainer.Y = interTabTransfer.OriginatorContainer.Y;
+                {
+                    if (interTabTransfer.IsTransposing)
+                    {
+                        newContainer.Y = 0;
+                        newContainer.X = 0;
+                    }
                     else
+                    {
+                        newContainer.Y = interTabTransfer.OriginatorContainer.Y;
                         newContainer.X = interTabTransfer.OriginatorContainer.X;
+                    }
+
+                    System.Diagnostics.Debug.WriteLine("ReceiveDrag (Breach) new container coord {0},{1}", newContainer.X, newContainer.Y);
                 }
                 else
                 {
-                    //TODO sort for vert tabs
-                    var mouseXOnItemsControl = Native.GetCursorPos().X - _dragablzItemsControl.PointToScreen(new Point()).X;                                        
-                    var newX = mouseXOnItemsControl - interTabTransfer.DragStartItemOffset.X;
-                    if (lastFixedItem != null)
-                    {                     
-                        newX = Math.Max(newX, lastFixedItem.X + lastFixedItem.ActualWidth);
+                    if (TabStripPlacement == Dock.Top || TabStripPlacement == Dock.Bottom)
+                    {
+                        var mouseXOnItemsControl = Native.GetCursorPos().X -
+                                                   _dragablzItemsControl.PointToScreen(new Point()).X;
+                        var newX = mouseXOnItemsControl - interTabTransfer.DragStartItemOffset.X;
+                        if (lastFixedItem != null)
+                        {
+                            newX = Math.Max(newX, lastFixedItem.X + lastFixedItem.ActualWidth);
+                        }
+                        newContainer.X = newX;
+                        newContainer.Y = 0;
                     }
-                    newContainer.X = newX;                    
-                    newContainer.Y = 0;                    
+                    else
+                    {
+                        var mouseYOnItemsControl = Native.GetCursorPos().Y -
+                                                   _dragablzItemsControl.PointToScreen(new Point()).Y;
+                        var newY = mouseYOnItemsControl - interTabTransfer.DragStartItemOffset.Y;
+                        if (lastFixedItem != null)
+                        {
+                            newY = Math.Max(newY, lastFixedItem.Y + lastFixedItem.ActualHeight);
+                        }
+                        newContainer.X = 0;
+                        newContainer.Y = newY;
+                    }
                 }
                 newContainer.MouseAtDragStart = interTabTransfer.DragStartItemOffset;
             });
