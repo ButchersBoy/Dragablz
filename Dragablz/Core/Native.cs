@@ -33,6 +33,13 @@ namespace Dragablz.Core
         [DllImport("user32.dll")]
         private static extern bool GetCursorPos(out POINT lpPoint);
 
+        public static POINT GetRawCursorPos()
+        {
+            POINT lpPoint;
+            GetCursorPos(out lpPoint);
+            return lpPoint;
+        }
+
         public static Point GetCursorPos()
         {
             POINT lpPoint;

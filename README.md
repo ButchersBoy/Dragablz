@@ -67,7 +67,7 @@ Here are some helpful blog posts to help you get started:
 
 ## Some examples:
 
-Material Design theme (see [Material Design in XML Toolkit](https://github.com/ButchersBoy/MaterialDesignInXamlToolkit)):
+Material Design theme (see [Material Design in XAML Toolkit](https://github.com/ButchersBoy/MaterialDesignInXamlToolkit)):
 
 ![Alt text](https://raw.githubusercontent.com/ButchersBoy/MaterialDesignInXamlToolkit/master/web/images/MashUp.gif "Material Design style")
 
