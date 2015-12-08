@@ -1294,7 +1294,9 @@ namespace Dragablz
             var selectedContent = GetContent(SelectedItem);
             foreach (ContentPresenter child in _itemsHolder.Children)
             {
-                child.Visibility = child.Content == selectedContent ? Visibility.Visible : Visibility.Collapsed;
+                var isSelected = (child.Content == selectedContent);
+                child.Visibility = isSelected ? Visibility.Visible : Visibility.Collapsed;
+                child.IsEnabled = isSelected;
             }
         }
 
