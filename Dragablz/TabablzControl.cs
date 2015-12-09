@@ -552,7 +552,7 @@ namespace Dragablz
             element.SetValue(IsWrappingTabItemProperty, value);
         }
 
-        internal static bool GetIsWrappingTabItem(DependencyObject element)
+        public static bool GetIsWrappingTabItem(DependencyObject element)
         {
             return (bool) element.GetValue(IsWrappingTabItemProperty);
         }
