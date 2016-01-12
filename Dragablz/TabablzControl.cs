@@ -557,6 +557,8 @@ namespace Dragablz
             return (bool) element.GetValue(IsWrappingTabItemProperty);
         }
 
+
+
         /// <summary>
         /// Adds an item to the source collection.  If the InterTabController.InterTabClient is set that instance will be deferred to.
         /// Otherwise an attempt will be made to add to the <see cref="ItemsSource" /> property, and lastly <see cref="Items"/>.
