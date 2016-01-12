@@ -544,6 +544,21 @@ namespace Dragablz
             return (bool) element.GetValue(IsClosingAsPartOfDragOperationProperty);
         }
 
+        /// <summary>
+        /// Provide a hint for how the header should size itself if there are no tabs left (and a Window is still open).
+        /// </summary>
+        public static readonly DependencyProperty EmptyHeaderSizingHintProperty = DependencyProperty.Register(
+            "EmptyHeaderSizingHint", typeof (EmptyHeaderSizingHint), typeof (TabablzControl), new PropertyMetadata(default(EmptyHeaderSizingHint)));
+
+        /// <summary>
+        /// Provide a hint for how the header should size itself if there are no tabs left (and a Window is still open).
+        /// </summary>
+        public EmptyHeaderSizingHint EmptyHeaderSizingHint
+        {
+            get { return (EmptyHeaderSizingHint) GetValue(EmptyHeaderSizingHintProperty); }
+            set { SetValue(EmptyHeaderSizingHintProperty, value); }
+        }
+
         public static readonly DependencyProperty IsWrappingTabItemProperty = DependencyProperty.RegisterAttached(
             "IsWrappingTabItem", typeof (bool), typeof (TabablzControl), new PropertyMetadata(default(bool)));
 
@@ -1210,7 +1225,7 @@ namespace Dragablz
 
             _interTabTransfer = interTabTransfer;
 
-            if (Items.Count == 0)
+            if (Items.Count == 0 && EmptyHeaderSizingHint == EmptyHeaderSizingHint.PreviousTab)
             {
                 if (interTabTransfer.IsTransposing)
                     _dragablzItemsControl.LockedMeasure = new Size(

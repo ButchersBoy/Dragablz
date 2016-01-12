@@ -13,9 +13,10 @@ namespace Dragablz
         /// The header size remains that of the last tab prior to the tab header becoming empty.
         /// </summary>
         PreviousTab,
+        //TODO implement EmptyHeaderSizingHint.Stretch        
         /// <summary>
         /// The header stretches along the according axis.
         /// </summary>
-        Stretch
+        //Stretch
     }
 }

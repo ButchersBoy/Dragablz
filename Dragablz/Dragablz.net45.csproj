@@ -61,6 +61,7 @@
     <Compile Include="Dockablz\LocationReport.cs" />
     <Compile Include="Dockablz\LocationReportBuilder.cs" />
     <Compile Include="Dockablz\LocationReportException.cs" />
+    <Compile Include="EmptyHeaderSizingHint.cs" />
     <Compile Include="ItemActionCallbackArgs.cs" />
     <Compile Include="ContainerCustomisations.cs" />
     <Compile Include="Converters\BooleanAndToVisibilityConverter.cs" />

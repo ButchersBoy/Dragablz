@@ -53,6 +53,7 @@
     <Compile Include="Dockablz\LocationReport.cs" />
     <Compile Include="Dockablz\LocationReportBuilder.cs" />
     <Compile Include="Dockablz\LocationReportException.cs" />
+    <Compile Include="EmptyHeaderSizingHint.cs" />
     <Compile Include="LocationHint.cs" />
     <Compile Include="CanvasOrganiser.cs" />
     <Compile Include="ContainerCustomisations.cs" />
