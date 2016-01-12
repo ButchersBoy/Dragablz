@@ -267,6 +267,7 @@
                                     </Grid.ColumnDefinitions>
                                     <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
                                                       x:Name="contentPresenter"                                                                                            
+                                                      Margin="{TemplateBinding Control.Padding}"
                                                       Opacity=".87"/>
                                     <Thumb Grid.Column="0" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" 
                                            x:Name="PART_Thumb"
