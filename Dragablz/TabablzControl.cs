@@ -1018,7 +1018,11 @@ namespace Dragablz
         {
             var item = _dragablzItemsControl.ItemContainerGenerator.ItemFromContainer(dragablzItem);
 
-            var minSize = new Size(_dragablzItemsControl.ActualWidth, _dragablzItemsControl.ActualHeight);                
+            //stop the header shrinking if the tab stays open when empty
+            var minSize = EmptyHeaderSizingHint == EmptyHeaderSizingHint.PreviousTab
+                ? new Size(_dragablzItemsControl.ActualWidth, _dragablzItemsControl.ActualHeight)
+                : new Size();
+            System.Diagnostics.Debug.WriteLine("A " + minSize);
             _dragablzItemsControl.MinHeight = 0;
             _dragablzItemsControl.MinWidth = 0;
 
@@ -1136,7 +1140,10 @@ namespace Dragablz
             var contentPresenter = FindChildContentPresenter(item);
 
             //stop the header shrinking if the tab stays open when empty
-            var minSize = new Size(_dragablzItemsControl.ActualWidth, _dragablzItemsControl.ActualHeight);
+            var minSize = EmptyHeaderSizingHint == EmptyHeaderSizingHint.PreviousTab
+                ? new Size(_dragablzItemsControl.ActualWidth, _dragablzItemsControl.ActualHeight)
+                : new Size();
+            System.Diagnostics.Debug.WriteLine("B " + minSize);
 
             RemoveFromSource(item);
             _itemsHolder.Children.Remove(contentPresenter);
@@ -1225,7 +1232,7 @@ namespace Dragablz
 
             _interTabTransfer = interTabTransfer;
 
-            if (Items.Count == 0 && EmptyHeaderSizingHint == EmptyHeaderSizingHint.PreviousTab)
+            if (Items.Count == 0)
             {
                 if (interTabTransfer.IsTransposing)
                     _dragablzItemsControl.LockedMeasure = new Size(
