@@ -50,6 +50,10 @@ XAML as simple as this will give you a tab the tears out (using the basic theme)
 - Single light weight assembly targeting .net 4.* frameworks, no additional dependencies
 - Demos in source (make sure you restore NuGet packages)
 
+## Want to say thanks?
+  *  Hit the :star: Star :star: button
+  *  <a href='https://pledgie.com/campaigns/31029'><img alt='Click here to lend your support to: Material Design In XAML Toolkit/Dragablz and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/31029.png?skin_name=chrome' border='0' ></a>
+
 ## Getting Started:
 
 Here are some helpful blog posts to help you get started:
@@ -58,7 +62,6 @@ Here are some helpful blog posts to help you get started:
  - [MahApps Styles](http://dragablz.net/2015/01/06/dragablz-meets-mahapps/)
  - [Material Design 1](http://dragablz.net/2015/02/09/how-to-use-the-material-design-theme-with-dragablz-tab-controlgithub/)
  - [Material Design 2](http://dragablz.net/2015/02/25/material-design-in-xaml-mash-up/)
-
 
 ## In the pipeline:
 
