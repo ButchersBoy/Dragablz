@@ -755,6 +755,13 @@
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}" />
             </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="False" />
+                    <Condition Property="IsMouseOver" Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+            </MultiTrigger>
         </Style.Triggers>
     </Style>
 
