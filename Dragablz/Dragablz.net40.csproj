@@ -127,8 +127,9 @@
     <Compile Include="TabEmptiedResponse.cs" />
     <Compile Include="Themes\BrushToRadialGradientBrushConverter.cs" />
     <Compile Include="Themes\MaterialDesignAssist.cs" />
+    <Compile Include="Themes\Ripple.cs" />
+    <Compile Include="Themes\RippleAssist.cs" />
     <Compile Include="Themes\SystemCommandIcon.cs" />
-    <Compile Include="Themes\VisualFeedbackContentControl.cs" />
     <Compile Include="Trapezoid.cs" />
     <Compile Include="VerticalOrganiser.cs" />
     <Compile Include="VerticalPositionMonitor.cs" />
