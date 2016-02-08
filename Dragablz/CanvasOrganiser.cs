@@ -8,17 +8,17 @@ namespace Dragablz
 {
     public class CanvasOrganiser : IItemsOrganiser
     {
-        public void Organise(DragablzItemsControl requestor, Size measureBounds, IEnumerable<DragablzItem> items)
+        public virtual void Organise(DragablzItemsControl requestor, Size measureBounds, IEnumerable<DragablzItem> items)
         {
             
         }
 
-        public void Organise(DragablzItemsControl requestor, Size measureBounds, IOrderedEnumerable<DragablzItem> items)
+        public virtual void Organise(DragablzItemsControl requestor, Size measureBounds, IOrderedEnumerable<DragablzItem> items)
         {
 
         }
 
-        public void OrganiseOnMouseDownWithin(DragablzItemsControl requestor, Size measureBounds, List<DragablzItem> siblingItems, DragablzItem dragablzItem)
+        public virtual void OrganiseOnMouseDownWithin(DragablzItemsControl requestor, Size measureBounds, List<DragablzItem> siblingItems, DragablzItem dragablzItem)
         {
             var zIndex = int.MaxValue;
             foreach (var source in siblingItems.OrderByDescending(Panel.GetZIndex))
@@ -29,22 +29,22 @@ namespace Dragablz
             Panel.SetZIndex(dragablzItem, int.MaxValue);
         }
 
-        public void OrganiseOnDragStarted(DragablzItemsControl requestor, Size measureBounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
+        public virtual void OrganiseOnDragStarted(DragablzItemsControl requestor, Size measureBounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
         {
             
         }
 
-        public void OrganiseOnDrag(DragablzItemsControl requestor, Size measureBounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
+        public virtual void OrganiseOnDrag(DragablzItemsControl requestor, Size measureBounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
         {
             
         }
 
-        public void OrganiseOnDragCompleted(DragablzItemsControl requestor, Size measureBounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
+        public virtual void OrganiseOnDragCompleted(DragablzItemsControl requestor, Size measureBounds, IEnumerable<DragablzItem> siblingItems, DragablzItem dragItem)
         {
             
         }
 
-        public Point ConstrainLocation(DragablzItemsControl requestor, Size measureBounds, Point itemCurrentLocation, Size itemCurrentSize, Point itemDesiredLocation, Size itemDesiredSize)
+        public virtual Point ConstrainLocation(DragablzItemsControl requestor, Size measureBounds, Point itemCurrentLocation, Size itemCurrentSize, Point itemDesiredLocation, Size itemDesiredSize)
         {
             //we will stop it pushing beyond the bounds...unless it's already beyond...
             var reduceBoundsWidth = itemCurrentLocation.X + itemCurrentSize.Width > measureBounds.Width
@@ -59,12 +59,12 @@ namespace Dragablz
                 Math.Min(Math.Max(itemDesiredLocation.Y, 0), measureBounds.Height - reduceBoundsHeight));
         }
 
-        public Size Measure(DragablzItemsControl requestor, Size availableSize, IEnumerable<DragablzItem> items)
+        public virtual Size Measure(DragablzItemsControl requestor, Size availableSize, IEnumerable<DragablzItem> items)
         {
             return availableSize;
         }
 
-        public IEnumerable<DragablzItem> Sort(IEnumerable<DragablzItem> items)
+        public virtual IEnumerable<DragablzItem> Sort(IEnumerable<DragablzItem> items)
         {
             return items;
         }
