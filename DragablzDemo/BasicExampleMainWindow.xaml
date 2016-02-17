@@ -87,11 +87,11 @@
                         <TextBlock Text="{Binding SimpleContent}" />
                     </DataTemplate>
                 </TabControl.ContentTemplate>
-                <dragablz:TabablzControl.CustomHeaderItemTemplate>
+                <dragablz:TabablzControl.HeaderItemTemplate>
                     <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
                         <TextBlock Text="{Binding Name}" />
                     </DataTemplate>
-                </dragablz:TabablzControl.CustomHeaderItemTemplate>
+                </dragablz:TabablzControl.HeaderItemTemplate>
                 <TabControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type dragablzDemo:SimpleViewModel}">
                         <TextBlock Text="{Binding SimpleContent}" />

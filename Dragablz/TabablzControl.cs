@@ -147,6 +147,7 @@ namespace Dragablz
         public static readonly DependencyProperty CustomHeaderItemTemplateProperty = DependencyProperty.Register(
             "CustomHeaderItemTemplate", typeof (DataTemplate), typeof (TabablzControl), new PropertyMetadata(default(DataTemplate)));
 
+        [Obsolete("Prefer HeaderItemTemplate")]
         public DataTemplate CustomHeaderItemTemplate
         {
             get { return (DataTemplate) GetValue(CustomHeaderItemTemplateProperty); }

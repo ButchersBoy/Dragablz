@@ -610,7 +610,7 @@
                                                            ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
                                                            ItemsOrganiser="{TemplateBinding HeaderItemsOrganiser}"
                                                            KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"
-                                                           ItemTemplate="{TemplateBinding CustomHeaderItemTemplate}"
+                                                           ItemTemplate="{TemplateBinding HeaderItemTemplate}"
                                                            Style="{StaticResource TabablzDragablzItemsControlStyle}">
                                 <dragablz:DragablzItemsControl.MaxWidth>
                                     <MultiBinding>
@@ -702,7 +702,7 @@
                                                                                 ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
                                                                                 ItemsOrganiser="{TemplateBinding HeaderItemsOrganiser}"
                                                                                 KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"
-                                                                                ItemTemplate="{TemplateBinding CustomHeaderItemTemplate}"
+                                                                                ItemTemplate="{TemplateBinding HeaderItemTemplate}"
                                                                                 Style="{StaticResource TabablzDragablzItemsControlStyle}">
                                         <dragablz:DragablzItemsControl.MaxHeight>
                                             <MultiBinding>
