@@ -276,7 +276,7 @@ namespace Dragablz
                 ItemsOrganiser.OrganiseOnDragCompleted(this, bounds,
                     dragablzItems.Except(eventArgs.DragablzItem),
                     eventArgs.DragablzItem);
-            }
+            }            
 
             eventArgs.Handled = true;
 

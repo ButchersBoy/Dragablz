@@ -75,5 +75,22 @@ namespace Dragablz.Core
                 dependencyObject = VisualTreeHelper.GetParent(dependencyObject);
             }            
         }
+
+        /// <summary>
+        /// Yields the logical ancestory (including the starting point).
+        /// </summary>
+        /// <param name="dependencyObject"></param>
+        /// <returns></returns>
+        public static IEnumerable<DependencyObject> LogicalTreeAncestory(this DependencyObject dependencyObject)
+        {
+            if (dependencyObject == null) throw new ArgumentNullException("dependencyObject");
+
+            while (dependencyObject != null)
+            {
+                yield return dependencyObject;
+                dependencyObject = LogicalTreeHelper.GetParent(dependencyObject);
+            }
+        }
+
     }
 }

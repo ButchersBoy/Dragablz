@@ -19,7 +19,19 @@
             <TabItem Header="Tab No. 2">
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">We Have Tearable Tabs!</TextBlock>
             </TabItem>
-            <TabItem Header="Tab No. 3">
+            <TabItem>
+                <!-- with context menu -->
+                <TabItem.Header>
+                    <Grid>
+                        <Grid.ContextMenu>
+                            <ContextMenu>
+                                <!--we'll be in a popup, so give dragablz a hint as to what tab header content needs closing -->
+                                <MenuItem Command="{x:Static dragablz:TabablzControl.CloseItemCommand}"/>
+                            </ContextMenu>
+                        </Grid.ContextMenu>
+                        <TextBlock>Tab No. 3</TextBlock>
+                    </Grid>
+                </TabItem.Header>
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">I feel like an ice cold drink</TextBlock>
             </TabItem>
         </dragablz:TabablzControl>
