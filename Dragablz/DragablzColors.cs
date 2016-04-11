@@ -35,7 +35,7 @@ namespace Dragablz
             var colorizationParams = new Native.DWMCOLORIZATIONPARAMS();
             Native.DwmGetColorizationParameters(ref colorizationParams);
             var frameColor = ToColor(colorizationParams.ColorizationColor);
-            var blendedColor = BlendColor(frameColor, WindowBaseColor, 100 - colorizationParams.ColorizationColorBalance);
+            var blendedColor = BlendColor(frameColor, WindowBaseColor, 100f - colorizationParams.ColorizationColorBalance);
 
             return new SolidColorBrush(blendedColor);
         }
@@ -56,8 +56,7 @@ namespace Dragablz
 
         private static Color BlendColor(Color color1, Color color2, double percentage)
         {
-            if ((percentage < 0) || (100 < percentage))
-                throw new ArgumentOutOfRangeException("percentage");
+            percentage = Math.Min(100, Math.Max(0, percentage));
 
             return Color.FromRgb(
                 BlendColorChannel(color1.R, color2.R, percentage),
