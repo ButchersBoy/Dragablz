@@ -625,6 +625,15 @@ namespace Dragablz
         }
 
         /// <summary>
+        /// Gets the header items, ordered according to their current visual position in the tab header.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<DragablzItem> GetOrderedHeaders()
+        {
+            return _dragablzItemsControl.ItemsOrganiser.Sort(_dragablzItemsControl.DragablzItems());
+        }
+
+        /// <summary>
         /// Called when <see cref="M:System.Windows.FrameworkElement.ApplyTemplate"/> is called.
         /// </summary>
         public override void OnApplyTemplate()
