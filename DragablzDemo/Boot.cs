@@ -18,11 +18,13 @@ namespace DragablzDemo
         {            
             var app = new App {ShutdownMode = ShutdownMode.OnLastWindowClose};
             app.InitializeComponent();
-            
+
+            new QuickStartWindow().Show();
+
             new BasicExampleMainWindow
             {
                 DataContext = new BasicExampleMainModel()
-            }.Show();                                      
+            }.Show();
                 
             var boundExampleModel = new BoundExampleModel(
                 new HeaderedItemViewModel { Header = "Fixed", Content = "There is a dragablz:DragablzItemsControl.FixedItemCount of 1, so this header is fixed!" },
@@ -44,9 +46,7 @@ namespace DragablzDemo
             new BoundExampleWindow()
             {
                 DataContext = boundExampleModel
-            }.Show();
-            
-            new QuickStartWindow().Show();
+            }.Show();                       
             
             app.Run();
         }

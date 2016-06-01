@@ -30,7 +30,10 @@ namespace Dragablz
         public const string ThumbPartName = "PART_Thumb";
 
         private readonly SerialDisposable _templateSubscriptions = new SerialDisposable();
+        private readonly SerialDisposable _rightMouseUpCleanUpDisposable = new SerialDisposable();
 
+        private Thumb _customThumb;
+        private Thumb _thumb;
         private bool _seizeDragWithTemplate;
         private Action<DragablzItem> _dragSeizedContinuation;
 
@@ -41,8 +44,8 @@ namespace Dragablz
 
         public DragablzItem()
         {
-            AddHandler(MouseDownEvent, new RoutedEventHandler(MouseDownHandler), true);
-        }        
+            AddHandler(MouseDownEvent, new RoutedEventHandler(MouseDownHandler), true);            
+        }
 
         public static readonly DependencyProperty XProperty = DependencyProperty.Register(
             "X", typeof (double), typeof (DragablzItem), new PropertyMetadata(default(double), OnXChanged));
@@ -475,6 +478,31 @@ namespace Dragablz
             _seizeDragWithTemplate = false;
         }
 
+        protected override void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
+        {            
+            if (_thumb != null)
+            {
+                var currentThumbIsHitTestVisible = _thumb.IsHitTestVisible;
+                _thumb.SetCurrentValue(IsHitTestVisibleProperty, false);
+                _rightMouseUpCleanUpDisposable.Disposable = Disposable.Create(() =>
+                {
+                    _thumb.SetCurrentValue(IsHitTestVisibleProperty, currentThumbIsHitTestVisible);
+                });
+            }
+            else
+            {
+                _rightMouseUpCleanUpDisposable.Disposable = Disposable.Empty;
+            }            
+            
+            base.OnPreviewMouseRightButtonDown(e);
+        }
+
+        protected override void OnPreviewMouseRightButtonUp(MouseButtonEventArgs e)
+        {
+            _rightMouseUpCleanUpDisposable.Disposable = Disposable.Empty;
+            base.OnPreviewMouseRightButtonUp(e);
+        }
+
         private void LostMouseAfterSeizeHandler(object sender, MouseEventArgs mouseEventArgs)
         {
             _isTemplateThumbWithMouseAfterSeize = false;
@@ -543,15 +571,12 @@ namespace Dragablz
         private Thumb FindCustomThumb()
         {
             return this.VisualTreeDepthFirstTraversal().OfType<Thumb>().FirstOrDefault(GetIsCustomThumb);
-        }
+        }        
 
-        private Thumb _customThumb;
         private static void ApplyCustomThumbSetting(Thumb thumb)
         {            
             var dragablzItem = thumb.VisualTreeAncestory().OfType<DragablzItem>().FirstOrDefault();
             if (dragablzItem == null) throw new ApplicationException("Cannot find parent DragablzItem for custom thumb");
-
-            System.Diagnostics.Debug.WriteLine("ApplyCustomThumbSetting " + dragablzItem.IsDragging);
 
             var enableCustomThumb = (bool)thumb.GetValue(IsCustomThumbProperty);
             dragablzItem._customThumb = enableCustomThumb ? thumb : null;
@@ -566,26 +591,26 @@ namespace Dragablz
         private Tuple<Thumb, IDisposable> SelectAndSubscribeToThumb()
         {
             var templateThumb = GetTemplateChild(ThumbPartName) as Thumb;
-            if (templateThumb != null)
-                templateThumb.IsHitTestVisible = _customThumb == null;
-
-            var thumb = _customThumb ?? templateThumb;
-            if (thumb != null)
+            templateThumb?.SetCurrentValue(IsHitTestVisibleProperty, _customThumb == null);
+            
+            _thumb = _customThumb ?? templateThumb;
+            if (_thumb != null)
             {
-                thumb.DragStarted += ThumbOnDragStarted;
-                thumb.DragDelta += ThumbOnDragDelta;
-                thumb.DragCompleted += ThumbOnDragCompleted;
+                _thumb.DragStarted += ThumbOnDragStarted;
+                _thumb.DragDelta += ThumbOnDragDelta;
+                _thumb.DragCompleted += ThumbOnDragCompleted;
             }
 
+            var tidyUpThumb = _thumb;
             var disposable = Disposable.Create(() =>
             {
-                if (thumb == null) return;
-                thumb.DragStarted -= ThumbOnDragStarted;
-                thumb.DragDelta -= ThumbOnDragDelta;
-                thumb.DragCompleted -= ThumbOnDragCompleted;
+                if (tidyUpThumb == null) return;
+                tidyUpThumb.DragStarted -= ThumbOnDragStarted;
+                tidyUpThumb.DragDelta -= ThumbOnDragDelta;
+                tidyUpThumb.DragCompleted -= ThumbOnDragCompleted;
             });
 
-            return new Tuple<Thumb, IDisposable>(thumb, disposable);
+            return new Tuple<Thumb, IDisposable>(_thumb, disposable);
         }
     }
 }

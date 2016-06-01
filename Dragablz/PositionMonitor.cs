@@ -13,6 +13,9 @@ namespace Dragablz
     /// </remarks>
     public class PositionMonitor
     {
+        /// <summary>
+        /// Raised when the X,Y coordinate of a <see cref="DragablzItem"/> changes.
+        /// </summary>
         public event EventHandler<LocationChangedEventArgs> LocationChanged;
 
         internal virtual void OnLocationChanged(LocationChangedEventArgs e)
@@ -20,7 +23,7 @@ namespace Dragablz
             if (e == null) throw new ArgumentNullException("e");
 
             var handler = LocationChanged;
-            if (handler != null) handler(this, e);
+            handler?.Invoke(this, e);
         }
 
         internal virtual void ItemsChanged() { }

@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Dragable and tearable tab control for WPF</description>
     <releaseNotes>We are in alpha right now!.</releaseNotes>
-    <copyright>Copyright 2014-15 James Willock/Mulholland Software Ltd</copyright>
+    <copyright>Copyright 2014-16 James Willock/Mulholland Software Ltd</copyright>
     <tags>WPF TabControl Tab Tearable</tags>
   </metadata>
   <files>
@@ -20,7 +20,7 @@
     <file src="..\bin\Release_net45\Dragablz.pdb" target="lib\net45" />
     <file src="..\bin\Release_net45\Dragablz.xml" target="lib\net45" />
     <file src="..\bin\Release_net40\Dragablz.dll" target="lib\net40" />
-    <file src="..\bin\Release_net45\Dragablz.pdb" target="lib\net40" />
+    <file src="..\bin\Release_net40\Dragablz.pdb" target="lib\net40" />
     <file src="..\bin\Release_net40\Dragablz.xml" target="lib\net40" />	
     <file src="..\Dragablz\**\*.cs" target="src\net45" />
     <file src="..\Dragablz\**\*.cs" target="src\net40" />

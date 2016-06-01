@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Dragablz.Core;
 using Dragablz.Dockablz;
@@ -38,12 +39,12 @@ namespace Dragablz
         /// <summary>
         /// Routed command which can be used to close a tab.
         /// </summary>
-        public static RoutedCommand CloseItemCommand = new RoutedCommand();
+        public static RoutedCommand CloseItemCommand = new RoutedUICommand("Close", "Close", typeof(TabablzControl));
 
         /// <summary>
         /// Routed command which can be used to add a new tab.  See <see cref="NewItemFactory"/>.
         /// </summary>
-        public static RoutedCommand AddItemCommand = new RoutedCommand();
+        public static RoutedCommand AddItemCommand = new RoutedUICommand("Add", "Add", typeof(TabablzControl));
 
         private static readonly HashSet<TabablzControl> LoadedInstances = new HashSet<TabablzControl>();
         private static readonly HashSet<TabablzControl> VisibleInstances = new HashSet<TabablzControl>();
@@ -59,7 +60,8 @@ namespace Dragablz
 
         static TabablzControl()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(TabablzControl), new FrameworkPropertyMetadata(typeof(TabablzControl)));            
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(TabablzControl), new FrameworkPropertyMetadata(typeof(TabablzControl)));
+            CommandManager.RegisterClassCommandBinding(typeof(FrameworkElement), new CommandBinding(CloseItemCommand, CloseItemClassHandler, CloseItemCanExecuteClassHandler));
         }
         
         /// <summary>
@@ -70,9 +72,8 @@ namespace Dragablz
             AddHandler(DragablzItem.DragStarted, new DragablzDragStartedEventHandler(ItemDragStarted), true);
             AddHandler(DragablzItem.PreviewDragDelta, new DragablzDragDeltaEventHandler(PreviewItemDragDelta), true);
             AddHandler(DragablzItem.DragDelta, new DragablzDragDeltaEventHandler(ItemDragDelta), true);
-            AddHandler(DragablzItem.DragCompleted, new DragablzDragCompletedEventHandler(ItemDragCompleted), true);
-            CommandBindings.Add(new CommandBinding(CloseItemCommand, CloseItemHandler));
-            CommandBindings.Add(new CommandBinding(AddItemCommand, AddItemHandler));            
+            AddHandler(DragablzItem.DragCompleted, new DragablzDragCompletedEventHandler(ItemDragCompleted), true);                        
+            CommandBindings.Add(new CommandBinding(AddItemCommand, AddItemHandler));                        
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;            
@@ -148,6 +149,7 @@ namespace Dragablz
         public static readonly DependencyProperty CustomHeaderItemTemplateProperty = DependencyProperty.Register(
             "CustomHeaderItemTemplate", typeof (DataTemplate), typeof (TabablzControl), new PropertyMetadata(default(DataTemplate)));
 
+        [Obsolete("Prefer HeaderItemTemplate")]
         public DataTemplate CustomHeaderItemTemplate
         {
             get { return (DataTemplate) GetValue(CustomHeaderItemTemplateProperty); }
@@ -620,6 +622,15 @@ namespace Dragablz
                 else
                     Items.Remove(item);
             }
+        }
+
+        /// <summary>
+        /// Gets the header items, ordered according to their current visual position in the tab header.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<DragablzItem> GetOrderedHeaders()
+        {
+            return _dragablzItemsControl.ItemsOrganiser.Sort(_dragablzItemsControl.DragablzItems());
         }
 
         /// <summary>
@@ -1096,7 +1107,7 @@ namespace Dragablz
 
         private bool IsMyItem(DragablzItem item)
         {
-            return _dragablzItemsControl.DragablzItems().Contains(item);
+            return _dragablzItemsControl != null && _dragablzItemsControl.DragablzItems().Contains(item);
         }
 
         private void MonitorBreach(DragablzDragDeltaEventArgs e)
@@ -1383,28 +1394,51 @@ namespace Dragablz
             MarkInitialSelection();
         }
 
-        private void CloseItemHandler(object sender, ExecutedRoutedEventArgs executedRoutedEventArgs)
+        private static void CloseItemCanExecuteClassHandler(object sender, CanExecuteRoutedEventArgs e)
         {
-            var dragablzItem = executedRoutedEventArgs.Parameter as DragablzItem;
-            if (dragablzItem == null)
-            {
-                var dependencyObject = executedRoutedEventArgs.OriginalSource as DependencyObject;
-                dragablzItem = dependencyObject.VisualTreeAncestory().OfType<DragablzItem>().FirstOrDefault();
-            }
+            e.CanExecute = FindOwner(e.Parameter, e.OriginalSource) != null;
+        }
+        private static void CloseItemClassHandler(object sender, ExecutedRoutedEventArgs e)
+        {
+            var owner = FindOwner(e.Parameter, e.OriginalSource);
 
-            if (dragablzItem == null) throw new ApplicationException("Unable to ascertain DragablzItem to close.");
+            if (owner == null) throw new ApplicationException("Unable to ascertain DragablzItem to close.");
 
             var cancel = false;
-            if (ClosingItemCallback != null)
+            if (owner.Item2.ClosingItemCallback != null)
             {
-                var callbackArgs = new ItemActionCallbackArgs<TabablzControl>(Window.GetWindow(this), this, dragablzItem);
-                ClosingItemCallback(callbackArgs);
+                var callbackArgs = new ItemActionCallbackArgs<TabablzControl>(Window.GetWindow(owner.Item2), owner.Item2, owner.Item1);
+                owner.Item2.ClosingItemCallback(callbackArgs);
                 cancel = callbackArgs.IsCancelled;
             }
 
             if (!cancel)
-                RemoveItem(dragablzItem);            
+                owner.Item2.RemoveItem(owner.Item1);
         }
+
+        private static Tuple<DragablzItem, TabablzControl> FindOwner(object eventParameter, object eventOriginalSource)
+        {
+            var dragablzItem = eventParameter as DragablzItem;
+            if (dragablzItem == null)
+            {
+                var dependencyObject = eventOriginalSource as DependencyObject;
+                dragablzItem = dependencyObject.VisualTreeAncestory().OfType<DragablzItem>().FirstOrDefault();
+                if (dragablzItem == null)
+                {
+                    var popup = dependencyObject.LogicalTreeAncestory().OfType<Popup>().LastOrDefault();
+                    if (popup?.PlacementTarget != null)
+                    {
+                        dragablzItem = popup.PlacementTarget.VisualTreeAncestory().OfType<DragablzItem>().FirstOrDefault();                        
+                    }
+                }
+            }
+
+            if (dragablzItem == null) return null;
+
+            var tabablzControl = LoadedInstances.FirstOrDefault(tc => tc.IsMyItem(dragablzItem));
+
+            return tabablzControl == null ? null : new Tuple<DragablzItem, TabablzControl>(dragablzItem, tabablzControl);
+        }        
 
         private void AddItemHandler(object sender, ExecutedRoutedEventArgs e)
         {            
