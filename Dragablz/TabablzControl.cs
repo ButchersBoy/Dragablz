@@ -45,7 +45,8 @@ namespace Dragablz
         /// </summary>
         public static RoutedCommand AddItemCommand = new RoutedCommand();
 
-        private static readonly HashSet<TabablzControl> LoadedInstances = new HashSet<TabablzControl>();        
+        private static readonly HashSet<TabablzControl> LoadedInstances = new HashSet<TabablzControl>();
+        private static readonly HashSet<TabablzControl> VisibleInstances = new HashSet<TabablzControl>();
 
         private Panel _itemsHolder;
         private TabHeaderDragStartInformation _tabHeaderDragStartInformation;
@@ -75,6 +76,7 @@ namespace Dragablz
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;            
+            IsVisibleChanged += OnIsVisibleChanged;
         }
 
         public static readonly DependencyProperty CustomHeaderItemStyleProperty = DependencyProperty.Register(
@@ -86,7 +88,7 @@ namespace Dragablz
         /// <returns></returns>
         public static IEnumerable<TabablzControl> GetLoadedInstances()
         {
-            return LoadedInstances.ToList();
+            return LoadedInstances.Union(VisibleInstances).Distinct().ToList();
         }
 
         /// <summary>
@@ -572,8 +574,6 @@ namespace Dragablz
             return (bool) element.GetValue(IsWrappingTabItemProperty);
         }
 
-
-
         /// <summary>
         /// Adds an item to the source collection.  If the InterTabController.InterTabClient is set that instance will be deferred to.
         /// Otherwise an attempt will be made to add to the <see cref="ItemsSource" /> property, and lastly <see cref="Items"/>.
@@ -800,6 +800,15 @@ namespace Dragablz
         internal static TabablzControl GetOwnerOfHeaderItems(DragablzItemsControl itemsControl)
         {
             return LoadedInstances.FirstOrDefault(t => Equals(t._dragablzItemsControl, itemsControl));
+        }
+
+        private static void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            var tabablzControl = (TabablzControl) sender;
+            if (tabablzControl.IsVisible)
+                VisibleInstances.Add(tabablzControl);
+            else if (VisibleInstances.Contains(tabablzControl))
+                VisibleInstances.Remove(tabablzControl);
         }
 
         private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
