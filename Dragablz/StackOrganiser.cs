@@ -125,7 +125,9 @@ namespace Dragablz
                 SetLocation(newItem, currentCoord);
                 newItem.LogicalIndex = logicalIndex++;
                 newItem.Measure(measureBounds);
-                currentCoord += _getDesiredSize(newItem) + _itemOffset;
+                var desiredSize = _getDesiredSize(newItem);
+                if (desiredSize == 0.0) desiredSize = 1.0; //no measure? create something to help sorting
+                currentCoord += desiredSize + _itemOffset;
             }
         }
 
