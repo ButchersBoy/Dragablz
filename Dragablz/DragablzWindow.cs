@@ -7,6 +7,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Dragablz.Core;
 using Dragablz.Dockablz;
 using Dragablz.Referenceless;
@@ -304,12 +305,16 @@ namespace Dragablz
                  !(Math.Abs(dragDeltaEventArgs.VerticalChange) > 2))) return;
 
             var cursorPos = Native.GetRawCursorPos();
-            Top = 2;
-            Left = Math.Max(cursorPos.X - RestoreBounds.Width /2, 0);
             WindowState = WindowState.Normal;
+
+            Top = cursorPos.Y - 2;
+            Left = cursorPos.X - RestoreBounds.Width / 2;
+            
             var lParam = (int)(uint)cursorPos.X | (cursorPos.Y << 16);
-            Native.SendMessage(CriticalHandle, WindowMessage.WM_LBUTTONUP, (IntPtr)HitTest.HT_CAPTION, (IntPtr)lParam);
-            Native.SendMessage(CriticalHandle, WindowMessage.WM_SYSCOMMAND, (IntPtr)SystemCommand.SC_MOUSEMOVE, IntPtr.Zero);
+            Native.SendMessage(CriticalHandle, WindowMessage.WM_LBUTTONUP, (IntPtr)HitTest.HT_CAPTION,
+                (IntPtr)lParam);
+            Native.SendMessage(CriticalHandle, WindowMessage.WM_SYSCOMMAND, (IntPtr)SystemCommand.SC_MOUSEMOVE,
+                IntPtr.Zero);            
         }
 
         private void RestoreWindowExecuted(object sender, ExecutedRoutedEventArgs e)
