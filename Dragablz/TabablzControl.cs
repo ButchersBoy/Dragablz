@@ -875,10 +875,16 @@ namespace Dragablz
         {
             if (_dragablzItemsControl == null) return;
 
-            foreach (var dragablzItem in _dragablzItemsControl.Items.OfType<TabItem>().Select(ti => 
-                _dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(ti)).OfType<DragablzItem>())
+            foreach (var pair in _dragablzItemsControl.Items.OfType<TabItem>().Select(tabItem =>
+                new
+                {
+                    tabItem,
+                    dragablzItem = _dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(tabItem) as DragablzItem
+                }).Where(a => a.dragablzItem != null))
             {
-                SetIsWrappingTabItem(dragablzItem, true);
+                var toolTipBinding = new Binding("ToolTip") { Source = pair.tabItem };
+                BindingOperations.SetBinding(pair.dragablzItem, ToolTipProperty, toolTipBinding);
+                SetIsWrappingTabItem(pair.dragablzItem, true);
             }
         }
 
