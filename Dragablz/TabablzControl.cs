@@ -630,6 +630,7 @@ namespace Dragablz
 
         private void OnUnloaded(object sender, RoutedEventArgs routedEventArgs)
         {
+            _windowSubscription.Disposable = Disposable.Empty;
             LoadedInstances.Remove(this);
         }
 
