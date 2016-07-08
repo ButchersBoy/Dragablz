@@ -156,7 +156,7 @@
         <Setter Property="Height" Value="40" />
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="TextBlock.FontWeight" Value="DemiBold" />
+        <Setter Property="TextBlock.FontWeight" Value="Medium" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type dragablz:DragablzItem}">
@@ -224,7 +224,7 @@
         <Setter Property="MinHeight" Value="40" />
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="TextBlock.FontWeight" Value="DemiBold" />
+        <Setter Property="TextBlock.FontWeight" Value="Medium" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type dragablz:DragablzItem}">
