@@ -664,7 +664,7 @@
                         <dragablz:VerticalOrganiser />
                     </Setter.Value>
                 </Setter>
-                <Setter Property="ItemContainerStyle" Value="{StaticResource MaterialDesignDragableTabItemVerticalStyle}"></Setter>
+                <Setter Property="ItemContainerStyle" Value="{StaticResource MaterialDesignDragableTabItemVerticalStyle}" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type dragablz:TabablzControl}">
