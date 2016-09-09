@@ -135,13 +135,29 @@ namespace Dragablz.Dockablz
         /// <param name="orientation">Direction of split.</param>
         /// <param name="makeSecond">Set to <c>true</c> to make the current tab control push into the right hand or bottom of the split.</param>
         /// <param name="firstItemProportion">Sets the proportion of the first tab control, with 0.5 being 50% of available space.</param>
-        /// <remarks>The tab control to be split must be hosted in a layout control.</remarks>
+        /// <remarks>The tab control to be split must be hosted in a layout control.  <see cref="Layout.BranchTemplate" /> should be set (typically via XAML).</remarks>
         public static BranchResult Branch(TabablzControl tabablzControl, Orientation orientation, bool makeSecond, double firstItemProportion)
+        {
+            return Branch(tabablzControl, null, orientation, makeSecond, firstItemProportion);
+        }
+
+        /// <summary>
+        /// Creates a split in a layout, at the location of a specified <see cref="TabablzControl"/>.
+        /// </summary>
+        /// <para></para>
+        /// <param name="tabablzControl">Tab control to be split.</param>
+        /// <param name="newSiblingTabablzControl">New sibling tab control (otherwise <see cref="Layout.BranchTemplate"/> will be used).</param>
+        /// <param name="orientation">Direction of split.</param>
+        /// <param name="makeCurrentSecond">Set to <c>true</c> to make the current tab control push into the right hand or bottom of the split.</param>
+        /// <param name="firstItemProportion">Sets the proportion of the first tab control, with 0.5 being 50% of available space.</param>
+        /// <remarks>The tab control to be split must be hosted in a layout control. </remarks>
+        public static BranchResult Branch(TabablzControl tabablzControl, TabablzControl newSiblingTabablzControl, Orientation orientation, bool makeCurrentSecond,
+            double firstItemProportion)
         {
             if (firstItemProportion < 0.0 || firstItemProportion > 1.0) throw new ArgumentOutOfRangeException("firstItemProportion", "Must be >= 0.0 and <= 1.0");
 
             var locationReport = Find(tabablzControl);
-            
+
             Action<Branch> applier;
             object existingContent;
             if (!locationReport.IsLeaf)
@@ -158,10 +174,10 @@ namespace Dragablz.Dockablz
             {
                 existingContent = locationReport.ParentBranch.SecondItem;
                 applier = branch => locationReport.ParentBranch.SecondItem = branch;
-            }            
+            }
 
             var selectedItem = tabablzControl.SelectedItem;
-            var branchResult = Branch(orientation, firstItemProportion, makeSecond, locationReport.RootLayout.BranchTemplate, existingContent, applier);
+            var branchResult = Branch(orientation, firstItemProportion, makeCurrentSecond, locationReport.RootLayout.BranchTemplate, newSiblingTabablzControl, existingContent, applier);
             tabablzControl.SelectedItem = selectedItem;
             tabablzControl.Dispatcher.BeginInvoke(new Action(() =>
                 tabablzControl.SetCurrentValue(Selector.SelectedItemProperty, selectedItem)),
@@ -565,7 +581,7 @@ namespace Dragablz.Dockablz
             return null;
         }
 
-        private static BranchResult Branch(Orientation orientation, double proportion, bool makeSecond, DataTemplate branchTemplate, object existingContent, Action<Branch> applier)
+        private static BranchResult Branch(Orientation orientation, double proportion, bool makeSecond, DataTemplate branchTemplate, TabablzControl newSibling, object existingContent, Action<Branch> applier)
         {
             var branchItem = new Branch
             {
@@ -574,7 +590,7 @@ namespace Dragablz.Dockablz
             
             var newContent = new ContentControl
             {
-                Content = new object(),
+                Content = newSibling ?? new object(),
                 ContentTemplate = branchTemplate,
             };            
 
@@ -596,6 +612,11 @@ namespace Dragablz.Dockablz
 
             newContent.Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.Loaded);
             var newTabablzControl = newContent.VisualTreeDepthFirstTraversal().OfType<TabablzControl>().FirstOrDefault();
+            if (newTabablzControl != null) return new BranchResult(branchItem, newTabablzControl);
+
+            //let#s be kinf and give WPF an extra change to gen the controls
+            newContent.Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.Background);
+            newTabablzControl = newContent.VisualTreeDepthFirstTraversal().OfType<TabablzControl>().FirstOrDefault();
 
             if (newTabablzControl == null)
                 throw new ApplicationException("New TabablzControl was not generated inside branch.");
