@@ -19,6 +19,9 @@ namespace Dragablz
 
             Clone(source, tabablzControl);
 
+            if (source.InterTabController == null)
+                throw new InvalidOperationException("Source tab does not have an InterTabCOntroller set.  Ensure this is set on initial, and subsequently generated tab controls.");
+
             var newInterTabController = new InterTabController
             {
                 Partition = source.InterTabController.Partition
