@@ -1,7 +1,7 @@
 ![Dragablz](https://dragablz.files.wordpress.com/2015/01/dragablztext22.png "Dragablz")
 ========
 [![Gitter](https://img.shields.io/badge/Gitter-Join%20Chat-green.svg?style=flat-square)](https://gitter.im/ButchersBoy/Dragablz?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Downloads](https://img.shields.io/nuget/dt/Dragablz.svg?style=flat-square)](http://www.nuget.org/packages/Dragablz/)
+[![NuGet](https://img.shields.io/nuget/v/Dragablz.svg?style=flat-square)](http://www.nuget.org/packages/Dragablz/)
 [![Build](https://img.shields.io/appveyor/ci/ButchersBoy/dragablz.svg?style=flat-square)](https://ci.appveyor.com/project/ButchersBoy/dragablz)
 [![Issues](https://img.shields.io/github/issues/ButchersBoy/MaterialDesignInXamlToolkit.svg?style=flat-square)](https://github.com/ButchersBoy/Dragablz/issues)
 [![Twitter](https://img.shields.io/badge/twitter-%40james__willock-55acee.svg?style=flat-square)](https://twitter.com/James_Willock)

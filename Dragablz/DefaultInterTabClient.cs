@@ -12,13 +12,13 @@ namespace Dragablz
         {
             if (source == null) throw new ArgumentNullException("source");
             var sourceWindow = Window.GetWindow(source);
-            if (sourceWindow == null) throw new ApplicationException("Unable to ascrtain source window.");
+            if (sourceWindow == null) throw new ApplicationException("Unable to ascertain source window.");
             var newWindow = (Window)Activator.CreateInstance(sourceWindow.GetType());
 
             newWindow.Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.DataBind);
 
             var newTabablzControl = newWindow.LogicalTreeDepthFirstTraversal().OfType<TabablzControl>().FirstOrDefault();
-            if (newTabablzControl == null) throw new ApplicationException("Unable to ascrtain tab control.");
+            if (newTabablzControl == null) throw new ApplicationException("Unable to ascertain tab control.");
 
             if (newTabablzControl.ItemsSource == null)
                 newTabablzControl.Items.Clear();
