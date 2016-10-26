@@ -250,13 +250,20 @@
                                         </ContentPresenter.RenderTransform>
                                     </ContentPresenter>
                                     <Thumb Grid.Row="0" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" 
-                                       x:Name="PART_Thumb"
-                                       Style="{StaticResource MaterialDesignInvisibleThumbStyle}" />
+                                           x:Name="PART_Thumb"
+                                           Style="{StaticResource MaterialDesignInvisibleThumbStyle}" />
                                     <Button Grid.Row="1"
-                                        Style="{StaticResource MaterialDesignCloseItemCommandButtonStyle}"
-                                        Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dragablz:TabablzControl}, Path=ShowDefaultCloseButton, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                        Command="{x:Static dragablz:TabablzControl.CloseItemCommand}"
-                                        CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
+                                            Style="{StaticResource MaterialDesignCloseItemCommandButtonStyle}"                                        
+                                            Command="{x:Static dragablz:TabablzControl.CloseItemCommand}"
+                                            CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                                        <Button.Visibility>
+                                            <MultiBinding Converter="{StaticResource ShowDefaultCloseButtonConverter}">
+                                                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type dragablz:TabablzControl}}" Path="ShowDefaultCloseButton" />
+                                                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type dragablz:TabablzControl}}" Path="FixedHeaderCount" />
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="LogicalIndex" />
+                                            </MultiBinding>
+                                        </Button.Visibility>
+                                    </Button>
                                 </Grid>
                             </local:Ripple>
                         </Border>
@@ -697,13 +704,14 @@
                                                                 ContentTemplate="{TemplateBinding HeaderPrefixContentStringFormat}"
                                                                 ContentTemplateSelector="{TemplateBinding HeaderPrefixContentTemplateSelector}"/>
                                     <dragablz:DragablzItemsControl x:Name="PART_HeaderItemsControl"                                                         
-                                                                                Grid.Row="1"
-                                                                                ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Items}"                                                                                                            
-                                                                                ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
-                                                                                ItemsOrganiser="{TemplateBinding HeaderItemsOrganiser}"
-                                                                                KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"
-                                                                                ItemTemplate="{TemplateBinding HeaderItemTemplate}"
-                                                                                Style="{StaticResource TabablzDragablzItemsControlStyle}">
+                                                                   Grid.Row="1"                                                                   
+                                                                   ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Items}"                                                                                                            
+                                                                   ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
+                                                                   FixedItemCount="{TemplateBinding FixedHeaderCount}"
+                                                                   ItemsOrganiser="{TemplateBinding HeaderItemsOrganiser}"
+                                                                   KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"
+                                                                   ItemTemplate="{TemplateBinding HeaderItemTemplate}"
+                                                                   Style="{StaticResource TabablzDragablzItemsControlStyle}">
                                         <dragablz:DragablzItemsControl.MaxHeight>
                                             <MultiBinding>
                                                 <MultiBinding.Converter>
