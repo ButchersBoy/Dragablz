@@ -38,7 +38,16 @@ namespace Dragablz
         private Size _sizeWhenResizeBegan;
         private Point _screenMousePointWhenResizeBegan;
         private Point _windowLocationPointWhenResizeBegan;
-        private SizeGrip _resizeType;        
+        private SizeGrip _resizeType;
+
+        private static SizeGrip[] _leftMode = new[] { SizeGrip.TopLeft, SizeGrip.Left, SizeGrip.BottomLeft };
+        private static SizeGrip[] _rightMode = new[] { SizeGrip.TopRight, SizeGrip.Right, SizeGrip.BottomRight };
+        private static SizeGrip[] _topMode = new[] { SizeGrip.TopLeft, SizeGrip.Top, SizeGrip.TopRight };
+        private static SizeGrip[] _bottomMode = new[] { SizeGrip.BottomLeft, SizeGrip.Bottom, SizeGrip.BottomRight };
+
+        private static double _xScale = 1;
+        private static double _yScale = 1;
+        private static bool _dpiInitialized = false;
 
         static DragablzWindow()
         {
@@ -199,27 +208,31 @@ namespace Dragablz
             var left = _windowLocationPointWhenResizeBegan.X;
             var top = _windowLocationPointWhenResizeBegan.Y;
 
-            if (new[] { SizeGrip.TopLeft, SizeGrip.Left, SizeGrip.BottomLeft }.Contains(_resizeType))
+            if (_leftMode.Contains(_resizeType))
             {
                 var diff = currentScreenMousePoint.X - _screenMousePointWhenResizeBegan.X;
+                diff /= _xScale;
                 var suggestedWidth = width + -diff;
                 left += diff;
                 width = suggestedWidth;
             }
-            if (new[] { SizeGrip.TopRight, SizeGrip.Right, SizeGrip.BottomRight }.Contains(_resizeType))
+            if (_rightMode.Contains(_resizeType))
             {
                 var diff = currentScreenMousePoint.X - _screenMousePointWhenResizeBegan.X;
+                diff /= _xScale;
                 width += diff;
             }
-            if (new[] { SizeGrip.TopLeft, SizeGrip.Top, SizeGrip.TopRight }.Contains(_resizeType))
+            if (_topMode.Contains(_resizeType))
             {
                 var diff = currentScreenMousePoint.Y - _screenMousePointWhenResizeBegan.Y;
+                diff /= _yScale;
                 height += -diff;
                 top += diff;
             }
-            if (new[] { SizeGrip.BottomLeft, SizeGrip.Bottom, SizeGrip.BottomRight }.Contains(_resizeType))
+            if (_bottomMode.Contains(_resizeType))
             {
                 var diff = currentScreenMousePoint.Y - _screenMousePointWhenResizeBegan.Y;
+                diff /= _yScale; 
                 height += diff;
             }
 
@@ -235,6 +248,19 @@ namespace Dragablz
             SetCurrentValue(TopProperty, top);
         }
 
+        private void GetDPI()
+        {
+            if (_dpiInitialized)
+            {
+                return;
+            }
+
+            Matrix m = PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice;
+            _xScale = m.M11;
+            _yScale = m.M22;
+            _dpiInitialized = true;
+        }
+
         private void WindowResizeThumbOnDragStarted(object sender, DragStartedEventArgs dragStartedEventArgs)
         {
             _sizeWhenResizeBegan = new Size(ActualWidth, ActualHeight);
@@ -245,6 +271,8 @@ namespace Dragablz
             var thumb = (Thumb)sender;
             var mousePositionInThumb = Mouse.GetPosition(thumb);
             _resizeType = SelectSizingMode(mousePositionInThumb, thumb.RenderSize);
+
+            GetDPI();
         }
 
         private static SizeGrip SelectSizingMode(Point mousePositionInThumb, Size thumbSize)
