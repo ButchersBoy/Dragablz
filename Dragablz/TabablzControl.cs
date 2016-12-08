@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
@@ -439,6 +440,7 @@ namespace Dragablz
         /// Set to <c>true</c> to have tabs automatically be moved to another tab is a window is closed, so that they arent lost.
         /// Can be useful for fixed/persistant tabs that may have been dragged into another Window.  You can further control
         /// this behaviour on a per tab item basis by providing <see cref="ConsolidatingOrphanedItemCallback" />.
+        /// </summary>
         public static readonly DependencyProperty ConsolidateOrphanedItemsProperty = DependencyProperty.Register(
             "ConsolidateOrphanedItems", typeof (bool), typeof (TabablzControl), new PropertyMetadata(default(bool)));
 
@@ -457,6 +459,7 @@ namespace Dragablz
         /// Assuming <see cref="ConsolidateOrphanedItems"/> is set to <c>true</c>, consolidation of individual
         /// tab items can be cancelled by providing this call back and cancelling the <see cref="ItemActionCallbackArgs{TOwner}"/>
         /// instance.
+        /// </summary>
         public static readonly DependencyProperty ConsolidatingOrphanedItemCallbackProperty = DependencyProperty.Register(
             "ConsolidatingOrphanedItemCallback", typeof (ItemActionCallback), typeof (TabablzControl), new PropertyMetadata(default(ItemActionCallback)));
 
@@ -479,7 +482,7 @@ namespace Dragablz
         /// <summary>
         /// Readonly dependency property which indicates whether the owning <see cref="Window"/> 
         /// is currently dragged 
-        /// <summary></summary>
+        /// </summary>
         public static readonly DependencyProperty IsDraggingWindowProperty =
             IsDraggingWindowPropertyKey.DependencyProperty;
 
@@ -808,6 +811,16 @@ namespace Dragablz
                 base.OnKeyDown(e); 
         }
 
+        /// <summary>
+        /// Provides an appropriate automation peer implementation for this control
+        /// as part of the WPF automation infrastructure.
+        /// </summary>
+        /// <returns>The type-specific System.Windows.Automation.Peers.AutomationPeer implementation.</returns>
+        protected override AutomationPeer OnCreateAutomationPeer()
+        {
+            return new FrameworkElementAutomationPeer(this);
+        }
+        
         internal static TabablzControl GetOwnerOfHeaderItems(DragablzItemsControl itemsControl)
         {
             return LoadedInstances.FirstOrDefault(t => Equals(t._dragablzItemsControl, itemsControl));
