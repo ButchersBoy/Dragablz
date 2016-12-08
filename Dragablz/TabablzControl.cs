@@ -808,6 +808,16 @@ namespace Dragablz
                 base.OnKeyDown(e); 
         }
 
+        /// <summary>
+        /// Provides an appropriate automation peer implementation for this control
+        /// as part of the WPF automation infrastructure.
+        /// </summary>
+        /// <returns>The type-specific System.Windows.Automation.Peers.AutomationPeer implementation.</returns>
+        protected override AutomationPeer OnCreateAutomationPeer()
+        {
+            return new FrameworkElementAutomationPeer(this);
+        }
+        
         internal static TabablzControl GetOwnerOfHeaderItems(DragablzItemsControl itemsControl)
         {
             return LoadedInstances.FirstOrDefault(t => Equals(t._dragablzItemsControl, itemsControl));
