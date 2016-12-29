@@ -1062,7 +1062,7 @@ namespace Dragablz
             var minSize = EmptyHeaderSizingHint == EmptyHeaderSizingHint.PreviousTab
                 ? new Size(_dragablzItemsControl.ActualWidth, _dragablzItemsControl.ActualHeight)
                 : new Size();
-            System.Diagnostics.Debug.WriteLine("A " + minSize);
+            
             _dragablzItemsControl.MinHeight = 0;
             _dragablzItemsControl.MinWidth = 0;
 
