@@ -1010,7 +1010,8 @@ namespace Dragablz
                 .Where(
                     tc =>
                         tc != this && tc.InterTabController != null && InterTabController != null
-                        && Equals(tc.InterTabController.Partition, InterTabController.Partition))
+                        && Equals(tc.InterTabController.Partition, InterTabController.Partition)
+                        && tc._dragablzItemsControl != null)
                 .Select(tc =>
                 {
                     var topLeft = tc._dragablzItemsControl.PointToScreen(new Point());
