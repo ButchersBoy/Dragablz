@@ -27,6 +27,8 @@ namespace Dragablz.Themes
 
             EventManager.RegisterClassHandler(typeof(Window), Mouse.PreviewMouseUpEvent, new MouseButtonEventHandler(MouseButtonEventHandler), true);
             EventManager.RegisterClassHandler(typeof(Window), Mouse.MouseMoveEvent, new MouseEventHandler(MouseMouveEventHandler), true);
+            EventManager.RegisterClassHandler(typeof(UserControl), Mouse.PreviewMouseUpEvent, new MouseButtonEventHandler(MouseButtonEventHandler), true);
+            EventManager.RegisterClassHandler(typeof(UserControl), Mouse.MouseMoveEvent, new MouseEventHandler(MouseMouveEventHandler), true);
         }
 
         public Ripple()
