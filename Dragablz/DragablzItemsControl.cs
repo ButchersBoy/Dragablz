@@ -115,6 +115,32 @@ namespace Dragablz
             private set { SetValue(ItemsPresenterHeightPropertyKey, value); }
         }
 
+        /// <summary>
+        /// Adds an item to the underlying source, displaying in a specific position in rendered control.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="addLocationHint"></param>
+        public void AddToSource(object item, AddLocationHint addLocationHint)
+        {
+            AddToSource(item, null, addLocationHint);
+        }
+
+        /// <summary>
+        /// Adds an item to the underlying source, displaying in a specific position in rendered control.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="nearItem"></param>
+        /// <param name="addLocationHint"></param>
+        public void AddToSource(object item, object nearItem, AddLocationHint addLocationHint)
+        {
+            CollectionTeaser collectionTeaser;
+            if (CollectionTeaser.TryCreate(ItemsSource, out collectionTeaser))
+                collectionTeaser.Add(item);
+            else
+                Items.Add(item);
+            MoveItem(new MoveItemRequest(item, nearItem, addLocationHint));
+        }
+
         internal ContainerCustomisations ContainerCustomisations { get; set; }
 
         private void ItemContainerGeneratorOnStatusChanged(object sender, EventArgs eventArgs)
@@ -185,7 +211,11 @@ namespace Dragablz
             dragablzItem.InstigateDrag(continuation);            
         }
 
-        internal void MoveItem(MoveItemRequest moveItemRequest)
+        /// <summary>
+        /// Move an item in the rendered layout.
+        /// </summary>
+        /// <param name="moveItemRequest"></param>
+        public void MoveItem(MoveItemRequest moveItemRequest)
         {
             if (moveItemRequest == null) throw new ArgumentNullException("moveItemRequest");
 

@@ -1,6 +1,6 @@
 namespace Dragablz
 {
-    internal class MoveItemRequest
+    public class MoveItemRequest
     {
         private readonly object _item;
         private readonly object _context;
