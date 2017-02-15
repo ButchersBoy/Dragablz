@@ -63,8 +63,10 @@ namespace Dragablz.Dockablz
             if (_branchAccessor != null)
             {
                 if (branchVisitor != null)
+                {
                     branchVisitor(_branchAccessor);
-
+                }
+                    
                 return this;
             }
 
@@ -80,6 +82,29 @@ namespace Dragablz.Dockablz
                 contentVisitor(_layout.Content);
 
             return this;
+        }
+
+        /// <summary>
+        /// Gets all the Tabablz controls in a Layout, regardless of location.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<TabablzControl> TabablzControls()
+        {
+            var tabablzControls = new List<TabablzControl>();
+            this.Visit(tabablzControls, BranchAccessorVisitor, TabablzControlVisitor);
+            return tabablzControls;
+        }
+
+        private static void TabablzControlVisitor(IList<TabablzControl> resultSet, TabablzControl tabablzControl)
+        {
+            resultSet.Add(tabablzControl);
+        }
+
+        private static void BranchAccessorVisitor(IList<TabablzControl> resultSet, BranchAccessor branchAccessor)
+        {
+            branchAccessor
+                .Visit(resultSet, BranchItem.First, BranchAccessorVisitor, TabablzControlVisitor)
+                .Visit(resultSet, BranchItem.Second, BranchAccessorVisitor, TabablzControlVisitor);
         }
     }
 }

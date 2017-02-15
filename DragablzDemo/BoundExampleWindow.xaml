@@ -35,10 +35,14 @@
                 <Setter Property="ShowDefaultCloseButton" Value="True" />
                 <Setter Property="AdjacentHeaderItemOffset" Value="-10" />
                 <Setter Property="ItemContainerStyle" Value="{StaticResource TrapezoidDragableTabItemStyle}" />
-                <Setter Property="HeaderMemberPath" Value="Header" />                                
+                <Setter Property="HeaderMemberPath" Value="Header" />
                 <Setter Property="InterTabController" Value="{StaticResource InterTabController}" />
-                <Setter Property="HeaderPrefixContent" Value="{StaticResource WindowIcon}" />                               
                 <Setter Property="Margin" Value="0 8 0 0" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(dockablz:Layout.IsTopLeftItem)}" Value="True">
+                        <Setter Property="HeaderPrefixContent" Value="{StaticResource WindowIcon}" />
+                    </DataTrigger>
+                </Style.Triggers>
             </Style>
         </ResourceDictionary>
     </Window.Resources>
