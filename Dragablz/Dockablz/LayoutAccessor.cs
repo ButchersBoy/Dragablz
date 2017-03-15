@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using Dragablz.Core;
 
 namespace Dragablz.Dockablz
 {
@@ -25,27 +26,7 @@ namespace Dragablz.Dockablz
             if (branch != null)
                 _branchAccessor = new BranchAccessor(branch);
             else            
-                _tabablzControl = FindVisualChildren<TabablzControl>(Layout).SingleOrDefault();
-        }
-
-        private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObject) where T : DependencyObject
-        {
-            if (depObject != null)
-            {
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObject); i++)
-                {
-                    var child = VisualTreeHelper.GetChild(depObject, i);
-                    if (child != null && child is T)
-                    {
-                        yield return (T)child;
-                    }
-
-                    foreach (T childOfChild in FindVisualChildren<T>(child))
-                    {
-                        yield return childOfChild;
-                    }
-                }
-            }
+                _tabablzControl = Layout.VisualTreeDepthFirstTraversal().OfType<TabablzControl>().FirstOrDefault();
         }
 
         public Layout Layout
