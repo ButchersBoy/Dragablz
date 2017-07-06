@@ -269,13 +269,6 @@ namespace Dragablz
 
         private void ItemDragStarted(object sender, DragablzDragStartedEventArgs eventArgs)
         {            
-            foreach (var dragableItem in DragablzItems()
-                .Except(new[] { eventArgs.DragablzItem }))
-            {
-                dragableItem.IsSiblingDragging = true;
-            }
-            eventArgs.DragablzItem.IsDragging = true;
-
             if (ItemsOrganiser != null)
             {
                 var bounds = new Size(ActualWidth, ActualHeight);
@@ -336,6 +329,13 @@ namespace Dragablz
                     new Size(eventArgs.DragablzItem.ActualWidth, eventArgs.DragablzItem.ActualHeight),
                     desiredLocation, eventArgs.DragablzItem.DesiredSize);
             }
+
+            foreach (var dragableItem in DragablzItems()
+                .Except(new[] { eventArgs.DragablzItem })) // how about Linq.Where() ?
+            {
+                dragableItem.IsSiblingDragging = true;
+            }
+            eventArgs.DragablzItem.IsDragging = true;
 
             eventArgs.DragablzItem.X = desiredLocation.X;
             eventArgs.DragablzItem.Y = desiredLocation.Y;
