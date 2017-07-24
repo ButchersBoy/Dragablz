@@ -78,7 +78,7 @@ namespace Dragablz
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;            
-            IsVisibleChanged += OnIsVisibleChanged;
+            IsVisibleChanged += OnIsVisibleChanged;            
         }
 
         public static readonly DependencyProperty CustomHeaderItemStyleProperty = DependencyProperty.Register(
@@ -307,6 +307,18 @@ namespace Dragablz
             set { SetValue(ShowDefaultAddButtonProperty, value); }
         }
 
+        public static readonly DependencyProperty IsHeaderPanelVisibleProperty = DependencyProperty.Register(
+            "IsHeaderPanelVisible", typeof(bool), typeof(TabablzControl), new PropertyMetadata(true));
+
+        /// <summary>
+        /// Indicates wither the heaeder panel is visible.  Default is <c>true</c>.
+        /// </summary>
+        public bool IsHeaderPanelVisible
+        {
+            get { return (bool)GetValue(IsHeaderPanelVisibleProperty); }
+            set { SetValue(IsHeaderPanelVisibleProperty, value); }
+        }
+
         public static readonly DependencyProperty AddLocationHintProperty = DependencyProperty.Register(
             "AddLocationHint", typeof (AddLocationHint), typeof (TabablzControl), new PropertyMetadata(AddLocationHint.Last));
 
@@ -473,6 +485,8 @@ namespace Dragablz
             get { return (ItemActionCallback) GetValue(ConsolidatingOrphanedItemCallbackProperty); }
             set { SetValue(ConsolidatingOrphanedItemCallbackProperty, value); }
         }
+
+        
 
         private static readonly DependencyPropertyKey IsDraggingWindowPropertyKey =
             DependencyProperty.RegisterReadOnly(
