@@ -91,6 +91,38 @@ namespace Dragablz.Core
                 dependencyObject = LogicalTreeHelper.GetParent(dependencyObject);
             }
         }
+        
+        /// <summary>
+        /// Returns the actual Left of the Window independently from the WindowState
+        /// </summary>
+        /// <param name="window"></param>
+        /// <returns></returns>
+        public static double GetActualLeft(this Window window)
+        {
+            if (window.WindowState == WindowState.Maximized)
+            {
+                var leftField = typeof(Window).GetField("_actualLeft", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                return leftField?.GetValue(window) as double? ?? 0;
+            }
+
+            return window.Left;
+        }
+
+        /// <summary>
+        /// Returns the actual Top of the Window independently from the WindowState
+        /// </summary>
+        /// <param name="window"></param>
+        /// <returns></returns>
+        public static double GetActualTop(this Window window)
+        {
+            if (window.WindowState == WindowState.Maximized)
+            {
+                var topField = typeof(Window).GetField("_actualTop", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                return topField?.GetValue(window) as double? ?? 0;
+            }
+
+            return window.Top;
+        }
 
     }
 }

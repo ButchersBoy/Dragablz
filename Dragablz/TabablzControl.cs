@@ -1271,9 +1271,7 @@ namespace Dragablz
             }            
             
             dragStartWindowOffset.Offset(dragablzItem.MouseAtDragStart.X, dragablzItem.MouseAtDragStart.Y);
-            var borderVector = currentWindow.WindowState == WindowState.Maximized
-                ? currentWindow.PointToScreen(new Point()).ToWpf() - new Point()
-                : currentWindow.PointToScreen(new Point()).ToWpf() - new Point(currentWindow.Left, currentWindow.Top);
+            var borderVector = currentWindow.PointToScreen(new Point()).ToWpf() - new Point(currentWindow.GetActualLeft(), currentWindow.GetActualTop());
             dragStartWindowOffset.Offset(borderVector.X, borderVector.Y);
             return dragStartWindowOffset;
         }
