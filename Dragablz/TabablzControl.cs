@@ -94,6 +94,28 @@ namespace Dragablz
         }
 
         /// <summary>
+        /// Helper method to close all tabs where the item is the tab's content (helpful with MVVM scenarios)
+        /// </summary>
+        /// <remarks>
+        /// In MVVM scenarios where you don't want to bind the routed command to your ViewModel,
+        /// with this helper method and embedding the TabablzControl in a UserControl, you can keep
+        /// the View-specific dependencies out of the ViewModel.
+        /// </remarks>
+        /// <param name="tabContentItem">An existing Tab item content (a ViewModel in MVVM scenarios) which is backing a tab control</param>
+        public static void CloseItem(object tabContentItem)
+        {
+            if (tabContentItem == null) return; //Do nothing.
+
+            //Find all loaded TabablzControl instances with tabs backed by this item and close them
+            foreach(var existingTabWithItemContent in 
+                GetLoadedInstances().SelectMany(tc => tc._dragablzItemsControl.DragablzItems().Where(di => di.Content.Equals(tabContentItem))))
+            {
+                if (TabablzControl.CloseItemCommand.CanExecute(existingTabWithItemContent, null))
+                    TabablzControl.CloseItemCommand.Execute(existingTabWithItemContent, null);
+            }
+        }
+
+        /// <summary>
         /// Helper method to add an item next to an existing item.
         /// </summary>
         /// <remarks>
