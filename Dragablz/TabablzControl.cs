@@ -1482,16 +1482,6 @@ namespace Dragablz
             if (owner == null) throw new ApplicationException("Unable to ascertain DragablzItem to close.");
 
             CloseItem(owner.Item1, owner.Item2);
-            /*var cancel = false;
-            if (owner.Item2.ClosingItemCallback != null)
-            {
-                var callbackArgs = new ItemActionCallbackArgs<TabablzControl>(Window.GetWindow(owner.Item2), owner.Item2, owner.Item1);
-                owner.Item2.ClosingItemCallback(callbackArgs);
-                cancel = callbackArgs.IsCancelled;
-            }
-
-            if (!cancel)
-                owner.Item2.RemoveItem(owner.Item1);*/
         }
 
         private static Tuple<DragablzItem, TabablzControl> FindOwner(object eventParameter, object eventOriginalSource)
