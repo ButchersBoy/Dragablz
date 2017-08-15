@@ -107,11 +107,11 @@ namespace Dragablz
             if (tabContentItem == null) return; //Do nothing.
 
             //Find all loaded TabablzControl instances with tabs backed by this item and close them
-            foreach(var existingTabWithItemContent in 
-                GetLoadedInstances().SelectMany(tc => tc._dragablzItemsControl.DragablzItems().Where(di => di.Content.Equals(tabContentItem))))
+            foreach(var tabWithItemContent in 
+                GetLoadedInstances().SelectMany(tc => 
+                tc._dragablzItemsControl.DragablzItems().Where(di => di.Content.Equals(tabContentItem)).Select(di => new { tc, di })))
             {
-                if (TabablzControl.CloseItemCommand.CanExecute(existingTabWithItemContent, null))
-                    TabablzControl.CloseItemCommand.Execute(existingTabWithItemContent, null);
+                TabablzControl.CloseItem(tabWithItemContent.di, tabWithItemContent.tc);
             }
         }
 
@@ -1448,6 +1448,29 @@ namespace Dragablz
             MarkInitialSelection();
         }
 
+        private static void CloseItem(DragablzItem item, TabablzControl owner)
+        {
+            if (item == null)
+                throw new ApplicationException("Valid DragablzItem to close is required.");
+
+            if (owner == null)
+                throw new ApplicationException("Valid TabablzControl container is required.");
+
+            if (!owner.IsMyItem(item))
+                throw new ApplicationException("TabablzControl container must be an owner of the DragablzItem to close");
+
+            var cancel = false;
+            if (owner.ClosingItemCallback != null)
+            {
+                var callbackArgs = new ItemActionCallbackArgs<TabablzControl>(Window.GetWindow(owner), owner, item);
+                owner.ClosingItemCallback(callbackArgs);
+                cancel = callbackArgs.IsCancelled;
+            }
+
+            if (!cancel)
+                owner.RemoveItem(item);
+        }
+
         private static void CloseItemCanExecuteClassHandler(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = FindOwner(e.Parameter, e.OriginalSource) != null;
@@ -1458,7 +1481,8 @@ namespace Dragablz
 
             if (owner == null) throw new ApplicationException("Unable to ascertain DragablzItem to close.");
 
-            var cancel = false;
+            CloseItem(owner.Item1, owner.Item2);
+            /*var cancel = false;
             if (owner.Item2.ClosingItemCallback != null)
             {
                 var callbackArgs = new ItemActionCallbackArgs<TabablzControl>(Window.GetWindow(owner.Item2), owner.Item2, owner.Item1);
@@ -1467,7 +1491,7 @@ namespace Dragablz
             }
 
             if (!cancel)
-                owner.Item2.RemoveItem(owner.Item1);
+                owner.Item2.RemoveItem(owner.Item1);*/
         }
 
         private static Tuple<DragablzItem, TabablzControl> FindOwner(object eventParameter, object eventOriginalSource)
