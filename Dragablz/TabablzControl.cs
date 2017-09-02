@@ -94,6 +94,28 @@ namespace Dragablz
         }
 
         /// <summary>
+        /// Helper method to close all tabs where the item is the tab's content (helpful with MVVM scenarios)
+        /// </summary>
+        /// <remarks>
+        /// In MVVM scenarios where you don't want to bind the routed command to your ViewModel,
+        /// with this helper method and embedding the TabablzControl in a UserControl, you can keep
+        /// the View-specific dependencies out of the ViewModel.
+        /// </remarks>
+        /// <param name="tabContentItem">An existing Tab item content (a ViewModel in MVVM scenarios) which is backing a tab control</param>
+        public static void CloseItem(object tabContentItem)
+        {
+            if (tabContentItem == null) return; //Do nothing.
+
+            //Find all loaded TabablzControl instances with tabs backed by this item and close them
+            foreach(var tabWithItemContent in 
+                GetLoadedInstances().SelectMany(tc => 
+                tc._dragablzItemsControl.DragablzItems().Where(di => di.Content.Equals(tabContentItem)).Select(di => new { tc, di })))
+            {
+                TabablzControl.CloseItem(tabWithItemContent.di, tabWithItemContent.tc);
+            }
+        }
+
+        /// <summary>
         /// Helper method to add an item next to an existing item.
         /// </summary>
         /// <remarks>
@@ -1426,6 +1448,29 @@ namespace Dragablz
             MarkInitialSelection();
         }
 
+        private static void CloseItem(DragablzItem item, TabablzControl owner)
+        {
+            if (item == null)
+                throw new ApplicationException("Valid DragablzItem to close is required.");
+
+            if (owner == null)
+                throw new ApplicationException("Valid TabablzControl container is required.");
+
+            if (!owner.IsMyItem(item))
+                throw new ApplicationException("TabablzControl container must be an owner of the DragablzItem to close");
+
+            var cancel = false;
+            if (owner.ClosingItemCallback != null)
+            {
+                var callbackArgs = new ItemActionCallbackArgs<TabablzControl>(Window.GetWindow(owner), owner, item);
+                owner.ClosingItemCallback(callbackArgs);
+                cancel = callbackArgs.IsCancelled;
+            }
+
+            if (!cancel)
+                owner.RemoveItem(item);
+        }
+
         private static void CloseItemCanExecuteClassHandler(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = FindOwner(e.Parameter, e.OriginalSource) != null;
@@ -1436,16 +1481,7 @@ namespace Dragablz
 
             if (owner == null) throw new ApplicationException("Unable to ascertain DragablzItem to close.");
 
-            var cancel = false;
-            if (owner.Item2.ClosingItemCallback != null)
-            {
-                var callbackArgs = new ItemActionCallbackArgs<TabablzControl>(Window.GetWindow(owner.Item2), owner.Item2, owner.Item1);
-                owner.Item2.ClosingItemCallback(callbackArgs);
-                cancel = callbackArgs.IsCancelled;
-            }
-
-            if (!cancel)
-                owner.Item2.RemoveItem(owner.Item1);
+            CloseItem(owner.Item1, owner.Item2);
         }
 
         private static Tuple<DragablzItem, TabablzControl> FindOwner(object eventParameter, object eventOriginalSource)
