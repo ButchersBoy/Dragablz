@@ -693,9 +693,9 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
-                                    <Border Background="{DynamicResource PrimaryHueMidBrush}" Grid.RowSpan="4">
+                                    <Border Background="{TemplateBinding BorderBrush}" Grid.RowSpan="4">
                                         <Border.Effect>
-                                            <DropShadowEffect BlurRadius="5" ShadowDepth="2" Direction="270" Opacity=".5" />
+                                            <DropShadowEffect BlurRadius="5" ShadowDepth="2" Direction="0" Opacity=".5" />
                                         </Border.Effect>
                                     </Border>
                                     <ContentControl Grid.Row="0" x:Name="PrefixContentControl" 
@@ -773,9 +773,31 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="MaterialDesignAlternateDragableTabItemVerticalStyle" TargetType="{x:Type dragablz:DragablzItem}" BasedOn="{StaticResource MaterialDesignDragableTabItemVerticalStyle}">
+        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignColumnHeader}"/>
+        <Setter Property="local:MaterialDesignAssist.IndicatorBrush" Value="{DynamicResource PrimaryHueMidBrush}" />
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="False" />
+                    <Condition Property="IsMouseOver" Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
+
     <Style TargetType="{x:Type dragablz:TabablzControl}" x:Key="MaterialDesignAlternateTabablzControlStyle" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}">
         <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignPaper}" />
-        <Setter Property="ItemContainerStyle" Value="{StaticResource MaterialDesignAlternateDragableTabItemStyle}" />        
+        <Setter Property="ItemContainerStyle" Value="{StaticResource MaterialDesignAlternateDragableTabItemStyle}" />
+        <Style.Triggers>
+            <Trigger Property="TabStripPlacement" Value="Left">
+                <Setter Property="ItemContainerStyle" Value="{StaticResource MaterialDesignAlternateDragableTabItemVerticalStyle}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 </ResourceDictionary>
