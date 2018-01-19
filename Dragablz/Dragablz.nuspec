@@ -7,12 +7,12 @@
     <authors>James Willock</authors>
     <owners>James Willock</owners>
     <iconUrl>https://raw.githubusercontent.com/ButchersBoy/Dragablz/master/Resources/D32.png</iconUrl>
-    <licenseUrl>http://opensource.org/licenses/MS-PL</licenseUrl>
+    <licenseUrl>https://raw.githubusercontent.com/ButchersBoy/Dragablz/master/LICENSE</licenseUrl>
     <projectUrl>http://dragablz.net</projectUrl>    
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Dragable and tearable tab control for WPF</description>
     <releaseNotes>We are in alpha right now!.</releaseNotes>
-    <copyright>Copyright 2014-16 James Willock/Mulholland Software Ltd</copyright>
+    <copyright>Copyright 2014-18 James Willock/Mulholland Software Ltd</copyright>
     <tags>WPF TabControl Tab Tearable</tags>
   </metadata>
   <files>
