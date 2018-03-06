@@ -335,8 +335,10 @@ namespace Dragablz
             var cursorPos = Native.GetRawCursorPos();
             WindowState = WindowState.Normal;
 
-            Top = cursorPos.Y - 2;
-            Left = cursorPos.X - RestoreBounds.Width / 2;
+            GetDPI();
+
+            Top = cursorPos.Y / _yScale - 2;
+            Left = cursorPos.X / _xScale - RestoreBounds.Width / 2;
             
             var lParam = (int)(uint)cursorPos.X | (cursorPos.Y << 16);
             Native.SendMessage(CriticalHandle, WindowMessage.WM_LBUTTONUP, (IntPtr)HitTest.HT_CAPTION,
