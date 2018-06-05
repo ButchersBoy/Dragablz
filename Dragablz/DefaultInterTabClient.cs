@@ -7,7 +7,7 @@ using Dragablz.Core;
 namespace Dragablz
 {
     public class DefaultInterTabClient : IInterTabClient
-    {        
+    {
         public virtual INewTabHost<Window> GetNewHost(IInterTabClient interTabClient, object partition, TabablzControl source)
         {
             if (source == null) throw new ArgumentNullException("source");
@@ -23,7 +23,7 @@ namespace Dragablz
             if (newTabablzControl.ItemsSource == null)
                 newTabablzControl.Items.Clear();
 
-            return new NewTabHost<Window>(newWindow, newTabablzControl);            
+            return new NewTabHost<Window>(newWindow, newTabablzControl);
         }
 
         public virtual TabEmptiedResponse TabEmptiedHandler(TabablzControl tabControl, Window window)

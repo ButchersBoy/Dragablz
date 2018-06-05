@@ -68,7 +68,7 @@ namespace Dragablz
         {
             var buff = channel1 + (channel2 - channel1) * channel2Percentage / 100D;
             return Math.Min((byte)Math.Round(buff), (byte)255);
-        }   
-        
+        }
+
     }
 }

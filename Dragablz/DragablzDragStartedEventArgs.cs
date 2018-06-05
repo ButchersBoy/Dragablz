@@ -33,6 +33,6 @@ namespace Dragablz
         public DragStartedEventArgs DragStartedEventArgs
         {
             get { return _dragStartedEventArgs; }
-        }        
+        }
     }
 }

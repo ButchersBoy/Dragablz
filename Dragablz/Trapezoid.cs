@@ -81,7 +81,7 @@ namespace Dragablz
             //TODO Make better :)  do some funky beziers or summit
             const double cheapRadiusBig = 6.0;
             const double cheapRadiusSmall = cheapRadiusBig/2;
-            
+
             const int angle = 20;
             const double radians = angle * (Math.PI / 180);
 
@@ -107,7 +107,7 @@ namespace Dragablz
             var bottomRightSegment = new ArcSegment(bottomRightPoint,
                 new Size(cheapRadiusSmall, cheapRadiusSmall), 25, false, SweepDirection.Counterclockwise, true);
             var bottomLeftPoint = new Point(0, bottomRightSegment.Point.Y);
-            var bottomSegment = new LineSegment(bottomLeftPoint, true);            
+            var bottomSegment = new LineSegment(bottomLeftPoint, true);
 
             var pathSegmentCollection = new PathSegmentCollection
             {
@@ -121,15 +121,15 @@ namespace Dragablz
             {
                 pathFigure
             };
-            var geometryGroup = new PathGeometry(pathFigureCollection);            
-            geometryGroup.Freeze();                        
+            var geometryGroup = new PathGeometry(pathFigureCollection);
+            geometryGroup.Freeze();
 
             return geometryGroup;
         }
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            base.OnRender(drawingContext);                        
+            base.OnRender(drawingContext);
             drawingContext.DrawGeometry(Background, CreatePen(), _pathGeometry);
 
             if (_pathGeometry == null) return;

@@ -23,7 +23,7 @@ namespace Dragablz.Core
         private readonly Size _itemSize;
         private readonly IList<FloatingItemSnapShot> _floatingItemSnapShots;
         private readonly bool _isTransposing;
-        private readonly InterTabTransferReason _transferReason; 
+        private readonly InterTabTransferReason _transferReason;
 
         public InterTabTransfer(object item, DragablzItem originatorContainer, Orientation breachOrientation, Point dragStartWindowOffset, Point dragStartItemOffset, Point itemPositionWithinHeader, Size itemSize, IList<FloatingItemSnapShot> floatingItemSnapShots, bool isTransposing)
         {

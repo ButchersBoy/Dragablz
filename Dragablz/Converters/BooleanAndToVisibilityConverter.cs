@@ -12,8 +12,8 @@ namespace Dragablz.Converters
         {
             if (values == null)
                 return Visibility.Collapsed;
-            
-            return values.Select(GetBool).All(b => b) 
+
+            return values.Select(GetBool).All(b => b)
                 ? Visibility.Visible
                 : Visibility.Collapsed;
         }
@@ -29,7 +29,7 @@ namespace Dragablz.Converters
             {
                 return (bool)value;
             }
-            
+
             return false;
         }
     }

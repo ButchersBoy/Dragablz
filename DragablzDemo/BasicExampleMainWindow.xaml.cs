@@ -11,7 +11,7 @@ namespace DragablzDemo
         {
             InitializeComponent();
 
-            DataContext = new BasicExampleMainModel();            
+            DataContext = new BasicExampleMainModel();
         }
     }
 }

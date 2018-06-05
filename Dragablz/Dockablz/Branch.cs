@@ -73,7 +73,7 @@ namespace Dragablz.Dockablz
         {
             get { return (GridLength) GetValue(SecondItemLengthProperty); }
             set { SetValue(SecondItemLengthProperty, value); }
-        }        
+        }
 
         /// <summary>
         /// Gets the proportional size of the first item, between 0 and 1, where 1 would represent the entire size of the branch.

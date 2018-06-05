@@ -8,7 +8,7 @@ namespace Dragablz.Dockablz
         {
             if (tabablzControl == null) throw new ArgumentNullException("tabablzControl");
 
-            var locationReportBuilder = new LocationReportBuilder(tabablzControl);            
+            var locationReportBuilder = new LocationReportBuilder(tabablzControl);
 
             foreach (var loadedInstance in Layout.GetLoadedInstances())
             {
@@ -41,7 +41,7 @@ namespace Dragablz.Dockablz
                 branchAccessor.Visit(BranchItem.First, ba => BranchVisitor(locationReportBuilder, ba));
                 if (locationReportBuilder.IsFound) return;
                 branchAccessor.Visit(BranchItem.Second, ba => BranchVisitor(locationReportBuilder, ba));
-            }            
+            }
         }
 
         private static void TabablzControlVisitor(LocationReportBuilder locationReportBuilder, TabablzControl tabablzControl)

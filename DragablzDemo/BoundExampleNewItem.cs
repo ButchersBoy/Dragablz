@@ -5,7 +5,7 @@ namespace DragablzDemo
 {
     public static class BoundExampleNewItem
     {
-        public static Func<HeaderedItemViewModel> Factory 
+        public static Func<HeaderedItemViewModel> Factory
         {
             get
             {
@@ -20,7 +20,7 @@ namespace DragablzDemo
                             Content = dateTime.ToString("R")
                         };
                     };
-            }        
+            }
         }
     }
 }

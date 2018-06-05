@@ -24,15 +24,15 @@ namespace Dragablz.Themes
         #region StayOnCenter
 
         /// <summary>
-        /// Set to <c>true</c> to cause the ripple to originate from the centre of the 
-        /// content.  Otherwise the effect will originate from the mouse down position.        
+        /// Set to <c>true</c> to cause the ripple to originate from the centre of the
+        /// content.  Otherwise the effect will originate from the mouse down position.
         /// </summary>
         public static readonly DependencyProperty IsCenteredProperty = DependencyProperty.RegisterAttached(
             "IsCentered", typeof(bool), typeof(RippleAssist), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.Inherits));
 
         /// <summary>
-        /// Set to <c>true</c> to cause the ripple to originate from the centre of the 
-        /// content.  Otherwise the effect will originate from the mouse down position.        
+        /// Set to <c>true</c> to cause the ripple to originate from the centre of the
+        /// content.  Otherwise the effect will originate from the mouse down position.
         /// </summary>
         /// <param name="element"></param>
         /// <param name="value"></param>
@@ -42,10 +42,10 @@ namespace Dragablz.Themes
         }
 
         /// <summary>
-        /// Set to <c>true</c> to cause the ripple to originate from the centre of the 
-        /// content.  Otherwise the effect will originate from the mouse down position.        
+        /// Set to <c>true</c> to cause the ripple to originate from the centre of the
+        /// content.  Otherwise the effect will originate from the mouse down position.
         /// </summary>
-        /// <param name="element"></param>        
+        /// <param name="element"></param>
         public static bool GetIsCentered(DependencyObject element)
         {
             return (bool)element.GetValue(IsCenteredProperty);

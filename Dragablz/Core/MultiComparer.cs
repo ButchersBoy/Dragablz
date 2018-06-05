@@ -8,7 +8,7 @@ namespace Dragablz.Core
     {
         private readonly IList<FuncComparer<TObject>> _attributeComparers;
 
-        private MultiComparer(FuncComparer<TObject> firstComparer)        
+        private MultiComparer(FuncComparer<TObject> firstComparer)
         {
             _attributeComparers = new List<FuncComparer<TObject>>
             {
@@ -16,15 +16,15 @@ namespace Dragablz.Core
             };
         }
 
-        public static MultiComparer<TObject> Ascending<TAttribute>(Func<TObject, TAttribute> accessor) 
+        public static MultiComparer<TObject> Ascending<TAttribute>(Func<TObject, TAttribute> accessor)
             where TAttribute : IComparable
         {
-            if (accessor == null) throw new ArgumentNullException("accessor");            
+            if (accessor == null) throw new ArgumentNullException("accessor");
 
             return new MultiComparer<TObject>(BuildAscendingComparer(accessor));
         }
 
-        public static MultiComparer<TObject> Descending<TAttribute>(Func<TObject, TAttribute> accessor) 
+        public static MultiComparer<TObject> Descending<TAttribute>(Func<TObject, TAttribute> accessor)
             where TAttribute : IComparable
         {
             if (accessor == null) throw new ArgumentNullException("accessor");
@@ -64,7 +64,7 @@ namespace Dragablz.Core
         {
             //TODO handle ref types better
             return new FuncComparer<TObject>((x, y) => accessor(x).CompareTo(accessor(y)));
-            
+
         }
 
         private static FuncComparer<TObject> BuildDescendingComparer<TAttribute>(Func<TObject, TAttribute> accessor)
