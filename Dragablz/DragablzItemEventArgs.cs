@@ -12,7 +12,7 @@ namespace Dragablz
 
         public DragablzItemEventArgs(DragablzItem dragablzItem)
         {
-            if (dragablzItem == null) throw new ArgumentNullException("dragablzItem");            
+            if (dragablzItem == null) throw new ArgumentNullException("dragablzItem");
 
             _dragablzItem = dragablzItem;
         }

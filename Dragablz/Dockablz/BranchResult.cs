@@ -11,7 +11,7 @@ namespace Dragablz.Dockablz
         {
             if (branch == null) throw new ArgumentNullException("branch");
             if (tabablzControl == null) throw new ArgumentNullException("tabablzControl");
-            
+
             _branch = branch;
             _tabablzControl = tabablzControl;
         }

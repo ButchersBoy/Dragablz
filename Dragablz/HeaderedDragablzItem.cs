@@ -7,9 +7,9 @@ namespace Dragablz
     {
         static HeaderedDragablzItem()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(HeaderedDragablzItem), new FrameworkPropertyMetadata(typeof(HeaderedDragablzItem)));            
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(HeaderedDragablzItem), new FrameworkPropertyMetadata(typeof(HeaderedDragablzItem)));
         }
-        
+
         public static readonly DependencyProperty HeaderContentProperty = DependencyProperty.Register(
             "HeaderContent", typeof (object), typeof (HeaderedDragablzItem), new PropertyMetadata(default(object)));
 
@@ -44,6 +44,6 @@ namespace Dragablz
         {
             get { return (DataTemplateSelector) GetValue(HeaderContentTemplateSelectorProperty); }
             set { SetValue(HeaderContentTemplateSelectorProperty, value); }
-        }         
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace DragablzDemo
 #endif
 #if NET45
                 OnPropertyChanged();
-#endif                
+#endif
             }
         }
 
@@ -42,7 +42,7 @@ namespace DragablzDemo
 #endif
 #if NET45
                 OnPropertyChanged();
-#endif                
+#endif
             }
         }
 

@@ -15,14 +15,14 @@ namespace Dragablz.Dockablz
         public LayoutAccessor(Layout layout)
         {
             if (layout == null) throw new ArgumentNullException("layout");
-            
+
             _layout = layout;
 
             var branch = Layout.Content as Branch;
             if (branch != null)
                 _branchAccessor = new BranchAccessor(branch);
-            else            
-                _tabablzControl = Layout.Content as TabablzControl;            
+            else
+                _tabablzControl = Layout.Content as TabablzControl;
         }
 
         public Layout Layout
@@ -53,8 +53,8 @@ namespace Dragablz.Dockablz
 
         /// <summary>
         /// Visits the content of the layout, according to its content type.  No more than one of the provided <see cref="Action"/>
-        /// callbacks will be called.  
-        /// </summary>        
+        /// callbacks will be called.
+        /// </summary>
         public LayoutAccessor Visit(
             Action<BranchAccessor> branchVisitor = null,
             Action<TabablzControl> tabablzControlVisitor = null,
@@ -66,7 +66,7 @@ namespace Dragablz.Dockablz
                 {
                     branchVisitor(_branchAccessor);
                 }
-                    
+
                 return this;
             }
 

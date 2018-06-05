@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Dragablz
-{    
+{
     public class DragablzIcon : Control
     {
         static DragablzIcon()

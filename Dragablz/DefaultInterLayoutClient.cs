@@ -7,7 +7,7 @@ using System.Windows.Data;
 namespace Dragablz
 {
     /// <summary>
-    /// Provides a simple implementation of <see cref="IInterLayoutClient"/>, but only really useful if 
+    /// Provides a simple implementation of <see cref="IInterLayoutClient"/>, but only really useful if
     /// <see cref="TabItem"/> instances are specified in XAML.  If you are binding via ItemsSource then
     /// you most likely want to create your own implementation of <see cref="IInterLayoutClient"/>.
     /// </summary>
@@ -27,7 +27,7 @@ namespace Dragablz
                 Partition = source.InterTabController.Partition
             };
             Clone(source.InterTabController, newInterTabController);
-            tabablzControl.SetCurrentValue(TabablzControl.InterTabControllerProperty, newInterTabController);            
+            tabablzControl.SetCurrentValue(TabablzControl.InterTabControllerProperty, newInterTabController);
 
             return new NewTabHost<UIElement>(tabablzControl, tabablzControl);
         }
@@ -39,10 +39,10 @@ namespace Dragablz
             {
                 if (localValueEnumerator.Current.Property.ReadOnly ||
                     localValueEnumerator.Current.Value is FrameworkElement) continue;
-                
+
                 if (!(localValueEnumerator.Current.Value is BindingExpressionBase))
-                    to.SetCurrentValue(localValueEnumerator.Current.Property, localValueEnumerator.Current.Value);                
-            }            
+                    to.SetCurrentValue(localValueEnumerator.Current.Property, localValueEnumerator.Current.Value);
+            }
         }
     }
 }

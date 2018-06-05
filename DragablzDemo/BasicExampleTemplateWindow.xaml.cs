@@ -22,6 +22,6 @@ namespace DragablzDemo
         public BasicExampleTemplateWindow()
         {
             InitializeComponent();
-        }        
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace Dragablz.Dockablz
     {
         public static void Tile(IEnumerable<DragablzItem> dragablzItems, Size bounds)
         {
-            if (dragablzItems == null) throw new ArgumentNullException("dragablzItems");            
+            if (dragablzItems == null) throw new ArgumentNullException("dragablzItems");
 
             var items = new Queue<DragablzItem>(dragablzItems.OrderBy(Panel.GetZIndex));
 

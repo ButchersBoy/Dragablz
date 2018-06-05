@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using Dragablz.Core;
 
 namespace Dragablz.Dockablz
-{ 
+{
     public class BranchAccessor
     {
         private readonly Branch _branch;
@@ -28,7 +28,7 @@ namespace Dragablz.Dockablz
             else
                 _firstItemTabablzControl = FindTabablzControl(branch.FirstItem, branch.FirstContentPresenter);
 
-            var secondChildBranch = branch.SecondItem as Branch;            
+            var secondChildBranch = branch.SecondItem as Branch;
             if (secondChildBranch != null)
                 _secondItemBranchAccessor = new BranchAccessor(secondChildBranch);
             else
@@ -68,7 +68,7 @@ namespace Dragablz.Dockablz
 
         /// <summary>
         /// Visits the content of the first or second side of a branch, according to its content type.  No more than one of the provided <see cref="Action"/>
-        /// callbacks will be called.  
+        /// callbacks will be called.
         /// </summary>
         /// <param name="childItem"></param>
         /// <param name="childBranchVisitor"></param>
@@ -107,7 +107,7 @@ namespace Dragablz.Dockablz
                     childBranchVisitor(branchDescription);
                 return this;
             }
-            
+
             var tabablzControl = tabGetter();
             if (tabablzControl != null)
             {
@@ -125,5 +125,5 @@ namespace Dragablz.Dockablz
 
             return this;
         }
-    }    
+    }
 }

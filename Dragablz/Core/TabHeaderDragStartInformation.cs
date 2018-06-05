@@ -6,7 +6,7 @@ namespace Dragablz.Core
     {
         private readonly DragablzItem _dragItem;
         private readonly double _dragablzItemsControlHorizontalOffset;
-        private readonly double _dragablzItemControlVerticalOffset; 
+        private readonly double _dragablzItemControlVerticalOffset;
         private readonly double _dragablzItemHorizontalOffset;
         private readonly double _dragablzItemVerticalOffset;
 

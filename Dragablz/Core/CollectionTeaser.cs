@@ -11,7 +11,7 @@ namespace Dragablz.Core
         private readonly Action<object> _removeMethod;
 
         private CollectionTeaser(Action<object> addMethod, Action<object> removeMethod)
-        {            
+        {
             _addMethod = addMethod;
             _removeMethod = removeMethod;
         }
@@ -23,7 +23,7 @@ namespace Dragablz.Core
             var list = items as IList;
             if (list != null)
             {
-                collectionTeaser = new CollectionTeaser(i => list.Add(i), list.Remove);                
+                collectionTeaser = new CollectionTeaser(i => list.Add(i), list.Remove);
             }
             else if (items != null)
             {
@@ -48,7 +48,7 @@ namespace Dragablz.Core
                         i => removeMethodInfo.Invoke(items, new[] {i}));
                 }
             }
-            
+
             return collectionTeaser != null;
         }
 
