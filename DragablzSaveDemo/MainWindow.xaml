@@ -1,0 +1,24 @@
+﻿<Window x:Class="DragablzSaveDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DragablzSaveDemo"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:dockablz="http://dragablz.net/winfx/xaml/dockablz"
+        xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+        mc:Ignorable="d"
+        Title="DragablzSaveDemo" Height="450" Width="800">
+    <Window.Resources>
+        <system:String x:Key="DragablzPartition">DragablzSaveDemo</system:String>
+    </Window.Resources>
+    <dockablz:Layout Partition="{StaticResource DragablzPartition}">
+        <dragablz:TabablzControl
+            x:Name="InitialTabablzControl"
+            ItemsSource="{Binding TabContents}">
+            <dragablz:TabablzControl.InterTabController>
+                <dragablz:InterTabController Partition="{StaticResource DragablzPartition}" />
+            </dragablz:TabablzControl.InterTabController>
+        </dragablz:TabablzControl>
+    </dockablz:Layout>
+</Window>

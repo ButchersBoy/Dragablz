@@ -93,7 +93,7 @@ namespace Dragablz.Core
         }
 
         /// <summary>
-        /// Returns the actual Left of the Window independently from the WindowState
+        /// Returns the actual Left of the Window independently from the LayoutWindowState
         /// </summary>
         /// <param name="window"></param>
         /// <returns></returns>
@@ -109,7 +109,7 @@ namespace Dragablz.Core
         }
 
         /// <summary>
-        /// Returns the actual Top of the Window independently from the WindowState
+        /// Returns the actual Top of the Window independently from the LayoutWindowState
         /// </summary>
         /// <param name="window"></param>
         /// <returns></returns>
