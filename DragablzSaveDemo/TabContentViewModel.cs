@@ -32,7 +32,11 @@
         /// </summary>
         public string Header
         {
-            get => this._header;
+            get
+            {
+                return this._header;
+            }
+
             set
             {
                 if (this._header != value)

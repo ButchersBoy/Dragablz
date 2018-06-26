@@ -22,7 +22,13 @@
         /// <summary>
         /// The content of the tabs
         /// </summary>
-        public ObservableCollection<TabContentViewModel> TabContents => this._tabContents;
+        public ObservableCollection<TabContentViewModel> TabContents
+        {
+            get
+            {
+                return this._tabContents;
+            }
+        }
 
         /// <summary>
         /// The factory that creates new viewModels
