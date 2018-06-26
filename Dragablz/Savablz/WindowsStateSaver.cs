@@ -34,7 +34,11 @@
         /// <returns>The state of the specified window</returns>
         private static LayoutWindowState<TTabModel> GetLayoutState<TTabModel, TTabViewModel>(Layout layout, Func<TTabViewModel, TTabModel> tabContentModelConverter)
         {
-            var window = Window.GetWindow(layout) ?? throw new InvalidOperationException("The layout is not bound to any window");
+            var window = Window.GetWindow(layout);
+            if (window == null)
+            {
+                throw new InvalidOperationException("The layout is not bound to any window");
+            }
 
             var layoutAccessor = layout.Query();
 
@@ -120,7 +124,12 @@
             }
 
             var mainWindowState = layoutWindowsState[0];
-            var mainWindow = Window.GetWindow(windowInitialTabablzControl) ?? throw new InvalidOperationException("Window not found");
+            var mainWindow = Window.GetWindow(windowInitialTabablzControl);
+            if (mainWindow == null)
+            {
+                throw new InvalidOperationException("Window not found");
+            }
+
             mainWindow.Width = mainWindowState.Width;
             mainWindow.Height = mainWindowState.Height;
             mainWindow.Left = mainWindowState.X;
