@@ -11,7 +11,7 @@ namespace Dragablz
         public LocationChangedEventArgs(object item, Point location)
         {
             if (item == null) throw new ArgumentNullException("item");
-            
+
             _item = item;
             _location = location;
         }

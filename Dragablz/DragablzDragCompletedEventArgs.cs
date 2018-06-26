@@ -16,7 +16,7 @@ namespace Dragablz
         {
             if (dragablzItem == null) throw new ArgumentNullException("dragablzItem");
             if (dragCompletedEventArgs == null) throw new ArgumentNullException("dragCompletedEventArgs");
-            
+
             _dragablzItem = dragablzItem;
             _dragCompletedEventArgs = dragCompletedEventArgs;
         }
@@ -27,7 +27,7 @@ namespace Dragablz
             if (dragablzItem == null) throw new ArgumentNullException("dragablzItem");
             if (dragCompletedEventArgs == null) throw new ArgumentNullException("dragCompletedEventArgs");
 
-            _dragablzItem = dragablzItem;            
+            _dragablzItem = dragablzItem;
             _dragCompletedEventArgs = dragCompletedEventArgs;
         }
 
@@ -49,6 +49,6 @@ namespace Dragablz
         public DragCompletedEventArgs DragCompletedEventArgs
         {
             get { return _dragCompletedEventArgs; }
-        }        
+        }
     }
 }

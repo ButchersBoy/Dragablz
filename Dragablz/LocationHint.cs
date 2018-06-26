@@ -5,7 +5,7 @@ namespace Dragablz
     /// specifically correlate to the order of the the source items.
     /// </summary>
     public enum AddLocationHint
-    {        
+    {
         /// <summary>
         /// Display item in the first position.
         /// </summary>

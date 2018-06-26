@@ -9,7 +9,7 @@ namespace Dragablz
         {
             HorizontalPopoutGrace = 8;
             VerticalPopoutGrace = 8;
-            MoveWindowWithSolitaryTabs = true;            
+            MoveWindowWithSolitaryTabs = true;
         }
 
         public static readonly DependencyProperty HorizontalPopoutGraceProperty = DependencyProperty.Register(

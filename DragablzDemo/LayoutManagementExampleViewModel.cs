@@ -57,7 +57,7 @@ namespace DragablzDemo
         private static void FloatingItemsVisitor(TreeNode layoutNode, LayoutAccessor layoutAccessor)
         {
             var floatingItems = layoutAccessor.FloatingItems.ToList();
-            var floatingItemsNode = new TreeNode {Content = "Floating Items " + floatingItems.Count};            
+            var floatingItemsNode = new TreeNode {Content = "Floating Items " + floatingItems.Count};
             foreach (var floatingItemNode in floatingItems.Select(floatingItem => new TreeNode
             {
                 Content =
@@ -73,7 +73,7 @@ namespace DragablzDemo
 
         private static void TabablzControlVisitor(TreeNode treeNode, TabablzControl tabablzControl)
         {
-            treeNode.Children.Add(new TreeNode { Content = new TabablzControlProxy(tabablzControl) });            
+            treeNode.Children.Add(new TreeNode { Content = new TabablzControlProxy(tabablzControl) });
         }
 
         private static void BranchAccessorVisitor(TreeNode treeNode, BranchAccessor branchAccessor)

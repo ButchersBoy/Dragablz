@@ -167,7 +167,7 @@ namespace DragablzDemo.Annotations
   /// <item><code>
   /// // A method that returns null if the parameter is null, and not null if the parameter is not null
   /// [ContractAnnotation("null => null; notnull => notnull")]
-  /// public object Transform(object data) 
+  /// public object Transform(object data)
   /// </code></item>
   /// <item><code>
   /// [ContractAnnotation("s:null=>false; =>true,result:notnull; =>false, result:null")]
@@ -293,7 +293,7 @@ namespace DragablzDemo.Annotations
   [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
   public sealed class MeansImplicitUseAttribute : Attribute
   {
-    public MeansImplicitUseAttribute() 
+    public MeansImplicitUseAttribute()
       : this(ImplicitUseKindFlags.Default, ImplicitUseTargetFlags.Default) { }
 
     public MeansImplicitUseAttribute(ImplicitUseKindFlags useKindFlags)
@@ -312,7 +312,7 @@ namespace DragablzDemo.Annotations
     [UsedImplicitly] public ImplicitUseKindFlags UseKindFlags { get; private set; }
     [UsedImplicitly] public ImplicitUseTargetFlags TargetFlags { get; private set; }
   }
-  
+
   [Flags]
   public enum ImplicitUseKindFlags
   {
@@ -440,7 +440,7 @@ namespace DragablzDemo.Annotations
   {
     public AspMvcViewLocationFormatAttribute(string format) { }
   }
-  
+
   /// <summary>
   /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
   /// is an MVC action. If applied to a method, the MVC action name is calculated
@@ -480,7 +480,7 @@ namespace DragablzDemo.Annotations
   /// ASP.NET MVC attribute. If applied to a parameter, indicates that
   /// the parameter is an MVC controller. If applied to a method,
   /// the MVC controller name is calculated implicitly from the context.
-  /// Use this attribute for custom wrappers similar to 
+  /// Use this attribute for custom wrappers similar to
   /// <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String, String)</c>
   /// </summary>
   [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
@@ -530,7 +530,7 @@ namespace DragablzDemo.Annotations
 
   /// <summary>
   /// ASP.NET MVC attribute. Indicates that a parameter is an MVC display template.
-  /// Use this attribute for custom wrappers similar to 
+  /// Use this attribute for custom wrappers similar to
   /// <c>System.Web.Mvc.Html.DisplayExtensions.DisplayForModel(HtmlHelper, String)</c>
   /// </summary>
   [AttributeUsage(AttributeTargets.Parameter)]
@@ -606,7 +606,7 @@ namespace DragablzDemo.Annotations
 
   /// <summary>
   /// Razor attribute. Indicates that a parameter or a method is a Razor section.
-  /// Use this attribute for custom wrappers similar to 
+  /// Use this attribute for custom wrappers similar to
   /// <c>System.Web.WebPages.WebPageBase.RenderSection(String)</c>
   /// </summary>
   [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method, Inherited = true)]

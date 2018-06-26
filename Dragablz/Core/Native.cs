@@ -28,7 +28,7 @@ namespace Dragablz.Core
             public int top;
             public int right;
             public int bottom;
-        }   
+        }
 
         [DllImport("user32.dll")]
         private static extern bool GetCursorPos(out POINT lpPoint);
@@ -58,7 +58,7 @@ namespace Dragablz.Core
 
         public static Point ToWpf(this Point pixelPoint)
         {
-            var desktop = GetDC(IntPtr.Zero); 
+            var desktop = GetDC(IntPtr.Zero);
             var dpi = GetDeviceCaps(desktop, 88);
             ReleaseDC(IntPtr.Zero, desktop);
 
@@ -104,7 +104,7 @@ namespace Dragablz.Core
             public POINT minPosition;
             public POINT maxPosition;
             public RECT normalPosition;
-        }        
+        }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         internal static extern IntPtr SendMessage(IntPtr hWnd, WindowMessage msg, IntPtr wParam, IntPtr lParam);

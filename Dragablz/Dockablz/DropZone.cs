@@ -7,7 +7,7 @@ namespace Dragablz.Dockablz
     {
         static DropZone()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(DropZone), new FrameworkPropertyMetadata(typeof(DropZone)));            
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(DropZone), new FrameworkPropertyMetadata(typeof(DropZone)));
         }
 
         public static readonly DependencyProperty LocationProperty = DependencyProperty.Register(

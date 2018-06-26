@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragablz.net45", "Dragablz\Dragablz.net45.csproj", "{7B11011C-7FD7-4AB0-A1AD-04E940B026DE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B127C87D-C212-40D1-895E-3B6341E81C21} = {B127C87D-C212-40D1-895E-3B6341E81C21}
@@ -13,6 +15,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragablz.net40", "Dragablz\Dragablz.net40.csproj", "{886AD9DE-BCED-4A99-8376-5177B376C0AC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragablzDemo.net40", "DragablzDemo\DragablzDemo.net40.csproj", "{B127C87D-C212-40D1-895E-3B6341E81C21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DragablzSaveDemo", "DragablzSaveDemo\DragablzSaveDemo.csproj", "{6709408B-A312-4CA3-B687-0FD22B5BFCF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,8 +78,23 @@ Global
 		{B127C87D-C212-40D1-895E-3B6341E81C21}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B127C87D-C212-40D1-895E-3B6341E81C21}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B127C87D-C212-40D1-895E-3B6341E81C21}.Release|x86.ActiveCfg = Release|Any CPU
+		{6709408B-A312-4CA3-B687-0FD22B5BFCF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6709408B-A312-4CA3-B687-0FD22B5BFCF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6709408B-A312-4CA3-B687-0FD22B5BFCF8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6709408B-A312-4CA3-B687-0FD22B5BFCF8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6709408B-A312-4CA3-B687-0FD22B5BFCF8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6709408B-A312-4CA3-B687-0FD22B5BFCF8}.Debug|x86.Build.0 = Debug|Any CPU
+		{6709408B-A312-4CA3-B687-0FD22B5BFCF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6709408B-A312-4CA3-B687-0FD22B5BFCF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6709408B-A312-4CA3-B687-0FD22B5BFCF8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6709408B-A312-4CA3-B687-0FD22B5BFCF8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6709408B-A312-4CA3-B687-0FD22B5BFCF8}.Release|x86.ActiveCfg = Release|Any CPU
+		{6709408B-A312-4CA3-B687-0FD22B5BFCF8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {14740FC0-D2AE-4AD5-A428-D00E52009FFD}
 	EndGlobalSection
 EndGlobal

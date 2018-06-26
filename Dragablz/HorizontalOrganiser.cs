@@ -12,5 +12,5 @@ namespace Dragablz
 
         public HorizontalOrganiser(double itemOffset) : base(Orientation.Horizontal, itemOffset)
         { }
-    }    
+    }
 }

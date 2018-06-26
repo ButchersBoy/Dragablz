@@ -20,14 +20,14 @@ namespace Dragablz.Core
 #endif
 #if NET40
             var fieldInfo = typeof(ItemContainerGenerator).GetField("_items", BindingFlags.NonPublic | BindingFlags.Instance);
-            var list = (IList)fieldInfo.GetValue(itemsControl.ItemContainerGenerator);            
+            var list = (IList)fieldInfo.GetValue(itemsControl.ItemContainerGenerator);
             for (var i = 0; i < list.Count; i++)
 #endif
             {
                 var container = itemsControl.ItemContainerGenerator.ContainerFromIndex(i) as TContainer;
                 if (container != null)
                     yield return container;
-            }            
+            }
         }
 
         public static IEnumerable<TObject> Except<TObject>(this IEnumerable<TObject> first, params TObject[] second)
@@ -41,7 +41,7 @@ namespace Dragablz.Core
             yield return node;
 
             foreach (var child in LogicalTreeHelper.GetChildren(node).OfType<DependencyObject>()
-                .SelectMany(depObj => depObj.LogicalTreeDepthFirstTraversal()))            
+                .SelectMany(depObj => depObj.LogicalTreeDepthFirstTraversal()))
                 yield return child;
         }
 
@@ -73,7 +73,7 @@ namespace Dragablz.Core
             {
                 yield return dependencyObject;
                 dependencyObject = VisualTreeHelper.GetParent(dependencyObject);
-            }            
+            }
         }
 
         /// <summary>
@@ -91,9 +91,9 @@ namespace Dragablz.Core
                 dependencyObject = LogicalTreeHelper.GetParent(dependencyObject);
             }
         }
-        
+
         /// <summary>
-        /// Returns the actual Left of the Window independently from the WindowState
+        /// Returns the actual Left of the Window independently from the LayoutWindowState
         /// </summary>
         /// <param name="window"></param>
         /// <returns></returns>
@@ -109,7 +109,7 @@ namespace Dragablz.Core
         }
 
         /// <summary>
-        /// Returns the actual Top of the Window independently from the WindowState
+        /// Returns the actual Top of the Window independently from the LayoutWindowState
         /// </summary>
         /// <param name="window"></param>
         /// <returns></returns>

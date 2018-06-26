@@ -1,0 +1,34 @@
+﻿<Application x:Class="DragablzSaveDemo.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+             xmlns:local="clr-namespace:DragablzSaveDemo">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type dragablz:TabablzControl}">
+                <Setter Property="HeaderItemTemplate">
+                    <Setter.Value>
+                        <DataTemplate DataType="{x:Type local:TabContentViewModel}">
+                            <TextBlock Text="{Binding Header}" />
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="ContentTemplate">
+                    <Setter.Value>
+                        <DataTemplate DataType="{x:Type local:TabContentViewModel}">
+                            <ContentPresenter Content="{Binding Control}" />
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="ItemContainerStyle" Value="{StaticResource TrapezoidDragableTabItemStyle}" />
+                <Setter Property="ShowDefaultCloseButton" Value="True" />
+                <Setter Property="ShowDefaultAddButton" Value="True" />
+                <Setter Property="NewItemFactory" Value="{x:Static local:TabsViewModel.NewItemFactory}" />
+                <Setter Property="ConsolidateOrphanedItems" Value="True" />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

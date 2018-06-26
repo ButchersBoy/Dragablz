@@ -14,6 +14,6 @@ namespace Dragablz
         /// <param name="source">The source control where a dragging operation was initiated.</param>
         /// <returns></returns>
         INewTabHost<UIElement> GetNewHost(object partition, TabablzControl source);
-        
+
     }
 }

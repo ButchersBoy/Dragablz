@@ -10,7 +10,7 @@ namespace DragablzDemo
         public BasicExampleTemplateModel(IInterTabClient interTabClient, object partition)
         {
             _interTabClient = interTabClient;
-            _partition = partition;            
+            _partition = partition;
         }
 
         public IInterTabClient InterTabClient
@@ -22,6 +22,6 @@ namespace DragablzDemo
         {
             get { return _partition; }
         }
-        
+
     }
 }

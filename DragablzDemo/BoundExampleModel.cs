@@ -55,7 +55,7 @@ namespace DragablzDemo
 
         /// <summary>
         /// Callback to handle tab closing.
-        /// </summary>        
+        /// </summary>
         private static void ClosingTabItemHandlerImpl(ItemActionCallbackArgs<TabablzControl> args)
         {
             //in here you can dispose stuff or cancel the close
@@ -65,7 +65,7 @@ namespace DragablzDemo
             Debug.Assert(viewModel != null);
 
             //here's how you can cancel stuff:
-            //args.Cancel(); 
+            //args.Cancel();
         }
 
         public ClosingFloatingItemCallback ClosingFloatingItemHandler
@@ -75,18 +75,18 @@ namespace DragablzDemo
 
         /// <summary>
         /// Callback to handle floating toolbar/MDI window closing.
-        /// </summary>        
+        /// </summary>
         private static void ClosingFloatingItemHandlerImpl(ItemActionCallbackArgs<Layout> args)
         {
             //in here you can dispose stuff or cancel the close
 
-            //here's your view model: 
+            //here's your view model:
             var disposable = args.DragablzItem.DataContext as IDisposable;
             if (disposable != null)
                 disposable.Dispose();
 
             //here's how you can cancel stuff:
-            //args.Cancel(); 
+            //args.Cancel();
         }
     }
 }

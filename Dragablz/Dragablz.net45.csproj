@@ -110,6 +110,11 @@
     <Compile Include="Core\InterTabTransfer.cs" />
     <Compile Include="LocationHint.cs" />
     <Compile Include="MoveItemRequest.cs" />
+    <Compile Include="Savablz\BranchItemState.cs" />
+    <Compile Include="Savablz\BranchState.cs" />
+    <Compile Include="Savablz\TabSetState.cs" />
+    <Compile Include="Savablz\LayoutWindowState.cs" />
+    <Compile Include="Savablz\WindowsStateSaver.cs" />
     <Compile Include="StackOrganiser.cs" />
     <Compile Include="LocationChangedEventArgs.cs" />
     <Compile Include="Core\Native.cs" />

@@ -11,7 +11,7 @@ namespace Dragablz.Dockablz
             if (totalCells == 2)
                 return new[] {1, 1};
 
-            var sqrt = Math.Sqrt(totalCells);            
+            var sqrt = Math.Sqrt(totalCells);
 
             if (unchecked(sqrt == (int) sqrt))
                 return Enumerable.Repeat((int) sqrt, (int) sqrt).ToArray();
