@@ -669,7 +669,7 @@ namespace Dragablz.Dockablz
             _isDragOpWireUpPending = false;
 
             foreach (var loadedLayout in LoadedLayouts)
-                loadedLayout.IsParticipatingInDrag = false;
+                loadedLayout.Dispatcher.Invoke(new Action(() => { loadedLayout.IsParticipatingInDrag = false; }));
 
             if (_currentlyOfferedDropZone == null || e.DragablzItem.IsDropTargetFound) return;
 
@@ -723,8 +723,11 @@ namespace Dragablz.Dockablz
                 _isDragOpWireUpPending = false;
             }
 
-            foreach (var layout in LoadedLayouts.Where(l => l.IsParticipatingInDrag))
-            {                
+            foreach (var layout in LoadedLayouts)
+            {
+                var isParticipating = false;
+                layout.Dispatcher.Invoke(new Action(() => { isParticipating = layout.IsParticipatingInDrag; }));
+                if (!isParticipating) continue;
                 var cursorPos = Native.GetCursorPos();
                 layout.MonitorDropZones(cursorPos);
             }         
