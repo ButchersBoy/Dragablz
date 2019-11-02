@@ -159,8 +159,7 @@ namespace DragablzDemo
         [NotifyPropertyChangedInvocator]
 #if NET40
         protected virtual void OnPropertyChanged(string propertyName)
-#endif
-#if NET45
+#else
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 #endif
         {
