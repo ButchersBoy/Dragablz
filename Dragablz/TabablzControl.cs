@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Controls;
@@ -52,7 +53,7 @@ namespace Dragablz
 
         private Panel _itemsHolder;
         private TabHeaderDragStartInformation _tabHeaderDragStartInformation;
-        private WeakReference _previousSelection;        
+        private WeakReference _previousSelection;
         private DragablzItemsControl _dragablzItemsControl;
         private IDisposable _templateSubscription;
         private readonly SerialDisposable _windowSubscription = new SerialDisposable();
@@ -64,25 +65,25 @@ namespace Dragablz
             DefaultStyleKeyProperty.OverrideMetadata(typeof(TabablzControl), new FrameworkPropertyMetadata(typeof(TabablzControl)));
             CommandManager.RegisterClassCommandBinding(typeof(FrameworkElement), new CommandBinding(CloseItemCommand, CloseItemClassHandler, CloseItemCanExecuteClassHandler));
         }
-        
+
         /// <summary>
         /// Default constructor.
         /// </summary>
         public TabablzControl()
-        {            
+        {
             AddHandler(DragablzItem.DragStarted, new DragablzDragStartedEventHandler(ItemDragStarted), true);
             AddHandler(DragablzItem.PreviewDragDelta, new DragablzDragDeltaEventHandler(PreviewItemDragDelta), true);
             AddHandler(DragablzItem.DragDelta, new DragablzDragDeltaEventHandler(ItemDragDelta), true);
-            AddHandler(DragablzItem.DragCompleted, new DragablzDragCompletedEventHandler(ItemDragCompleted), true);                        
-            CommandBindings.Add(new CommandBinding(AddItemCommand, AddItemHandler));                        
+            AddHandler(DragablzItem.DragCompleted, new DragablzDragCompletedEventHandler(ItemDragCompleted), true);
+            CommandBindings.Add(new CommandBinding(AddItemCommand, AddItemHandler));
 
             Loaded += OnLoaded;
-            Unloaded += OnUnloaded;            
-            IsVisibleChanged += OnIsVisibleChanged;            
+            Unloaded += OnUnloaded;
+            IsVisibleChanged += OnIsVisibleChanged;
         }
 
         public static readonly DependencyProperty CustomHeaderItemStyleProperty = DependencyProperty.Register(
-            "CustomHeaderItemStyle", typeof (Style), typeof (TabablzControl), new PropertyMetadata(default(Style)));
+            "CustomHeaderItemStyle", typeof(Style), typeof(TabablzControl), new PropertyMetadata(default(Style)));
 
         /// <summary>
         /// Helper method which returns all the currently loaded instances.
@@ -107,8 +108,8 @@ namespace Dragablz
             if (tabContentItem == null) return; //Do nothing.
 
             //Find all loaded TabablzControl instances with tabs backed by this item and close them
-            foreach(var tabWithItemContent in 
-                GetLoadedInstances().SelectMany(tc => 
+            foreach (var tabWithItemContent in
+                GetLoadedInstances().SelectMany(tc =>
                 tc._dragablzItemsControl.DragablzItems().Where(di => di.Content.Equals(tabContentItem)).Select(di => new { tc, di })))
             {
                 TabablzControl.CloseItem(tabWithItemContent.di, tabWithItemContent.tc);
@@ -132,12 +133,12 @@ namespace Dragablz
 
             var existingLocation = GetLoadedInstances().SelectMany(tabControl =>
                 (tabControl.ItemsSource ?? tabControl.Items).OfType<object>()
-                    .Select(existingObject => new {tabControl, existingObject}))
+                    .Select(existingObject => new { tabControl, existingObject }))
                 .SingleOrDefault(a => nearItem.Equals(a.existingObject));
 
             if (existingLocation == null)
-                throw new ArgumentException("Did not find precisely one instance of adjacentTo", "nearItem");            
-            
+                throw new ArgumentException("Did not find precisely one instance of adjacentTo", "nearItem");
+
             existingLocation.tabControl.AddToSource(item);
             if (existingLocation.tabControl._dragablzItemsControl != null)
                 existingLocation.tabControl._dragablzItemsControl.MoveItem(new MoveItemRequest(item, nearItem, addLocationHint));
@@ -151,13 +152,13 @@ namespace Dragablz
         {
             var existingLocation = GetLoadedInstances().SelectMany(tabControl =>
                 (tabControl.ItemsSource ?? tabControl.Items).OfType<object>()
-                    .Select(existingObject => new {tabControl, existingObject}))
+                    .Select(existingObject => new { tabControl, existingObject }))
                     .FirstOrDefault(a => item.Equals(a.existingObject));
 
             if (existingLocation == null) return;
 
             existingLocation.tabControl.SelectedItem = item;
-        }        
+        }
 
         /// <summary>
         /// Style to apply to header items which are not their own item container (<see cref="TabItem"/>).  Typically items bound via the <see cref="ItemsSource"/> will use this style.
@@ -165,32 +166,32 @@ namespace Dragablz
         [Obsolete]
         public Style CustomHeaderItemStyle
         {
-            get { return (Style) GetValue(CustomHeaderItemStyleProperty); }
+            get { return (Style)GetValue(CustomHeaderItemStyleProperty); }
             set { SetValue(CustomHeaderItemStyleProperty, value); }
         }
 
         public static readonly DependencyProperty CustomHeaderItemTemplateProperty = DependencyProperty.Register(
-            "CustomHeaderItemTemplate", typeof (DataTemplate), typeof (TabablzControl), new PropertyMetadata(default(DataTemplate)));
+            "CustomHeaderItemTemplate", typeof(DataTemplate), typeof(TabablzControl), new PropertyMetadata(default(DataTemplate)));
 
         [Obsolete("Prefer HeaderItemTemplate")]
         public DataTemplate CustomHeaderItemTemplate
         {
-            get { return (DataTemplate) GetValue(CustomHeaderItemTemplateProperty); }
+            get { return (DataTemplate)GetValue(CustomHeaderItemTemplateProperty); }
             set { SetValue(CustomHeaderItemTemplateProperty, value); }
         }
 
         public static readonly DependencyProperty DefaultHeaderItemStyleProperty = DependencyProperty.Register(
-            "DefaultHeaderItemStyle", typeof (Style), typeof (TabablzControl), new PropertyMetadata(default(Style)));        
+            "DefaultHeaderItemStyle", typeof(Style), typeof(TabablzControl), new PropertyMetadata(default(Style)));
 
         [Obsolete]
         public Style DefaultHeaderItemStyle
         {
-            get { return (Style) GetValue(DefaultHeaderItemStyleProperty); }
+            get { return (Style)GetValue(DefaultHeaderItemStyleProperty); }
             set { SetValue(DefaultHeaderItemStyleProperty, value); }
         }
 
         public static readonly DependencyProperty AdjacentHeaderItemOffsetProperty = DependencyProperty.Register(
-            "AdjacentHeaderItemOffset", typeof (double), typeof (TabablzControl), new PropertyMetadata(default(double), AdjacentHeaderItemOffsetPropertyChangedCallback));
+            "AdjacentHeaderItemOffset", typeof(double), typeof(TabablzControl), new PropertyMetadata(default(double), AdjacentHeaderItemOffsetPropertyChangedCallback));
 
         private static void AdjacentHeaderItemOffsetPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
@@ -199,70 +200,70 @@ namespace Dragablz
 
         public double AdjacentHeaderItemOffset
         {
-            get { return (double) GetValue(AdjacentHeaderItemOffsetProperty); }
+            get { return (double)GetValue(AdjacentHeaderItemOffsetProperty); }
             set { SetValue(AdjacentHeaderItemOffsetProperty, value); }
         }
 
         public static readonly DependencyProperty HeaderItemsOrganiserProperty = DependencyProperty.Register(
-            "HeaderItemsOrganiser", typeof (IItemsOrganiser), typeof (TabablzControl), new PropertyMetadata(new HorizontalOrganiser()));
+            "HeaderItemsOrganiser", typeof(IItemsOrganiser), typeof(TabablzControl), new PropertyMetadata(new HorizontalOrganiser()));
 
         public IItemsOrganiser HeaderItemsOrganiser
         {
-            get { return (IItemsOrganiser) GetValue(HeaderItemsOrganiserProperty); }
+            get { return (IItemsOrganiser)GetValue(HeaderItemsOrganiserProperty); }
             set { SetValue(HeaderItemsOrganiserProperty, value); }
         }
 
         public static readonly DependencyProperty HeaderMemberPathProperty = DependencyProperty.Register(
-            "HeaderMemberPath", typeof (string), typeof (TabablzControl), new PropertyMetadata(default(string)));
+            "HeaderMemberPath", typeof(string), typeof(TabablzControl), new PropertyMetadata(default(string)));
 
         public string HeaderMemberPath
         {
-            get { return (string) GetValue(HeaderMemberPathProperty); }
+            get { return (string)GetValue(HeaderMemberPathProperty); }
             set { SetValue(HeaderMemberPathProperty, value); }
         }
 
         public static readonly DependencyProperty HeaderItemTemplateProperty = DependencyProperty.Register(
-            "HeaderItemTemplate", typeof (DataTemplate), typeof (TabablzControl), new PropertyMetadata(default(DataTemplate)));
+            "HeaderItemTemplate", typeof(DataTemplate), typeof(TabablzControl), new PropertyMetadata(default(DataTemplate)));
 
         public DataTemplate HeaderItemTemplate
         {
-            get { return (DataTemplate) GetValue(HeaderItemTemplateProperty); }
+            get { return (DataTemplate)GetValue(HeaderItemTemplateProperty); }
             set { SetValue(HeaderItemTemplateProperty, value); }
         }
 
         public static readonly DependencyProperty HeaderPrefixContentProperty = DependencyProperty.Register(
-            "HeaderPrefixContent", typeof (object), typeof (TabablzControl), new PropertyMetadata(default(object)));
+            "HeaderPrefixContent", typeof(object), typeof(TabablzControl), new PropertyMetadata(default(object)));
 
         public object HeaderPrefixContent
         {
-            get { return (object) GetValue(HeaderPrefixContentProperty); }
+            get { return (object)GetValue(HeaderPrefixContentProperty); }
             set { SetValue(HeaderPrefixContentProperty, value); }
         }
 
         public static readonly DependencyProperty HeaderPrefixContentStringFormatProperty = DependencyProperty.Register(
-            "HeaderPrefixContentStringFormat", typeof (string), typeof (TabablzControl), new PropertyMetadata(default(string)));
+            "HeaderPrefixContentStringFormat", typeof(string), typeof(TabablzControl), new PropertyMetadata(default(string)));
 
         public string HeaderPrefixContentStringFormat
         {
-            get { return (string) GetValue(HeaderPrefixContentStringFormatProperty); }
+            get { return (string)GetValue(HeaderPrefixContentStringFormatProperty); }
             set { SetValue(HeaderPrefixContentStringFormatProperty, value); }
         }
 
         public static readonly DependencyProperty HeaderPrefixContentTemplateProperty = DependencyProperty.Register(
-            "HeaderPrefixContentTemplate", typeof (DataTemplate), typeof (TabablzControl), new PropertyMetadata(default(DataTemplate)));
+            "HeaderPrefixContentTemplate", typeof(DataTemplate), typeof(TabablzControl), new PropertyMetadata(default(DataTemplate)));
 
         public DataTemplate HeaderPrefixContentTemplate
         {
-            get { return (DataTemplate) GetValue(HeaderPrefixContentTemplateProperty); }
+            get { return (DataTemplate)GetValue(HeaderPrefixContentTemplateProperty); }
             set { SetValue(HeaderPrefixContentTemplateProperty, value); }
         }
 
         public static readonly DependencyProperty HeaderPrefixContentTemplateSelectorProperty = DependencyProperty.Register(
-            "HeaderPrefixContentTemplateSelector", typeof (DataTemplateSelector), typeof (TabablzControl), new PropertyMetadata(default(DataTemplateSelector)));
+            "HeaderPrefixContentTemplateSelector", typeof(DataTemplateSelector), typeof(TabablzControl), new PropertyMetadata(default(DataTemplateSelector)));
 
         public DataTemplateSelector HeaderPrefixContentTemplateSelector
         {
-            get { return (DataTemplateSelector) GetValue(HeaderPrefixContentTemplateSelectorProperty); }
+            get { return (DataTemplateSelector)GetValue(HeaderPrefixContentTemplateSelectorProperty); }
             set { SetValue(HeaderPrefixContentTemplateSelectorProperty, value); }
         }
 
@@ -303,7 +304,7 @@ namespace Dragablz
         }
 
         public static readonly DependencyProperty ShowDefaultCloseButtonProperty = DependencyProperty.Register(
-            "ShowDefaultCloseButton", typeof (bool), typeof (TabablzControl), new PropertyMetadata(default(bool)));
+            "ShowDefaultCloseButton", typeof(bool), typeof(TabablzControl), new PropertyMetadata(default(bool)));
 
         /// <summary>
         /// Indicates whether a default close button should be displayed.  If manually templating the tab header content the close command 
@@ -311,12 +312,12 @@ namespace Dragablz
         /// </summary>
         public bool ShowDefaultCloseButton
         {
-            get { return (bool) GetValue(ShowDefaultCloseButtonProperty); }
+            get { return (bool)GetValue(ShowDefaultCloseButtonProperty); }
             set { SetValue(ShowDefaultCloseButtonProperty, value); }
         }
 
         public static readonly DependencyProperty ShowDefaultAddButtonProperty = DependencyProperty.Register(
-            "ShowDefaultAddButton", typeof (bool), typeof (TabablzControl), new PropertyMetadata(default(bool)));
+            "ShowDefaultAddButton", typeof(bool), typeof(TabablzControl), new PropertyMetadata(default(bool)));
 
         /// <summary>
         /// Indicates whether a default add button should be displayed.  Alternately an add button
@@ -325,7 +326,7 @@ namespace Dragablz
         /// </summary>
         public bool ShowDefaultAddButton
         {
-            get { return (bool) GetValue(ShowDefaultAddButtonProperty); }
+            get { return (bool)GetValue(ShowDefaultAddButtonProperty); }
             set { SetValue(ShowDefaultAddButtonProperty, value); }
         }
 
@@ -342,7 +343,7 @@ namespace Dragablz
         }
 
         public static readonly DependencyProperty AddLocationHintProperty = DependencyProperty.Register(
-            "AddLocationHint", typeof (AddLocationHint), typeof (TabablzControl), new PropertyMetadata(AddLocationHint.Last));
+            "AddLocationHint", typeof(AddLocationHint), typeof(TabablzControl), new PropertyMetadata(AddLocationHint.Last));
 
         /// <summary>
         /// Gets or sets the location to add new tab items in the header.
@@ -353,24 +354,24 @@ namespace Dragablz
         /// </remarks>
         public AddLocationHint AddLocationHint
         {
-            get { return (AddLocationHint) GetValue(AddLocationHintProperty); }
+            get { return (AddLocationHint)GetValue(AddLocationHintProperty); }
             set { SetValue(AddLocationHintProperty, value); }
         }
 
         public static readonly DependencyProperty FixedHeaderCountProperty = DependencyProperty.Register(
-            "FixedHeaderCount", typeof (int), typeof (TabablzControl), new PropertyMetadata(default(int)));
+            "FixedHeaderCount", typeof(int), typeof(TabablzControl), new PropertyMetadata(default(int)));
 
         /// <summary>
         /// Allows a the first adjacent tabs to be fixed (no dragging, and default close button will not show).
         /// </summary>
         public int FixedHeaderCount
         {
-            get { return (int) GetValue(FixedHeaderCountProperty); }
+            get { return (int)GetValue(FixedHeaderCountProperty); }
             set { SetValue(FixedHeaderCountProperty, value); }
         }
 
         public static readonly DependencyProperty InterTabControllerProperty = DependencyProperty.Register(
-            "InterTabController", typeof (InterTabController), typeof (TabablzControl), new PropertyMetadata(null, InterTabControllerPropertyChangedCallback));
+            "InterTabController", typeof(InterTabController), typeof(TabablzControl), new PropertyMetadata(null, InterTabControllerPropertyChangedCallback));
 
         private static void InterTabControllerPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
@@ -387,7 +388,7 @@ namespace Dragablz
         /// </summary>
         public InterTabController InterTabController
         {
-            get { return (InterTabController) GetValue(InterTabControllerProperty); }
+            get { return (InterTabController)GetValue(InterTabControllerProperty); }
             set { SetValue(InterTabControllerProperty, value); }
         }
 
@@ -395,20 +396,20 @@ namespace Dragablz
         /// Allows a factory to be provided for generating new items. Typically used in conjunction with <see cref="AddItemCommand"/>.
         /// </summary>
         public static readonly DependencyProperty NewItemFactoryProperty = DependencyProperty.Register(
-            "NewItemFactory", typeof (Func<object>), typeof (TabablzControl), new PropertyMetadata(default(Func<object>)));
+            "NewItemFactory", typeof(Func<object>), typeof(TabablzControl), new PropertyMetadata(default(Func<object>)));
 
         /// <summary>
         /// Allows a factory to be provided for generating new items. Typically used in conjunction with <see cref="AddItemCommand"/>.
         /// </summary>
         public Func<object> NewItemFactory
         {
-            get { return (Func<object>) GetValue(NewItemFactoryProperty); }
+            get { return (Func<object>)GetValue(NewItemFactoryProperty); }
             set { SetValue(NewItemFactoryProperty, value); }
         }
 
         private static readonly DependencyPropertyKey IsEmptyPropertyKey =
             DependencyProperty.RegisterReadOnly(
-                "IsEmpty", typeof (bool), typeof (TabablzControl),
+                "IsEmpty", typeof(bool), typeof(TabablzControl),
                 new PropertyMetadata(true, OnIsEmptyChanged));
 
         /// <summary>
@@ -422,7 +423,7 @@ namespace Dragablz
         /// </summary>
         public bool IsEmpty
         {
-            get { return (bool) GetValue(IsEmptyProperty); }
+            get { return (bool)GetValue(IsEmptyProperty); }
             private set { SetValue(IsEmptyPropertyKey, value); }
         }
 
@@ -433,8 +434,8 @@ namespace Dragablz
             EventManager.RegisterRoutedEvent(
                 "IsEmptyChanged",
                 RoutingStrategy.Bubble,
-                typeof (RoutedPropertyChangedEventHandler<bool>),
-                typeof (TabablzControl));
+                typeof(RoutedPropertyChangedEventHandler<bool>),
+                typeof(TabablzControl));
 
         /// <summary>
         /// Event handler to list to <see cref="IsEmptyChangedEvent"/>.
@@ -450,10 +451,11 @@ namespace Dragablz
         {
             var instance = d as TabablzControl;
             var args = new RoutedPropertyChangedEventArgs<bool>(
-                (bool) e.OldValue,
-                (bool) e.NewValue) {RoutedEvent = IsEmptyChangedEvent};
+                (bool)e.OldValue,
+                (bool)e.NewValue)
+            { RoutedEvent = IsEmptyChangedEvent };
             instance?.RaiseEvent(args);
-        } 
+        }
 
         /// <summary>
         /// Optionally allows a close item hook to be bound in.  If this propety is provided, the func must return true for the close to continue.
@@ -476,7 +478,7 @@ namespace Dragablz
         /// this behaviour on a per tab item basis by providing <see cref="ConsolidatingOrphanedItemCallback" />.
         /// </summary>
         public static readonly DependencyProperty ConsolidateOrphanedItemsProperty = DependencyProperty.Register(
-            "ConsolidateOrphanedItems", typeof (bool), typeof (TabablzControl), new PropertyMetadata(default(bool)));
+            "ConsolidateOrphanedItems", typeof(bool), typeof(TabablzControl), new PropertyMetadata(default(bool)));
 
         /// <summary>
         /// Set to <c>true</c> to have tabs automatically be moved to another tab is a window is closed, so that they arent lost.
@@ -485,7 +487,7 @@ namespace Dragablz
         /// </summary>
         public bool ConsolidateOrphanedItems
         {
-            get { return (bool) GetValue(ConsolidateOrphanedItemsProperty); }
+            get { return (bool)GetValue(ConsolidateOrphanedItemsProperty); }
             set { SetValue(ConsolidateOrphanedItemsProperty, value); }
         }
 
@@ -495,7 +497,7 @@ namespace Dragablz
         /// instance.
         /// </summary>
         public static readonly DependencyProperty ConsolidatingOrphanedItemCallbackProperty = DependencyProperty.Register(
-            "ConsolidatingOrphanedItemCallback", typeof (ItemActionCallback), typeof (TabablzControl), new PropertyMetadata(default(ItemActionCallback)));
+            "ConsolidatingOrphanedItemCallback", typeof(ItemActionCallback), typeof(TabablzControl), new PropertyMetadata(default(ItemActionCallback)));
 
         /// <summary>
         /// Assuming <see cref="ConsolidateOrphanedItems"/> is set to <c>true</c>, consolidation of individual
@@ -504,15 +506,15 @@ namespace Dragablz
         /// </summary>
         public ItemActionCallback ConsolidatingOrphanedItemCallback
         {
-            get { return (ItemActionCallback) GetValue(ConsolidatingOrphanedItemCallbackProperty); }
+            get { return (ItemActionCallback)GetValue(ConsolidatingOrphanedItemCallbackProperty); }
             set { SetValue(ConsolidatingOrphanedItemCallbackProperty, value); }
         }
 
-        
+
 
         private static readonly DependencyPropertyKey IsDraggingWindowPropertyKey =
             DependencyProperty.RegisterReadOnly(
-                "IsDraggingWindow", typeof (bool), typeof (TabablzControl),
+                "IsDraggingWindow", typeof(bool), typeof(TabablzControl),
                 new PropertyMetadata(default(bool), OnIsDraggingWindowChanged));
 
         /// <summary>
@@ -528,7 +530,7 @@ namespace Dragablz
         /// </summary>
         public bool IsDraggingWindow
         {
-            get { return (bool) GetValue(IsDraggingWindowProperty); }
+            get { return (bool)GetValue(IsDraggingWindowProperty); }
             private set { SetValue(IsDraggingWindowPropertyKey, value); }
         }
 
@@ -539,8 +541,8 @@ namespace Dragablz
             EventManager.RegisterRoutedEvent(
                 "IsDraggingWindowChanged",
                 RoutingStrategy.Bubble,
-                typeof (RoutedPropertyChangedEventHandler<bool>),
-                typeof (TabablzControl));
+                typeof(RoutedPropertyChangedEventHandler<bool>),
+                typeof(TabablzControl));
 
         /// <summary>
         /// Event indicating <see cref="IsDraggingWindow"/> has changed.
@@ -554,22 +556,22 @@ namespace Dragablz
         private static void OnIsDraggingWindowChanged(
             DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var instance = (TabablzControl) d;
+            var instance = (TabablzControl)d;
             var args = new RoutedPropertyChangedEventArgs<bool>(
-                (bool) e.OldValue,
-                (bool) e.NewValue)
+                (bool)e.OldValue,
+                (bool)e.NewValue)
             {
                 RoutedEvent = IsDraggingWindowChangedEvent
             };
             instance.RaiseEvent(args);
-            
+
         }
 
         /// <summary>
         /// Temporarily set by the framework if a users drag opration causes a Window to close (e.g if a tab is dragging into another tab).
         /// </summary>
         public static readonly DependencyProperty IsClosingAsPartOfDragOperationProperty = DependencyProperty.RegisterAttached(
-            "IsClosingAsPartOfDragOperation", typeof (bool), typeof (TabablzControl), new FrameworkPropertyMetadata(default(bool), FrameworkPropertyMetadataOptions.NotDataBindable));
+            "IsClosingAsPartOfDragOperation", typeof(bool), typeof(TabablzControl), new FrameworkPropertyMetadata(default(bool), FrameworkPropertyMetadataOptions.NotDataBindable));
 
         internal static void SetIsClosingAsPartOfDragOperation(Window element, bool value)
         {
@@ -584,26 +586,26 @@ namespace Dragablz
         /// <returns></returns>
         public static bool GetIsClosingAsPartOfDragOperation(Window element)
         {
-            return (bool) element.GetValue(IsClosingAsPartOfDragOperationProperty);
+            return (bool)element.GetValue(IsClosingAsPartOfDragOperationProperty);
         }
 
         /// <summary>
         /// Provide a hint for how the header should size itself if there are no tabs left (and a Window is still open).
         /// </summary>
         public static readonly DependencyProperty EmptyHeaderSizingHintProperty = DependencyProperty.Register(
-            "EmptyHeaderSizingHint", typeof (EmptyHeaderSizingHint), typeof (TabablzControl), new PropertyMetadata(default(EmptyHeaderSizingHint)));
+            "EmptyHeaderSizingHint", typeof(EmptyHeaderSizingHint), typeof(TabablzControl), new PropertyMetadata(default(EmptyHeaderSizingHint)));
 
         /// <summary>
         /// Provide a hint for how the header should size itself if there are no tabs left (and a Window is still open).
         /// </summary>
         public EmptyHeaderSizingHint EmptyHeaderSizingHint
         {
-            get { return (EmptyHeaderSizingHint) GetValue(EmptyHeaderSizingHintProperty); }
+            get { return (EmptyHeaderSizingHint)GetValue(EmptyHeaderSizingHintProperty); }
             set { SetValue(EmptyHeaderSizingHintProperty, value); }
         }
 
         public static readonly DependencyProperty IsWrappingTabItemProperty = DependencyProperty.RegisterAttached(
-            "IsWrappingTabItem", typeof (bool), typeof (TabablzControl), new PropertyMetadata(default(bool)));
+            "IsWrappingTabItem", typeof(bool), typeof(TabablzControl), new PropertyMetadata(default(bool)));
 
         internal static void SetIsWrappingTabItem(DependencyObject element, bool value)
         {
@@ -612,7 +614,7 @@ namespace Dragablz
 
         public static bool GetIsWrappingTabItem(DependencyObject element)
         {
-            return (bool) element.GetValue(IsWrappingTabItemProperty);
+            return (bool)element.GetValue(IsWrappingTabItemProperty);
         }
 
         /// <summary>
@@ -688,7 +690,7 @@ namespace Dragablz
                     Disposable.Create(
                         () =>
                             _dragablzItemsControl.ItemContainerGenerator.StatusChanged -=
-                                ItemContainerGeneratorOnStatusChanged);                
+                                ItemContainerGeneratorOnStatusChanged);
 
                 _dragablzItemsControl.ContainerCustomisations = new ContainerCustomisations(null, PrepareChildContainerForItemOverride);
             }
@@ -699,10 +701,10 @@ namespace Dragablz
             _itemsHolder = GetTemplateChild(ItemsHolderPartName) as Panel;
             UpdateSelectedItem();
             MarkWrappedTabItems();
-            MarkInitialSelection();            
+            MarkInitialSelection();
 
             base.OnApplyTemplate();
-        }                
+        }
 
         /// <summary>
         /// update the visible child in the ItemsHolder
@@ -723,11 +725,11 @@ namespace Dragablz
                     l.Cast<object>()
                         .Where(o => !(o is TabItem))
                         .Select(o => _dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(o))
-                        .OfType<DragablzItem>();            
+                        .OfType<DragablzItem>();
             foreach (var addedItem in notTabItems(e.AddedItems))
             {
                 addedItem.IsSelected = true;
-                addedItem.BringIntoView();    
+                addedItem.BringIntoView();
             }
             foreach (var removedItem in notTabItems(e.RemovedItems))
             {
@@ -735,14 +737,14 @@ namespace Dragablz
             }
 
             foreach (var tabItem in e.AddedItems.OfType<TabItem>().Select(t => _dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(t)).OfType<DragablzItem>())
-            {                
+            {
                 tabItem.IsSelected = true;
                 tabItem.BringIntoView();
-            }            
+            }
             foreach (var tabItem in e.RemovedItems.OfType<TabItem>().Select(t => _dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(t)).OfType<DragablzItem>())
             {
-                tabItem.IsSelected = false;                
-            }                           
+                tabItem.IsSelected = false;
+            }
         }
 
         /// <summary>
@@ -778,9 +780,9 @@ namespace Dragablz
 
                     break;
 
-                case NotifyCollectionChangedAction.Remove:                    
+                case NotifyCollectionChangedAction.Remove:
                     foreach (var item in e.OldItems)
-                    {                        
+                    {
                         var cp = FindChildContentPresenter(item);
                         if (cp != null)
                             _itemsHolder.Children.Remove(cp);
@@ -818,7 +820,7 @@ namespace Dragablz
                     if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
                     {
                         var selectedDragablzItem = (DragablzItem)_dragablzItemsControl.ItemContainerGenerator.ContainerFromItem(SelectedItem);
-                        var selectedDragablzItemIndex = sortedDragablzItems.IndexOf(selectedDragablzItem);                        
+                        var selectedDragablzItemIndex = sortedDragablzItems.IndexOf(selectedDragablzItem);
                         var direction = ((e.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
                             ? -1 : 1;
                         var newIndex = selectedDragablzItemIndex + direction;
@@ -844,7 +846,7 @@ namespace Dragablz
             }
 
             if (!e.Handled)
-                base.OnKeyDown(e); 
+                base.OnKeyDown(e);
         }
 
         /// <summary>
@@ -856,7 +858,7 @@ namespace Dragablz
         {
             return new FrameworkElementAutomationPeer(this);
         }
-        
+
         internal static TabablzControl GetOwnerOfHeaderItems(DragablzItemsControl itemsControl)
         {
             return LoadedInstances.FirstOrDefault(t => Equals(t._dragablzItemsControl, itemsControl));
@@ -864,7 +866,7 @@ namespace Dragablz
 
         private static void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            var tabablzControl = (TabablzControl) sender;
+            var tabablzControl = (TabablzControl)sender;
             if (tabablzControl.IsVisible)
                 VisibleInstances.Add(tabablzControl);
             else if (VisibleInstances.Contains(tabablzControl))
@@ -875,7 +877,7 @@ namespace Dragablz
         {
             LoadedInstances.Add(this);
             var window = Window.GetWindow(this);
-            if (window == null) return; 
+            if (window == null) return;
             window.Closing += WindowOnClosing;
             _windowSubscription.Disposable = Disposable.Create(() => window.Closing -= WindowOnClosing);
         }
@@ -970,8 +972,8 @@ namespace Dragablz
             _tabHeaderDragStartInformation = new TabHeaderDragStartInformation(e.DragablzItem, itemsControlOffset.X,
                 itemsControlOffset.Y, e.DragStartedEventArgs.HorizontalOffset, e.DragStartedEventArgs.VerticalOffset);
 
-            foreach (var otherItem in _dragablzItemsControl.Containers<DragablzItem>().Except(e.DragablzItem))                
-                otherItem.IsSelected = false;                
+            foreach (var otherItem in _dragablzItemsControl.Containers<DragablzItem>().Except(e.DragablzItem))
+                otherItem.IsSelected = false;
             e.DragablzItem.IsSelected = true;
             e.DragablzItem.PartitionAtDragStart = InterTabController?.Partition;
             var item = _dragablzItemsControl.ItemContainerGenerator.ItemFromContainer(e.DragablzItem);
@@ -1019,9 +1021,9 @@ namespace Dragablz
                     var offset = e.DragablzItem.TranslatePoint(_interTabTransfer.OriginatorContainer.MouseAtDragStart, myWindow);
                     var borderVector = myWindow.PointToScreen(new Point()).ToWpf() - new Point(myWindow.Left, myWindow.Top);
                     offset.Offset(borderVector.X, borderVector.Y);
-                    myWindow.Left = cursorPos.X - offset.X;                    
+                    myWindow.Left = cursorPos.X - offset.X;
                     myWindow.Top = cursorPos.Y - offset.Y;
-                }                 
+                }
             }
             else
             {
@@ -1032,43 +1034,61 @@ namespace Dragablz
             e.Handled = true;
         }
 
+        private class TabablzCtrlInfo
+        {
+            public Point topLeft;
+            public Point bottomRight;
+            public TabablzControl tc;
+
+            public TabablzCtrlInfo(TabablzControl tabablzControl, Point tl, Point br)
+            {
+                topLeft = tl;
+                bottomRight = br;
+                tc = tabablzControl;
+            }
+        }
         private bool MonitorReentry(DragablzDragDeltaEventArgs e)
         {
+
             var screenMousePosition = _dragablzItemsControl.PointToScreen(Mouse.GetPosition(_dragablzItemsControl));
 
-            var sourceTabablzControl = (TabablzControl) e.Source;
+            var sourceTabablzControl = (TabablzControl)e.Source;
             if (sourceTabablzControl.Items.Count > 1 && e.DragablzItem.LogicalIndex < sourceTabablzControl.FixedHeaderCount)
-            {                
+            {
                 return false;
             }
 
-            var otherTabablzControls = LoadedInstances
-                .Where(
-                    tc =>
-                        tc != this && tc.InterTabController != null && InterTabController != null
-                        && Equals(tc.InterTabController.Partition, InterTabController.Partition)
-                        && tc._dragablzItemsControl != null)
-                .Select(tc =>
-                {
-                    var topLeft = tc._dragablzItemsControl.PointToScreen(new Point());
-                    var lastFixedItem = tc._dragablzItemsControl.DragablzItems()
-                        .OrderBy(di=> di.LogicalIndex)
-                        .Take(tc._dragablzItemsControl.FixedItemCount)
-                        .LastOrDefault();                    
-                    //TODO work this for vert tabs
-                    if (lastFixedItem != null)
-                        topLeft.Offset(lastFixedItem.X + lastFixedItem.ActualWidth, 0);
-                    var bottomRight =
-                        tc._dragablzItemsControl.PointToScreen(new Point(tc._dragablzItemsControl.ActualWidth,
-                            tc._dragablzItemsControl.ActualHeight));
+            var otherTabablzControls = new List<TabablzCtrlInfo>();
+            var loadedInstances = Dispatcher.Invoke(GetLoadedInstances);
+            foreach (var tc in loadedInstances)
+            {
+                if (tc == this || tc.InterTabController == null || InterTabController == null ||
+                    !Equals(tc.InterTabController.Partition, InterTabController.Partition) ||
+                    tc._dragablzItemsControl == null) continue;
 
-                    return new {tc, topLeft, bottomRight};
-                });
+                var topLeft = tc._dragablzItemsControl.PointToScreen(new Point());
+                var lastFixedItem = tc._dragablzItemsControl.DragablzItems()
+                    .OrderBy(di => di.LogicalIndex)
+                    .Take(tc._dragablzItemsControl.FixedItemCount)
+                    .LastOrDefault();
+                //TODO work this for vert tabs
+                if (lastFixedItem != null)
+                    topLeft.Offset(lastFixedItem.X + lastFixedItem.ActualWidth, 0);
+                var bottomRight =
+                    tc._dragablzItemsControl.PointToScreen(new Point(tc._dragablzItemsControl.ActualWidth,
+                        tc._dragablzItemsControl.ActualHeight));
+                otherTabablzControls.Add(new TabablzCtrlInfo(tc, topLeft, bottomRight));
+            }
+            TabablzCtrlInfo target = null;
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                //[Foglio] The Join() causes InvalidOperationException, so just skipping it since I don't know how to solve.
+                //Wrapping Window.GetWindow(a.tc) in a Dispatcher.Invoke() causes a deadlock too.
 
+                //Native.SortWindowsTopToBottom(Application.Current.Windows.OfType<Window>()).Join(otherTabablzControls, w => w, a => Window.GetWindow(a.tc), (w, a) => a);
 
-            var target = Native.SortWindowsTopToBottom(Application.Current.Windows.OfType<Window>())
-                .Join(otherTabablzControls, w => w, a => Window.GetWindow(a.tc), (w, a) => a)
-                .FirstOrDefault(a => new Rect(a.topLeft, a.bottomRight).Contains(screenMousePosition));
+                target = otherTabablzControls.FirstOrDefault(a => new Rect(a.topLeft, a.bottomRight).Contains(screenMousePosition));
+            });
 
             if (target == null) return false;
 
@@ -1080,14 +1100,14 @@ namespace Dragablz
                 .ToList();
 
             e.DragablzItem.IsDropTargetFound = true;
-            var item = RemoveItem(e.DragablzItem);                
+            var item = RemoveItem(e.DragablzItem);
 
             var interTabTransfer = new InterTabTransfer(item, e.DragablzItem, mousePositionOnItem, floatingItemSnapShots);
             e.DragablzItem.IsDragging = false;
 
             target.tc.ReceiveDrag(interTabTransfer);
             e.Cancel = true;
-                
+
             return true;
         }
 
@@ -1099,7 +1119,7 @@ namespace Dragablz
             var minSize = EmptyHeaderSizingHint == EmptyHeaderSizingHint.PreviousTab
                 ? new Size(_dragablzItemsControl.ActualWidth, _dragablzItemsControl.ActualHeight)
                 : new Size();
-            
+
             _dragablzItemsControl.MinHeight = 0;
             _dragablzItemsControl.MinWidth = 0;
 
@@ -1110,8 +1130,8 @@ namespace Dragablz
             if (Items.Count != 0) return item;
 
             var window = Window.GetWindow(this);
-            if (window != null 
-                && InterTabController != null                
+            if (window != null
+                && InterTabController != null
                 && InterTabController.InterTabClient.TabEmptiedHandler(this, window) == TabEmptiedResponse.CloseWindowOrLayoutBranch)
             {
                 if (Layout.ConsolidateBranch(this)) return item;
@@ -1124,7 +1144,7 @@ namespace Dragablz
                 finally
                 {
                     SetIsClosingAsPartOfDragOperation(window, false);
-                }                    
+                }
             }
             else
             {
@@ -1145,19 +1165,19 @@ namespace Dragablz
 
         private void ItemDragDelta(object sender, DragablzDragDeltaEventArgs e)
         {
-            if (!IsMyItem(e.DragablzItem)) return;                        
+            if (!IsMyItem(e.DragablzItem)) return;
             if (FixedHeaderCount > 0 &&
                 _dragablzItemsControl.ItemsOrganiser.Sort(_dragablzItemsControl.DragablzItems())
                     .Take(FixedHeaderCount)
-                    .Contains(e.DragablzItem))                
+                    .Contains(e.DragablzItem))
                 return;
 
             if (_tabHeaderDragStartInformation == null ||
                 !Equals(_tabHeaderDragStartInformation.DragItem, e.DragablzItem) || InterTabController == null) return;
 
-            if (InterTabController.InterTabClient == null)                    
+            if (InterTabController.InterTabClient == null)
                 throw new InvalidOperationException("An InterTabClient must be provided on an InterTabController.");
-                
+
             MonitorBreach(e);
         }
 
@@ -1197,7 +1217,7 @@ namespace Dragablz
             var floatingItemSnapShots = this.VisualTreeDepthFirstTraversal()
                 .OfType<Layout>()
                 .SelectMany(l => l.FloatingDragablzItems().Select(FloatingItemSnapShot.Take))
-                .ToList();            
+                .ToList();
 
             var interTabTransfer = new InterTabTransfer(item, e.DragablzItem, breachOrientation.Value, dragStartWindowOffset, e.DragablzItem.MouseAtDragStart, dragableItemHeaderPoint, dragableItemSize, floatingItemSnapShots, isTransposing);
 
@@ -1289,9 +1309,9 @@ namespace Dragablz
                     dragStartWindowOffset = isTransposing ? new Point() : dragablzItem.TranslatePoint(new Point(), this);
                     dragStartWindowOffset.Offset(dragablzItem.MouseAtDragStart.X, dragablzItem.MouseAtDragStart.Y);
                     return dragStartWindowOffset;
-                }                
-            }            
-            
+                }
+            }
+
             dragStartWindowOffset.Offset(dragablzItem.MouseAtDragStart.X, dragablzItem.MouseAtDragStart.Y);
             var borderVector = currentWindow.PointToScreen(new Point()).ToWpf() - new Point(currentWindow.GetActualLeft(), currentWindow.GetActualTop());
             dragStartWindowOffset.Offset(borderVector.X, borderVector.Y);
@@ -1325,7 +1345,7 @@ namespace Dragablz
 
             AddToSource(interTabTransfer.Item);
             SelectedItem = interTabTransfer.Item;
-            
+
             Dispatcher.BeginInvoke(new Action(() => Layout.RestoreFloatingItemSnapShots(this, interTabTransfer.FloatingItemSnapShots)), DispatcherPriority.Loaded);
             _dragablzItemsControl.InstigateDrag(interTabTransfer.Item, newContainer =>
             {
@@ -1374,19 +1394,19 @@ namespace Dragablz
                 }
                 newContainer.MouseAtDragStart = interTabTransfer.DragStartItemOffset;
             });
-        }                
+        }
 
         /// <summary>
         /// generate a ContentPresenter for the selected item
         /// </summary>
-        private void UpdateSelectedItem()        
-        {            
+        private void UpdateSelectedItem()
+        {
             if (_itemsHolder == null)
             {
                 return;
             }
-            
-            CreateChildContentPresenter(SelectedItem);            
+
+            CreateChildContentPresenter(SelectedItem);
 
             // show the right child
             var selectedContent = GetContent(SelectedItem);
@@ -1400,7 +1420,7 @@ namespace Dragablz
 
         private static object GetContent(object item)
         {
-            return (item is TabItem) ? ((TabItem) item).Content : item;
+            return (item is TabItem) ? ((TabItem)item).Content : item;
         }
 
         /// <summary>
@@ -1410,7 +1430,7 @@ namespace Dragablz
         /// <returns></returns>
         private void CreateChildContentPresenter(object item)
         {
-            if (item == null) return;            
+            if (item == null) return;
 
             var cp = FindChildContentPresenter(item);
             if (cp != null) return;
@@ -1422,9 +1442,9 @@ namespace Dragablz
                 ContentTemplate = ContentTemplate,
                 ContentTemplateSelector = ContentTemplateSelector,
                 ContentStringFormat = ContentStringFormat,
-                Visibility = Visibility.Collapsed,                
+                Visibility = Visibility.Collapsed,
             };
-            _itemsHolder.Children.Add(cp);         
+            _itemsHolder.Children.Add(cp);
         }
 
         /// <summary>
@@ -1435,7 +1455,7 @@ namespace Dragablz
         private ContentPresenter FindChildContentPresenter(object data)
         {
             if (data is TabItem)
-                data = ((TabItem) data).Content;
+                data = ((TabItem)data).Content;
 
             return data == null
                 ? null
@@ -1496,7 +1516,7 @@ namespace Dragablz
                     var popup = dependencyObject.LogicalTreeAncestory().OfType<Popup>().LastOrDefault();
                     if (popup?.PlacementTarget != null)
                     {
-                        dragablzItem = popup.PlacementTarget.VisualTreeAncestory().OfType<DragablzItem>().FirstOrDefault();                        
+                        dragablzItem = popup.PlacementTarget.VisualTreeAncestory().OfType<DragablzItem>().FirstOrDefault();
                     }
                 }
             }
@@ -1506,10 +1526,10 @@ namespace Dragablz
             var tabablzControl = LoadedInstances.FirstOrDefault(tc => tc.IsMyItem(dragablzItem));
 
             return tabablzControl == null ? null : new Tuple<DragablzItem, TabablzControl>(dragablzItem, tabablzControl);
-        }        
+        }
 
         private void AddItemHandler(object sender, ExecutedRoutedEventArgs e)
-        {            
+        {
             if (NewItemFactory == null)
                 throw new InvalidOperationException("NewItemFactory must be provided.");
 
@@ -1532,7 +1552,7 @@ namespace Dragablz
                 dragablzItem.UnderlyingContent = o;
             }
 
-            SetIsWrappingTabItem(dependencyObject, o is TabItem);            
+            SetIsWrappingTabItem(dependencyObject, o is TabItem);
         }
     }
 }
