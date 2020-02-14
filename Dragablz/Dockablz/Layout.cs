@@ -473,29 +473,32 @@ namespace Dragablz.Dockablz
 
         private void MonitorDropZones(Point cursorPos)
         {
-            var myWindow = Window.GetWindow(this);
-            if (myWindow == null) return;
-
-            foreach (var dropZone in _dropZones.Values.Where(dz => dz != null))
+            Dispatcher.Invoke(() =>
             {
-                var pointFromScreen = myWindow.PointFromScreen(cursorPos);
-                var pointRelativeToDropZone = myWindow.TranslatePoint(pointFromScreen, dropZone);
-                var inputHitTest = dropZone.InputHitTest(pointRelativeToDropZone);
-                //TODO better halding when windows are layered over each other
-                if (inputHitTest != null)
+                var myWindow = Window.GetWindow(this);
+                if (myWindow == null) return;
+
+                foreach (var dropZone in _dropZones.Values.Where(dz => dz != null))
                 {
-                    if (_currentlyOfferedDropZone != null)
-                        _currentlyOfferedDropZone.Item2.IsOffered = false;
-                    dropZone.IsOffered = true;
-                    _currentlyOfferedDropZone = new Tuple<Layout, DropZone>(this, dropZone);
+                    var pointFromScreen = myWindow.PointFromScreen(cursorPos);
+                    var pointRelativeToDropZone = myWindow.TranslatePoint(pointFromScreen, dropZone);
+                    var inputHitTest = dropZone.InputHitTest(pointRelativeToDropZone);
+                    //TODO better halding when windows are layered over each other
+                    if (inputHitTest != null)
+                    {
+                        if (_currentlyOfferedDropZone != null)
+                            _currentlyOfferedDropZone.Item2.IsOffered = false;
+                        dropZone.IsOffered = true;
+                        _currentlyOfferedDropZone = new Tuple<Layout, DropZone>(this, dropZone);
+                    }
+                    else
+                    {
+                        dropZone.IsOffered = false;
+                        if (_currentlyOfferedDropZone != null && _currentlyOfferedDropZone.Item2 == dropZone)
+                            _currentlyOfferedDropZone = null;
+                    }
                 }
-                else
-                {
-                    dropZone.IsOffered = false;
-                    if (_currentlyOfferedDropZone != null && _currentlyOfferedDropZone.Item2 == dropZone)
-                        _currentlyOfferedDropZone = null;
-                }
-            }
+            });
         }
 
         private static bool TryGetSourceTabControl(DragablzItem dragablzItem, out TabablzControl tabablzControl)
