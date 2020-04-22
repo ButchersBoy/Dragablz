@@ -11,17 +11,21 @@
     <projectUrl>http://dragablz.net</projectUrl>    
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Dragable and tearable tab control for WPF</description>
-    <releaseNotes>We are in alpha right now!.</releaseNotes>
-    <copyright>Copyright 2014-18 James Willock/Mulholland Software Ltd</copyright>
+    <releaseNotes>Support for .NET Core 3.0</releaseNotes>
+    <copyright>Copyright 2014-20 James Willock/Mulholland Software Ltd</copyright>
     <tags>WPF TabControl Tab Tearable</tags>
   </metadata>
   <files>
-    <file src="..\bin\Release_net45\Dragablz.dll" target="lib\net45" />
-    <file src="..\bin\Release_net45\Dragablz.pdb" target="lib\net45" />
-    <file src="..\bin\Release_net45\Dragablz.xml" target="lib\net45" />
-    <file src="..\bin\Release_net40\Dragablz.dll" target="lib\net40" />
-    <file src="..\bin\Release_net40\Dragablz.pdb" target="lib\net40" />
-    <file src="..\bin\Release_net40\Dragablz.xml" target="lib\net40" />	
+  	<file src="..\bin\Release\netcoreapp3.0\Dragablz.dll" target="lib\netcoreapp3.0" />
+    <file src="..\bin\Release\netcoreapp3.0\Dragablz.pdb" target="lib\netcoreapp3.0" />
+    <file src="..\bin\Release\netcoreapp3.0\Dragablz.xml" target="lib\netcoreapp3.0" />	
+    <file src="..\bin\Release\net45\Dragablz.dll" target="lib\net45" />
+    <file src="..\bin\Release\net45\Dragablz.pdb" target="lib\net45" />
+    <file src="..\bin\Release\net45\Dragablz.xml" target="lib\net45" />
+    <file src="..\bin\Release\net40\Dragablz.dll" target="lib\net40" />
+    <file src="..\bin\Release\net40\Dragablz.pdb" target="lib\net40" />
+    <file src="..\bin\Release\net40\Dragablz.xml" target="lib\net40" />
+	<file src="..\Dragablz\**\*.cs" target="src\netcoreapp3.0" />
     <file src="..\Dragablz\**\*.cs" target="src\net45" />
     <file src="..\Dragablz\**\*.cs" target="src\net40" />
   </files>  

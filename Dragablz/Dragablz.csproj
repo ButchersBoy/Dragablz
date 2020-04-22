@@ -12,6 +12,7 @@
     <PackageTags>WPF TabControl Tab Tearable</PackageTags>
     <PackageReleaseNotes>Support for .Net Core 3.0</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
+    <DocumentationFile>..\bin\Release\Dragablz.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
