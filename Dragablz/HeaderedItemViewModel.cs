@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Dragablz
 {
@@ -37,8 +32,7 @@ namespace Dragablz
                 _header = value;
 #if NET40
                 OnPropertyChanged("Header");
-#endif
-#if NET45
+#else
                 OnPropertyChanged();
 #endif
             }
@@ -53,8 +47,7 @@ namespace Dragablz
                 _content = value;
 #if NET40
                 OnPropertyChanged("Content");
-#endif
-#if NET45
+#else
                 OnPropertyChanged();
 #endif
             }
@@ -69,8 +62,7 @@ namespace Dragablz
                 _isSelected = value;
 #if NET40
                 OnPropertyChanged("IsSelected");
-#endif
-#if NET45
+#else
                 OnPropertyChanged();
 #endif
             }
@@ -80,8 +72,7 @@ namespace Dragablz
 
 #if NET40
         protected virtual void OnPropertyChanged(string propertyName)
-#endif
-#if NET45
+#else
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 #endif
         {

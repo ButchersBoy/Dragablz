@@ -22,8 +22,7 @@ namespace DragablzDemo
                 _isSelected = value;
 #if NET40
                 OnPropertyChanged("IsSelected");
-#endif
-#if NET45
+#else
                 OnPropertyChanged();
 #endif                
             }
@@ -34,8 +33,7 @@ namespace DragablzDemo
         [NotifyPropertyChangedInvocator]
 #if NET40
         protected virtual void OnPropertyChanged(string propertyName)
-#endif
-#if NET45
+#else
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 #endif
         {

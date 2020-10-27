@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dragablz.Dockablz;
-using Microsoft.CSharp;
-using NUnit.Framework;
-
-namespace Dragablz.Test.Dockablz
+﻿using NUnit.Framework;
+namespace Dragablz.Dockablz.Tests
 {
     [TestFixture]
     public class TilerCalculatorFixture

@@ -45,7 +45,7 @@ namespace DragablzDemo
                 {
                     Header = new CustomHeaderViewModel {Header = "Header"},
                     Content =
-                        "This tab illustrates how an individual header can be customised, without having to change the DragablzItem tab header template."
+                        "This tab illustrates how an individual header can be customized, without having to change the DragablzItem tab header template."
                 },
                 new HeaderedItemViewModel {Header = "Tues", Content = "Tuesday's child is full of grace"} //,
                 //new HeaderedItemViewModel { Header = "Wed", Content = "Wednesday's child is full of woe" }//,
