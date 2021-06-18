@@ -574,9 +574,8 @@
     </Style>
 
     <Style TargetType="{x:Type dragablz:TabablzControl}" x:Key="MaterialDesignTabablzControlStyle">
-        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=Background}" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}" />
-        <Setter Property="TextElement.Foreground" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=(TextElement.Foreground)}" />
         <Setter Property="ItemContainerStyle" Value="{StaticResource MaterialDesignDragableTabItemStyle}" />
         <Setter Property="Template">
             <Setter.Value>
