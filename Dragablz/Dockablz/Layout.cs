@@ -70,7 +70,10 @@ namespace Dragablz.Dockablz
             Application.Current.MainWindow.ContentRendered += MainWindow_ContentRendered;
             Application.Current.MainWindow.Closing += MainWindow_Closing;
             Application.Current.MainWindow.Loaded += MainWindow_Loaded;
-            headerOverTabStyle = Application.Current.FindResource("HeaderOverTabStyle") as Style;
+            if (Application.Current.TryFindResource("HeaderOverTabStyle") is Style style)
+            {
+                headerOverTabStyle = style;
+            }
             #endregion
         }
 
@@ -222,10 +225,10 @@ namespace Dragablz.Dockablz
         /// to isolate drag and drop spaces/control instances.
         /// </summary>
         public string Partition { get; set; }
-
+        #region DragablzTabItem
         public static readonly DependencyProperty InterLayoutClientProperty = DependencyProperty.Register(
-            "InterLayoutClient", typeof(IInterLayoutClient), typeof(Layout), new PropertyMetadata(new DefaultInterLayoutClient()));
-
+            "InterLayoutClient", typeof(IInterLayoutClient), typeof(Layout), new PropertyMetadata(new DragablzTabItemInterLayoutClient()));
+        #endregion
         public IInterLayoutClient InterLayoutClient
         {
             get { return (IInterLayoutClient)GetValue(InterLayoutClientProperty); }

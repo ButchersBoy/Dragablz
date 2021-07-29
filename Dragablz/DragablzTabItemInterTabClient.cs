@@ -11,7 +11,7 @@ using Dragablz.Dockablz;
 
 namespace Dragablz
 {
-    public class DragablzTabItemInterTabClient: DefaultInterTabClient 
+    public class DragablzTabItemInterTabClient : DefaultInterTabClient
     {
         public override INewTabHost<Window> GetNewHost(IInterTabClient interTabClient, object partition, TabablzControl source)
         {
@@ -21,31 +21,36 @@ namespace Dragablz
             var newWindow = (Window)Activator.CreateInstance(sourceWindow.GetType());
 
             newWindow.Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.DataBind);
-            
+
             var newTabablzControl = newWindow.LogicalTreeDepthFirstTraversal().OfType<TabablzControl>().FirstOrDefault();
+            if (newTabablzControl == null) throw new ApplicationException("Unable to ascertain tab control.");
             newTabablzControl.Name = source.Name;
             //ToDo: replace it with data trigger in Generic.xaml file
             newTabablzControl.IsHeaderOverTab = source.IsHeaderOverTab;
-            
-            if (newTabablzControl == null) throw new ApplicationException("Unable to ascertain tab control.");
+
 
             if (newTabablzControl.ItemsSource == null)
                 newTabablzControl.Items.Clear();
 
             newTabablzControl.InterTabController.Partition = (partition as string);
             newWindow.Content = new UserControl() { Content = newTabablzControl };
-            var tabWindowStyle = Application.Current.FindResource("TabWindow") as Style;
-            newWindow.Style = tabWindowStyle;
+            if (Application.Current.TryFindResource("TabWindow") is Style style)
+            {
+                newWindow.Style = style;
+            }
+
             return new NewTabHost<Window>(newWindow, newTabablzControl);
         }
         public virtual INewTabHost<Window> CreateNewHost(IInterTabClient interTabClient, object partition, TabablzControl tabablzControl)
         {
             var newWindow = new Window { AllowsTransparency = true, Width = tabablzControl.Width, Height = tabablzControl.Height };
             newWindow.Content = new UserControl() { Content = tabablzControl };
-            var tabWindowStyle = Application.Current.FindResource("TabWindow") as Style;
-            newWindow.Style = tabWindowStyle;
-            newWindow.Background = new SolidColorBrush(Color.FromRgb(51, 51, 51));
-            newWindow.BorderBrush = Brushes.Orange;
+
+            if (Application.Current.TryFindResource("TabWindow") is Style style)
+            {
+                newWindow.Style = style;
+            }
+                newWindow.BorderBrush = Brushes.Orange;
             return new NewTabHost<Window>(newWindow, tabablzControl);
         }
     }

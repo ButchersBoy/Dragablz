@@ -4,65 +4,70 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz">
     <Application.Resources>
-        <Style
-            x:Key="CustomDragablzItemStyle"
-            BasedOn="{StaticResource {x:Type dragablz:DragablzItem}}"
-            TargetType="{x:Type dragablz:DragablzItem}">
-            <Style.Setters>
-                <Setter Property="Template">
+        <ResourceDictionary>
+            <Style
+                x:Key="CustomDragablzItemStyle"
+                BasedOn="{StaticResource {x:Type dragablz:DragablzItem}}"
+                TargetType="{x:Type dragablz:DragablzItem}">
+                <Style.Setters>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Border
+                                    Padding="{TemplateBinding Control.Padding}"
+                                    Background="{TemplateBinding Panel.Background}"
+                                    BorderBrush="{TemplateBinding Border.BorderBrush}"
+                                    BorderThickness="{TemplateBinding Border.BorderThickness}"
+                                    SnapsToDevicePixels="True">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border x:Name="PART_DragableElement" Background="Cyan">
+                                            <TextBlock>DH</TextBlock>
+                                        </Border>
+                                        <Thumb
+                                            x:Name="PART_Thumb"
+                                            Grid.Row="1"
+                                            Width="30"
+                                            Height="30"
+                                            Background="Yellow" />
+                                        <ContentPresenter
+                                            Grid.Row="2"
+                                            HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                            Content="{TemplateBinding ContentControl.Content}"
+                                            ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
+                                            ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
+                                            SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                    </Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style.Setters>
+            </Style>
+            <Style x:Key="BasicExamplesTabStyle" TargetType="{x:Type dragablz:TabablzControl}">
+                <Setter Property="Margin" Value="8,8,8,8" />
+                <Setter Property="HeaderPrefixContent" Value="☺" />
+                <Setter Property="HeaderSuffixContent" Value="☻" />
+                <Setter Property="HeaderSuffixContentTemplate">
                     <Setter.Value>
-                        <ControlTemplate>
-                            <Border
-                                Padding="{TemplateBinding Control.Padding}"
-                                Background="{TemplateBinding Panel.Background}"
-                                BorderBrush="{TemplateBinding Border.BorderBrush}"
-                                BorderThickness="{TemplateBinding Border.BorderThickness}"
-                                SnapsToDevicePixels="True">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
-                                    <Border x:Name="PART_DragableElement" Background="Cyan">
-                                        <TextBlock>DH</TextBlock>
-                                    </Border>
-                                    <Thumb
-                                        x:Name="PART_Thumb"
-                                        Grid.Row="1"
-                                        Width="30"
-                                        Height="30"
-                                        Background="Yellow" />
-                                    <ContentPresenter
-                                        Grid.Row="2"
-                                        HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
-                                        VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
-                                        Content="{TemplateBinding ContentControl.Content}"
-                                        ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
-                                        ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
-                                        SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
-                                </Grid>
-                            </Border>
-                        </ControlTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Margin="2,0,2,0"
+                                Text="☻"
+                                ToolTip="You can easily insert content here using HeaderSuffixContent" />
+                        </DataTemplate>
                     </Setter.Value>
                 </Setter>
-            </Style.Setters>
-        </Style>
+            </Style>
 
-        <Style x:Key="BasicExamplesTabStyle" TargetType="{x:Type dragablz:TabablzControl}">
-            <Setter Property="Margin" Value="8,8,8,8" />
-            <Setter Property="HeaderPrefixContent" Value="☺" />
-            <Setter Property="HeaderSuffixContent" Value="☻" />
-            <Setter Property="HeaderSuffixContentTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <TextBlock
-                            Margin="2,0,2,0"
-                            Text="☻"
-                            ToolTip="You can easily insert content here using HeaderSuffixContent" />
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/TabWindow.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

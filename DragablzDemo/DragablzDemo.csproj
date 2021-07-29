@@ -12,4 +12,10 @@
     <ProjectReference Include="..\Dragablz\Dragablz.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="PresetSavableWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+  </ItemGroup>
+
 </Project>

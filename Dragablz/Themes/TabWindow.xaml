@@ -19,6 +19,37 @@
     <SolidColorBrush x:Key="TabItem.MouseOver.Background" Color="#999" />
     <SolidColorBrush x:Key="TabItem.MouseOver.Border" Color="#999" />
 
+    <Color x:Key="BorderColor">#232323</Color>
+    <SolidColorBrush x:Key="BorderBrush" Color="{DynamicResource BorderColor}" />
+    <Color x:Key="LightColor">#FEF6E9</Color>
+    <SolidColorBrush x:Key="LightBrush" Color="{DynamicResource LightColor}" />
+    <Color x:Key="DarkColor">#232323</Color>
+    <SolidColorBrush x:Key="DarkBrush" Color="{DynamicResource DarkColor}" />
+    <Color x:Key="ControlForegroundColor">#FEF6E9</Color>
+    <SolidColorBrush x:Key="ControlForegroundBrush" Color="{DynamicResource ControlForegroundColor}" />
+    <Color x:Key="BackgroundColor">#FEF6E9</Color>
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource BackgroundColor}" />
+    <Color x:Key="ForegroundMainColor">#232323</Color>
+    <SolidColorBrush x:Key="ForegroundMainBrush" Color="{DynamicResource ForegroundMainColor}" />
+    <Color x:Key="PrimaryColor">#FCA311</Color>
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{DynamicResource PrimaryColor}" />
+    <Color x:Key="PrimaryMidColor">#FCB33C</Color>
+    <SolidColorBrush x:Key="PrimaryMidBrush" Color="{DynamicResource PrimaryMidColor}" />
+    <Color x:Key="PrimaryLightColor">#FDCC7D</Color>
+    <SolidColorBrush x:Key="PrimaryLightBrush" Color="{DynamicResource PrimaryLightColor}" />
+    <Color x:Key="SecondaryColor">#3264D1</Color>
+    <SolidColorBrush x:Key="SecondaryBrush" Color="{DynamicResource SecondaryColor}" />
+    <Color x:Key="SecondaryMidColor">#5780D9</Color>
+    <SolidColorBrush x:Key="SecondaryMidBrush" Color="{DynamicResource SecondaryMidColor}" />
+    <Color x:Key="SecondaryLightColor">#8FAAE5</Color>
+    <SolidColorBrush x:Key="SecondaryLightBrush" Color="{DynamicResource SecondaryLightColor}" />
+    <Color x:Key="ErrorColor">#FF4444</Color>
+    <SolidColorBrush x:Key="ErrorBrush" Color="{DynamicResource ErrorColor}" />
+    <Color x:Key="DisabledColor">#AAAAAA</Color>
+    <SolidColorBrush x:Key="DisabledBrush" Color="{DynamicResource DisabledColor}" />
+    <Color x:Key="TransparentColor">#00000000</Color>
+    <SolidColorBrush x:Key="TransparentBrush" Color="{DynamicResource TransparentColor}" />
+
     <Style x:Key="CustomDragablzTabItemStyle" TargetType="{x:Type local:DragablzItem}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
         <Setter Property="Foreground" Value="#aaa" />
@@ -556,7 +587,6 @@
         <Setter Property="Control.Margin" Value="5" />
         <Setter Property="Control.Background" Value="{x:Null}" />
         <Setter Property="Control.BorderBrush" Value="{x:Null}" />
-        <Setter Property="TextElement.FontFamily" Value="{DynamicResource FontPrimary}" />
         <Setter Property="TextElement.FontWeight" Value="Medium" />
         <Setter Property="Control.VerticalAlignment" Value="Center" />
     </Style>
@@ -570,7 +600,6 @@
         <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="FontFamily" Value="{StaticResource FontAwesome}" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Width" Value="14" />
@@ -836,12 +865,12 @@
     <!--  Tab Window Style  -->
     <Style x:Key="TabWindow" TargetType="{x:Type Window}">
         <Setter Property="WindowStyle" Value="None" />
+        <Setter Property="AllowsTransparency" Value="True" />
         <Setter Property="TextBlock.Foreground" Value="{DynamicResource ForegroundMainBrush}" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="Orange" />
         <Setter Property="Background" Value="#333" />
-        <Setter Property="Icon" Value="pack://application:,,,/FlatStyle;component/Icons/stira.ico" />
         <Setter Property="Template" Value="{StaticResource TabWindowTamplate}" />
     </Style>
 </ResourceDictionary>

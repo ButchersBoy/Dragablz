@@ -1,0 +1,42 @@
+﻿<Window
+    x:Class="DragablzDemo.PresetSavableWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dockablz="clr-namespace:Dragablz.Dockablz;assembly=Dragablz"
+    xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    Title="Preset and Savable Window"
+    Width="617"
+    Height="341">
+    <Window.Resources>
+        <system:String x:Key="Partition">QuickStart</system:String>
+    </Window.Resources>
+    <dockablz:Layout Name="L1" Partition="{StaticResource Partition}">
+        <dragablz:TabablzControl x:Name="T1" ConsolidateOrphanedItems="True">
+            <dragablz:TabablzControl.InterTabController>
+                <dragablz:InterTabController Partition="{StaticResource Partition}" />
+            </dragablz:TabablzControl.InterTabController>
+
+
+            <dragablz:DragablzTabItem
+                Header="Tab No. 1"
+                IsSelected="True"
+                LayoutName="L1"
+                Location="Left">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Hello World</TextBlock>
+            </dragablz:DragablzTabItem>
+            <dragablz:DragablzTabItem
+                Header="Tab No. 2"
+                LayoutName="L1"
+                Location="Right">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">We Have Tearable Tabs!</TextBlock>
+            </dragablz:DragablzTabItem>
+            <dragablz:DragablzTabItem
+                Header="Tab No. 3"
+                LayoutName="1"
+                Location="Bottom">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">I feel like an ice cold drink</TextBlock>
+            </dragablz:DragablzTabItem>
+        </dragablz:TabablzControl>
+    </dockablz:Layout>
+</Window>

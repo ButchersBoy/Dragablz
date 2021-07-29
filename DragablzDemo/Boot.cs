@@ -22,12 +22,13 @@ namespace DragablzDemo
             var app = new App {ShutdownMode = ShutdownMode.OnLastWindowClose};
             app.InitializeComponent();
 
-            new QuickStartWindow().Show();
+         //   new QuickStartWindow().Show();
+            new PresetSavableWindow().Show();
 
-            new BasicExampleMainWindow
-            {
-                DataContext = new BasicExampleMainModel()
-            }.Show();
+            //new BasicExampleMainWindow
+            //{
+            //    DataContext = new BasicExampleMainModel()
+            //}.Show();
 
             var boundExampleModel = new BoundExampleModel(
                 new HeaderedItemViewModel
@@ -69,10 +70,10 @@ namespace DragablzDemo
                         }
                 });
 
-            new BoundExampleWindow()
-            {
-                DataContext = boundExampleModel
-            }.Show();
+            //new BoundExampleWindow()
+            //{
+            //    DataContext = boundExampleModel
+            //}.Show();
 
             app.Run();
         }
