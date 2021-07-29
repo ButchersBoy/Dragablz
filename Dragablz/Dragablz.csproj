@@ -2,7 +2,10 @@
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.0;net45;net40</TargetFrameworks>
+    <TargetFrameworks>net5.0-windows;netcoreapp3.0;net45;net40</TargetFrameworks>
+    <!--<TargetFramework>net5.0-windows</TargetFramework>-->
     <UseWPF>true</UseWPF>
+    <LangVersion>9.0</LangVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PackageIconUrl>https://raw.githubusercontent.com/ButchersBoy/Dragablz/master/Resources/D32.png</PackageIconUrl>
     <PackageLicenseExpression></PackageLicenseExpression>
@@ -29,5 +32,11 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+
 
 </Project>
