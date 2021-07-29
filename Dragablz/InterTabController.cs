@@ -38,11 +38,11 @@ namespace Dragablz
             get { return (bool) GetValue(MoveWindowWithSolitaryTabsProperty); }
             set { SetValue(MoveWindowWithSolitaryTabsProperty, value); }
         }
-
+        #region DragablzTabItem
         public static readonly DependencyProperty InterTabClientProperty = DependencyProperty.Register(
             "InterTabClient", typeof (IInterTabClient), typeof (InterTabController),
-            new PropertyMetadata(new DefaultInterTabClient()));
-
+            new PropertyMetadata(new DragablzTabItemInterTabClient()));
+        #endregion
         public IInterTabClient InterTabClient
         {
             get { return (IInterTabClient) GetValue(InterTabClientProperty); }
