@@ -1087,7 +1087,7 @@ namespace Dragablz.Dockablz
                         {
                             Orientation = (location == DropZoneLocation.Right || location == DropZoneLocation.Left || location == DropZoneLocation.Unset) ? Orientation.Horizontal : Orientation.Vertical
                         };
-                        
+
                         INewTabHost<UIElement> newTabHost;
                         DragablzItemsControl sourceOfDragItemsControl;
                         object sourceItem;
@@ -1106,7 +1106,7 @@ namespace Dragablz.Dockablz
                                 openedWindows.Add((newTabHost.TabablzControl.InterTabController.InterTabClient as DragablzTabItemInterTabClient).CreateNewHost(newTabHost.TabablzControl.InterTabController.InterTabClient, layoutAccessor.Layout.Partition, newTabHost.TabablzControl).Container);
                                 continue;
                             }
-                            
+
                             //check for the adjacent tabs in the same control
                             if (relatedItems is not null)
                             {
@@ -1308,7 +1308,8 @@ namespace Dragablz.Dockablz
                     }
                 }
 
-                RestoreState();
+                if (dragablzTabItems.Count == states.dragablzTabItemState.Length)
+                    RestoreState();
             }
         }
 
