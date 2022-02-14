@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <!--<TargetFrameworks>net5.0-windows;netcoreapp3.0;net45;net40</TargetFrameworks>-->
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>10.0</LangVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PackageIconUrl>https://raw.githubusercontent.com/ButchersBoy/Dragablz/master/Resources/D32.png</PackageIconUrl>
     <PackageLicenseExpression></PackageLicenseExpression>
@@ -15,7 +15,7 @@
     <PackageReleaseNotes>Support for .Net Core 3.0</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <DocumentationFile>..\bin\Release\Dragablz.xml</DocumentationFile>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
