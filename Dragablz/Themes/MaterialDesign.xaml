@@ -648,7 +648,8 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="TabStripPlacement" Value="Bottom">
-                            <Setter Property="Grid.Row" TargetName="PART_HeaderItemsControl" Value="1"/>
+                            <!--<Setter Property="Grid.Row" TargetName="PART_HeaderItemsControl" Value="1"/>-->
+                            <Setter Property="Grid.Row" TargetName="HeaderContainerGrid" Value="1"/>
                             <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
