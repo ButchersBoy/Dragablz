@@ -523,22 +523,42 @@ namespace Dragablz
 
         internal Point MouseAtDragStart { get; set; }
 
+        private bool _onTheMove;
+
         internal string PartitionAtDragStart { get; set; }
 
         internal bool IsDropTargetFound { get; set; }
 
         private void ThumbOnDragCompleted(object sender, DragCompletedEventArgs dragCompletedEventArgs)
-        {            
+        {
             OnDragCompleted(dragCompletedEventArgs);
             MouseAtDragStart = new Point();
-        }        
+            _onTheMove = false;
+        }
 
         private void ThumbOnDragDelta(object sender, DragDeltaEventArgs dragDeltaEventArgs)
         {
-            var thumb = (Thumb) sender;
+            var thumb = (Thumb)sender;
 
             var previewEventArgs = new DragablzDragDeltaEventArgs(PreviewDragDelta, this, dragDeltaEventArgs);
-            OnPreviewDragDelta(previewEventArgs);            
+
+            OnPreviewDragDelta(previewEventArgs);
+
+            if (!_onTheMove)
+            {
+                var delta = MouseAtDragStart - Mouse.GetPosition(this);
+                if (
+                    (Math.Abs(delta.X) < SystemParameters.MinimumHorizontalDragDistance) &&
+                    (Math.Abs(delta.Y) < SystemParameters.MinimumVerticalDragDistance))
+                {
+                    previewEventArgs.Handled = true;
+
+                    return;
+                }
+                else
+                    _onTheMove = true;
+            }
+
             if (previewEventArgs.Cancel)
                 thumb.CancelDrag();
             if (!previewEventArgs.Handled)
@@ -549,7 +569,7 @@ namespace Dragablz
                     thumb.CancelDrag();
             }
         }
-        
+
         private void ThumbOnDragStarted(object sender, DragStartedEventArgs dragStartedEventArgs)
         {
             MouseAtDragStart = Mouse.GetPosition(this);
