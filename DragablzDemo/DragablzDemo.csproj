@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net5.0-windows;netcoreapp3.0;net45;net40</TargetFrameworks>
+	<TargetFrameworks>net7.0-windows;net6.0-windows;netcoreapp3.1;net48</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <StartupObject>DragablzDemo.Boot</StartupObject>
