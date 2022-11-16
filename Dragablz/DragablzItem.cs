@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Dynamic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -29,8 +30,7 @@ namespace Dragablz
     {
         public const string ThumbPartName = "PART_Thumb";
 
-        private readonly SerialDisposable _templateSubscriptions = new SerialDisposable();
-        private readonly SerialDisposable _rightMouseUpCleanUpDisposable = new SerialDisposable();
+        private readonly SerialDisposable _templateSubscriptions = new SerialDisposable();        
 
         private Thumb _customThumb;
         private Thumb _thumb;
@@ -478,28 +478,26 @@ namespace Dragablz
             _seizeDragWithTemplate = false;
         }
 
-        protected override void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
+        protected override async void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
         {            
             if (_thumb != null)
             {
                 var currentThumbIsHitTestVisible = _thumb.IsHitTestVisible;
                 _thumb.SetCurrentValue(IsHitTestVisibleProperty, false);
-                _rightMouseUpCleanUpDisposable.Disposable = Disposable.Create(() =>
+
+                while (Mouse.RightButton == MouseButtonState.Pressed)
                 {
-                    _thumb.SetCurrentValue(IsHitTestVisibleProperty, currentThumbIsHitTestVisible);
-                });
-            }
-            else
-            {
-                _rightMouseUpCleanUpDisposable.Disposable = Disposable.Empty;
-            }            
+                    await Task.Delay(25);
+                };
+
+                _thumb.SetCurrentValue(IsHitTestVisibleProperty, currentThumbIsHitTestVisible);
+            }                   
             
             base.OnPreviewMouseRightButtonDown(e);
         }
 
         protected override void OnPreviewMouseRightButtonUp(MouseButtonEventArgs e)
         {
-            _rightMouseUpCleanUpDisposable.Disposable = Disposable.Empty;
             base.OnPreviewMouseRightButtonUp(e);
         }
 
