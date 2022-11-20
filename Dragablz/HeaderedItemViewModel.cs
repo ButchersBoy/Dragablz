@@ -30,11 +30,7 @@ namespace Dragablz
             {
                 if (_header == value) return;
                 _header = value;
-#if NET40
-                OnPropertyChanged("Header");
-#else
                 OnPropertyChanged();
-#endif
             }
         }
 
@@ -45,11 +41,7 @@ namespace Dragablz
             {
                 if (_content == value) return;
                 _content = value;
-#if NET40
-                OnPropertyChanged("Content");
-#else
                 OnPropertyChanged();
-#endif
             }
         }
 
@@ -60,21 +52,13 @@ namespace Dragablz
             {
                 if (_isSelected == value) return;
                 _isSelected = value;
-#if NET40
-                OnPropertyChanged("IsSelected");
-#else
                 OnPropertyChanged();
-#endif
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-#if NET40
-        protected virtual void OnPropertyChanged(string propertyName)
-#else
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-#endif
         {
             var handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));

@@ -77,12 +77,7 @@ namespace DragablzDemo
                 if (_basicColourMonitorText == value) return;
 
                 _basicColourMonitorText = value;
-#if NET40
-                OnPropertyChanged("BasicColourMonitorText");
-#endif
-#if NET45
                 OnPropertyChanged();
-#endif 
             }
         }
 
@@ -94,12 +89,7 @@ namespace DragablzDemo
                 if (_peopleMonitorText == value) return;
 
                 _peopleMonitorText = value;
-#if NET40
-                OnPropertyChanged("PeopleMonitorText");
-#endif
-#if NET45
                 OnPropertyChanged();
-#endif 
             }
         }
 
@@ -125,12 +115,7 @@ namespace DragablzDemo
             {
                 if (_selectedViewModel == value) return;
                 _selectedViewModel = value;
-#if NET40
-                OnPropertyChanged("SelectedViewModel");
-#endif
-#if NET45
                 OnPropertyChanged();
-#endif 
             }
         }
 
@@ -157,11 +142,7 @@ namespace DragablzDemo
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-#if NET40
-        protected virtual void OnPropertyChanged(string propertyName)
-#else
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-#endif
         {
             var handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
