@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0-windows;netcoreapp3.0;net45;net40</TargetFrameworks>
+	  <TargetFrameworks>net6.0-windows;netcoreapp3.1;net48</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PackageIconUrl>https://raw.githubusercontent.com/ButchersBoy/Dragablz/master/Resources/D32.png</PackageIconUrl>
@@ -10,7 +10,7 @@
     <PackageProjectUrl>http://dragablz.net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ButchersBoy/Dragablz</RepositoryUrl>
     <PackageTags>WPF TabControl Tab Tearable</PackageTags>
-    <PackageReleaseNotes>Support for .Net Core 3.0</PackageReleaseNotes>
+    <PackageReleaseNotes>Support for .NET 6</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <DocumentationFile>..\bin\Release\Dragablz.xml</DocumentationFile>
   </PropertyGroup>
